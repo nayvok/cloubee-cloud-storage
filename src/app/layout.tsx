@@ -2,8 +2,10 @@ import type { Metadata } from 'next';
 import { NextIntlClientProvider } from 'next-intl';
 import { getLocale, getMessages } from 'next-intl/server';
 import { Geist, Geist_Mono } from 'next/font/google';
+import { ReactNode } from 'react';
 
-import ReactQueryProvider from '@/app/react-query-provider';
+import QueryProvider from '@/providers/query-provider';
+import ThemeProvider from '@/providers/theme-provider';
 
 import '../styles/globals.css';
 
@@ -24,19 +26,26 @@ export const metadata: Metadata = {
 export default async function RootLayout({
     children,
 }: Readonly<{
-    children: React.ReactNode;
+    children: ReactNode;
 }>) {
     const locale = await getLocale();
     const messages = await getMessages();
 
     return (
-        <html lang={locale}>
+        <html lang={locale} suppressHydrationWarning>
             <body className={`${geistSans.variable} ${geistMono.variable}`}>
-                <ReactQueryProvider>
+                <QueryProvider>
                     <NextIntlClientProvider messages={messages}>
-                        {children}
+                        <ThemeProvider
+                            attribute="class"
+                            defaultTheme="system"
+                            enableSystem
+                            disableTransitionOnChange
+                        >
+                            {children}
+                        </ThemeProvider>
                     </NextIntlClientProvider>
-                </ReactQueryProvider>
+                </QueryProvider>
             </body>
         </html>
     );
