@@ -14,6 +14,16 @@ const eslintConfig = [
     {
         ignores: ['node_modules/', 'dist/', '/.next/', '/.idea/'],
     },
+    {
+        files: ['**/*.jsx', '**/*.tsx'],
+        rules: {
+            'react/jsx-curly-brace-presence': [
+                'error',
+                { props: 'never', children: 'never' },
+            ],
+            'prettier/prettier': 'error',
+        },
+    },
 ];
 
 export default eslintConfig;
