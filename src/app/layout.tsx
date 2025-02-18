@@ -4,6 +4,7 @@ import { getLocale, getMessages } from 'next-intl/server';
 import { Geist, Geist_Mono } from 'next/font/google';
 import { ReactNode } from 'react';
 
+import { Toaster } from '@/components/ui/common/sonner';
 import QueryProvider from '@/providers/query-provider';
 import ThemeProvider from '@/providers/theme-provider';
 
@@ -43,6 +44,7 @@ export default async function RootLayout({
                             disableTransitionOnChange
                         >
                             {children}
+                            <Toaster />
                         </ThemeProvider>
                     </NextIntlClientProvider>
                 </QueryProvider>
