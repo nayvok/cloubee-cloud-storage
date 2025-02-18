@@ -1,10 +1,9 @@
-import { QueryClientProvider } from '@tanstack/react-query';
 import type { Metadata } from 'next';
 import { NextIntlClientProvider } from 'next-intl';
 import { getLocale, getMessages } from 'next-intl/server';
 import { Geist, Geist_Mono } from 'next/font/google';
 
-import { queryClient } from '@/libs/api/query-client';
+import ReactQueryProvider from '@/app/react-query-provider';
 
 import '../styles/globals.css';
 
@@ -33,11 +32,11 @@ export default async function RootLayout({
     return (
         <html lang={locale}>
             <body className={`${geistSans.variable} ${geistMono.variable}`}>
-                <QueryClientProvider client={queryClient}>
+                <ReactQueryProvider>
                     <NextIntlClientProvider messages={messages}>
                         {children}
                     </NextIntlClientProvider>
-                </QueryClientProvider>
+                </ReactQueryProvider>
             </body>
         </html>
     );
