@@ -1,4 +1,6 @@
 import { FlatCompat } from '@eslint/eslintrc';
+import eslintPluginPrettier from 'eslint-plugin-prettier';
+import eslintPluginReact from 'eslint-plugin-react';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -22,6 +24,12 @@ const eslintConfig = [
                 { props: 'never', children: 'never' },
             ],
             'prettier/prettier': 'error',
+        },
+        plugins: [eslintPluginReact, eslintPluginPrettier],
+        settings: {
+            react: {
+                version: 'detect',
+            },
         },
     },
 ];
