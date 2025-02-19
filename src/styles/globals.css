@@ -4,6 +4,18 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@layer base {
+    button,
+    [role='button'] {
+        cursor: pointer;
+    }
+
+    button:disabled,
+    [role='button']:disabled {
+        cursor: default;
+    }
+}
+
 :root {
     --background: hsl(0 0% 100%);
     --foreground: hsl(240 10% 3.9%);
