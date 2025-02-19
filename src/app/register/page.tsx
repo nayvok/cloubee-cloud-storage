@@ -1,8 +1,6 @@
 import { redirect } from 'next/navigation';
 
-import SignInForm from '@/components/features/auth/forms/sign-in-form';
-
-export default async function SignInPage() {
+export default async function RegisterPage() {
     const hasAdmin = await fetch(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/is-admin-exist`,
         {
@@ -11,8 +9,8 @@ export default async function SignInPage() {
     );
 
     if (!hasAdmin) {
-        redirect('/register');
+        redirect('/');
     }
 
-    return <SignInForm />;
+    return <div></div>;
 }

@@ -1,5 +1,20 @@
 {
-  "home": {
-    "title": "Home"
+  "auth": {
+    "login": {
+      "title": "Sing in",
+      "description": "Enter your email and password to sign in",
+      "emailLabel": "Email",
+      "passwordLabel": "Password",
+      "submitButton": "Login",
+      "forgotPassword": "Forgot password?",
+      "error": {
+        "email": "Invalid email address",
+        "emailRequired": "Email is required",
+        "password": "Password must be at least 8 characters long",
+        "passwordRequired": "Password is required",
+        "invalidCredentials": "Invalid email or password",
+        "authError": "Authorization failed"
+      }
+    }
   }
 }
