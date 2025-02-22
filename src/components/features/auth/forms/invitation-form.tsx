@@ -3,8 +3,8 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { redirect, useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import AuthWrapper from '@/components/features/auth/auth-wrapper';
@@ -18,39 +18,54 @@ import {
     FormMessage,
 } from '@/components/ui/common/form';
 import { Input } from '@/components/ui/common/input';
-import { registerMutationFn } from '@/libs/api/auth-api';
+import { invitationMutationFn } from '@/libs/api/auth-api';
+import API from '@/libs/api/axios-client';
 import {
-    TypeRegisterSchema,
-    useRegisterSchema,
-} from '@/schemas/auth/register.schema';
+    TypeInvitationSchema,
+    useInvitationSchema,
+} from '@/schemas/auth/invitation.schema';
 
-const RegisterForm = () => {
+const InvitationForm = () => {
     const router = useRouter();
 
-    const t = useTranslations('auth.registerAdmin');
-    const registerSchema = useRegisterSchema();
+    const searchParams = useSearchParams();
+    const token = searchParams.get('token');
+    const [invitationEmail, setInvitationEmail] = useState('');
+
+    if (!token) {
+        redirect('/');
+    }
+
+    useEffect(() => {
+        API.get(`/invites/${token}`)
+            .then(res => setInvitationEmail(res.data))
+            .catch(() => redirect('/'));
+    }, []);
+
+    const t = useTranslations('auth.invitation');
+    const invitationSchema = useInvitationSchema();
 
     const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-    const form = useForm<TypeRegisterSchema>({
-        resolver: zodResolver(registerSchema),
+    const form = useForm<TypeInvitationSchema>({
+        resolver: zodResolver(invitationSchema),
         defaultValues: {
+            token: token,
             name: '',
-            email: '',
             password: '',
             confirmPassword: '',
         },
     });
 
-    const registerMutation = useMutation({
-        mutationFn: registerMutationFn,
+    const invitationMutation = useMutation({
+        mutationFn: invitationMutationFn,
         onSuccess: () => {
             setErrorMsg(null);
-            router.push('/dashboard');
+            router.push('/dashboard'); // TODO: update link
         },
         onError: () => {
             form.reset();
-            setErrorMsg(t('error.registerError'));
+            setErrorMsg(t('error.invitationError'));
         },
     });
 
@@ -64,10 +79,22 @@ const RegisterForm = () => {
                 <form
                     onSubmit={form.handleSubmit(data => {
                         const { confirmPassword, ...submitData } = data;
-                        registerMutation.mutate(submitData);
+                        invitationMutation.mutate(submitData);
                     })}
                     className="flex flex-col gap-6"
                 >
+                    <FormItem>
+                        <FormLabel>{t('emailLabel')}</FormLabel>
+                        <FormControl>
+                            <Input
+                                type="email"
+                                disabled
+                                value={invitationEmail}
+                            />
+                        </FormControl>
+                        <FormMessage />
+                    </FormItem>
+
                     <FormField
                         control={form.control}
                         name="name"
@@ -78,26 +105,7 @@ const RegisterForm = () => {
                                     <Input
                                         type="name"
                                         placeholder="Cloubee"
-                                        disabled={registerMutation.isPending}
-                                        {...field}
-                                    />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-
-                    <FormField
-                        control={form.control}
-                        name="email"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>{t('emailLabel')}</FormLabel>
-                                <FormControl>
-                                    <Input
-                                        type="email"
-                                        placeholder="m@example.com"
-                                        disabled={registerMutation.isPending}
+                                        disabled={invitationMutation.isPending}
                                         {...field}
                                     />
                                 </FormControl>
@@ -116,7 +124,7 @@ const RegisterForm = () => {
                                     <Input
                                         type="password"
                                         placeholder="********"
-                                        disabled={registerMutation.isPending}
+                                        disabled={invitationMutation.isPending}
                                         {...field}
                                     />
                                 </FormControl>
@@ -137,7 +145,7 @@ const RegisterForm = () => {
                                     <Input
                                         type="password"
                                         placeholder="********"
-                                        disabled={registerMutation.isPending}
+                                        disabled={invitationMutation.isPending}
                                         {...field}
                                     />
                                 </FormControl>
@@ -148,7 +156,7 @@ const RegisterForm = () => {
 
                     <Button
                         className="w-full"
-                        isLoading={registerMutation.isPending}
+                        isLoading={invitationMutation.isPending}
                     >
                         {t('submitButton')}
                     </Button>
@@ -158,4 +166,4 @@ const RegisterForm = () => {
     );
 };
 
-export default RegisterForm;
+export default InvitationForm;

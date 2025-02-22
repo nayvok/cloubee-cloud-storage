@@ -24,7 +24,6 @@
       "passwordLabel": "Password",
       "confirmPasswordLabel": "Confirm password",
       "submitButton": "Register",
-      "successMessage": "Administrator successfully registered",
       "error": {
         "name": "Name must be at least 2 characters long",
         "nameRequired": "Name is required",
@@ -34,6 +33,23 @@
         "passwordRequired": "Password is required",
         "confirmPassword": "Passwords do not match",
         "registerError": "Registration failed"
+      }
+    },
+    "invitation": {
+      "title": "Invitation",
+      "description": "Fill the form below to create your account",
+      "emailLabel": "Email",
+      "nameLabel": "Name",
+      "passwordLabel": "Password",
+      "confirmPasswordLabel": "Confirm password",
+      "submitButton": "Register",
+      "error": {
+        "name": "Name must be at least 2 characters long",
+        "nameRequired": "Name is required",
+        "password": "Password must be at least 8 characters long",
+        "passwordRequired": "Password is required",
+        "confirmPassword": "Passwords do not match",
+        "invitationError": "Registration failed"
       }
     }
   }

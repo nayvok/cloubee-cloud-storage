@@ -24,7 +24,6 @@
       "passwordLabel": "Пароль",
       "confirmPasswordLabel": "Подтвердить пароль",
       "submitButton": "Зарегистрироваться",
-      "successMessage": "Администратор успешно зарегистрирован",
       "error": {
         "name": "Имя должно содержать не менее 2 символов",
         "nameRequired": "Имя обязательно",
@@ -34,6 +33,23 @@
         "passwordRequired": "Пароль обязателен",
         "confirmPassword": "Пароли не совпадают",
         "registerError": "Ошибка регистрации"
+      }
+    },
+    "invitation": {
+      "title": "Приглашение",
+      "description": "Заполните форму ниже, чтобы создать аккаунт",
+      "emailLabel": "Почта",
+      "nameLabel": "Имя",
+      "passwordLabel": "Пароль",
+      "confirmPasswordLabel": "Подтвердить пароль",
+      "submitButton": "Зарегистрироваться",
+      "error": {
+        "name": "Имя должно содержать не менее 2 символов",
+        "nameRequired": "Имя обязательно",
+        "password": "Пароль должен содержать не менее 8 символов",
+        "passwordRequired": "Пароль обязателен",
+        "confirmPassword": "Пароли не совпадают",
+        "invitationError": "Ошибка регистрации"
       }
     }
   }
