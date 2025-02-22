@@ -62,16 +62,17 @@ const AuthWrapper = ({
                             )}
                             {children}
                         </CardContent>
-                        <CardFooter>
-                            {additionalButtonLabel && additionalButtonHref && (
+
+                        {additionalButtonLabel && additionalButtonHref && (
+                            <CardFooter>
                                 <Link
                                     href={additionalButtonHref}
                                     className="m-auto inline-block text-sm underline-offset-4 hover:underline"
                                 >
                                     {additionalButtonLabel}
                                 </Link>
-                            )}
-                        </CardFooter>
+                            </CardFooter>
+                        )}
                     </Card>
                 </div>
             </div>

@@ -18,42 +18,39 @@ import {
     FormMessage,
 } from '@/components/ui/common/form';
 import { Input } from '@/components/ui/common/input';
-import { loginMutationFn } from '@/libs/api/auth-api';
+import { registerMutationFn } from '@/libs/api/auth-api';
 import {
-    TypeSignInSchema,
-    useSignInSchema,
-} from '@/schemas/auth/sign-in.schema';
+    TypeRegisterSchema,
+    useRegisterSchema,
+} from '@/schemas/auth/register.schema';
 
-const SignInForm = () => {
+const RegisterForm = () => {
     const router = useRouter();
 
-    const t = useTranslations('auth.login');
-    const signInSchema = useSignInSchema();
+    const t = useTranslations('auth.registerAdmin');
+    const registerSchema = useRegisterSchema();
 
     const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-    const form = useForm<TypeSignInSchema>({
-        resolver: zodResolver(signInSchema),
+    const form = useForm<TypeRegisterSchema>({
+        resolver: zodResolver(registerSchema),
         defaultValues: {
+            name: '',
             email: '',
             password: '',
+            confirmPassword: '',
         },
     });
 
     const singInMutation = useMutation({
-        mutationFn: loginMutationFn,
+        mutationFn: registerMutationFn,
         onSuccess: () => {
             setErrorMsg(null);
             router.push('/home'); // TODO: update link
         },
-        onError: (error: Error) => {
+        onError: () => {
             form.reset();
-
-            if (error.message === 'NOT_FOUND') {
-                setErrorMsg(t('error.invalidCredentials'));
-            } else {
-                setErrorMsg(t('error.authError'));
-            }
+            setErrorMsg(t('error.registerError'));
         },
     });
 
@@ -62,16 +59,34 @@ const SignInForm = () => {
             title={t('title')}
             description={t('description')}
             errorMessage={errorMsg}
-            additionalButtonHref="#" // TODO: Добавить ссылку для документации по восстановлению пароля
-            additionalButtonLabel={t('forgotPassword')}
         >
             <Form {...form}>
                 <form
-                    onSubmit={form.handleSubmit((data: TypeSignInSchema) =>
-                        singInMutation.mutate(data),
-                    )}
+                    onSubmit={form.handleSubmit(data => {
+                        const { confirmPassword, ...submitData } = data;
+                        singInMutation.mutate(submitData);
+                    })}
                     className="flex flex-col gap-6"
                 >
+                    <FormField
+                        control={form.control}
+                        name="name"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>{t('nameLabel')}</FormLabel>
+                                <FormControl>
+                                    <Input
+                                        type="name"
+                                        placeholder="Cloubee"
+                                        disabled={singInMutation.isPending}
+                                        {...field}
+                                    />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+
                     <FormField
                         control={form.control}
                         name="email"
@@ -110,6 +125,27 @@ const SignInForm = () => {
                         )}
                     />
 
+                    <FormField
+                        control={form.control}
+                        name="confirmPassword"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>
+                                    {t('confirmPasswordLabel')}
+                                </FormLabel>
+                                <FormControl>
+                                    <Input
+                                        type="password"
+                                        placeholder="********"
+                                        disabled={singInMutation.isPending}
+                                        {...field}
+                                    />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+
                     <Button
                         className="w-full"
                         isLoading={singInMutation.isPending}
@@ -122,4 +158,4 @@ const SignInForm = () => {
     );
 };
 
-export default SignInForm;
+export default RegisterForm;
