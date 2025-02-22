@@ -42,7 +42,7 @@ const RegisterForm = () => {
         },
     });
 
-    const singInMutation = useMutation({
+    const registerMutation = useMutation({
         mutationFn: registerMutationFn,
         onSuccess: () => {
             setErrorMsg(null);
@@ -64,7 +64,7 @@ const RegisterForm = () => {
                 <form
                     onSubmit={form.handleSubmit(data => {
                         const { confirmPassword, ...submitData } = data;
-                        singInMutation.mutate(submitData);
+                        registerMutation.mutate(submitData);
                     })}
                     className="flex flex-col gap-6"
                 >
@@ -78,7 +78,7 @@ const RegisterForm = () => {
                                     <Input
                                         type="name"
                                         placeholder="Cloubee"
-                                        disabled={singInMutation.isPending}
+                                        disabled={registerMutation.isPending}
                                         {...field}
                                     />
                                 </FormControl>
@@ -97,7 +97,7 @@ const RegisterForm = () => {
                                     <Input
                                         type="email"
                                         placeholder="m@example.com"
-                                        disabled={singInMutation.isPending}
+                                        disabled={registerMutation.isPending}
                                         {...field}
                                     />
                                 </FormControl>
@@ -116,7 +116,7 @@ const RegisterForm = () => {
                                     <Input
                                         type="password"
                                         placeholder="********"
-                                        disabled={singInMutation.isPending}
+                                        disabled={registerMutation.isPending}
                                         {...field}
                                     />
                                 </FormControl>
@@ -137,7 +137,7 @@ const RegisterForm = () => {
                                     <Input
                                         type="password"
                                         placeholder="********"
-                                        disabled={singInMutation.isPending}
+                                        disabled={registerMutation.isPending}
                                         {...field}
                                     />
                                 </FormControl>
@@ -148,7 +148,7 @@ const RegisterForm = () => {
 
                     <Button
                         className="w-full"
-                        isLoading={singInMutation.isPending}
+                        isLoading={registerMutation.isPending}
                     >
                         {t('submitButton')}
                     </Button>
