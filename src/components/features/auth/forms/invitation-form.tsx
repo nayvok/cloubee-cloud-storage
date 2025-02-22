@@ -37,10 +37,12 @@ const InvitationForm = () => {
     }
 
     useEffect(() => {
-        API.get(`/invites/${token}`)
-            .then(res => setInvitationEmail(res.data))
-            .catch(() => redirect('/'));
-    }, []);
+        if (token) {
+            API.get(`/invites/${token}`)
+                .then(res => setInvitationEmail(res.data))
+                .catch(() => redirect('/'));
+        }
+    }, [token]);
 
     const t = useTranslations('auth.invitation');
     const invitationSchema = useInvitationSchema();
@@ -78,6 +80,7 @@ const InvitationForm = () => {
             <Form {...form}>
                 <form
                     onSubmit={form.handleSubmit(data => {
+                        // eslint-disable-next-line @typescript-eslint/no-unused-vars
                         const { confirmPassword, ...submitData } = data;
                         invitationMutation.mutate(submitData);
                     })}

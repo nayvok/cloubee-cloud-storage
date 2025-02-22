@@ -25,7 +25,10 @@ const eslintConfig = [
             ],
             'prettier/prettier': 'error',
         },
-        plugins: [eslintPluginReact, eslintPluginPrettier],
+        plugins: {
+            react: eslintPluginReact,
+            prettier: eslintPluginPrettier,
+        },
         settings: {
             react: {
                 version: 'detect',
