@@ -1,7 +1,6 @@
-import type { ComponentProps } from 'react';
-import * as React from 'react';
+import { type ComponentProps } from 'react';
 
-import { cn } from '@/utils/tw-merge';
+import { cn } from '@/libs/utils/tw-merge';
 
 function Input({ className, type, ...props }: ComponentProps<'input'>) {
     return (

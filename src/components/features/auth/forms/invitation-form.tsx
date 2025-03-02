@@ -18,8 +18,9 @@ import {
     FormMessage,
 } from '@/components/ui/common/form';
 import { Input } from '@/components/ui/common/input';
-import { invitationMutationFn } from '@/libs/api/auth-api';
+import { invitationMutationFn } from '@/libs/api/auth/auth-api';
 import API from '@/libs/api/axios-client';
+import { APP_ROUTES } from '@/libs/constants/routes';
 import {
     TypeInvitationSchema,
     useInvitationSchema,
@@ -33,14 +34,14 @@ const InvitationForm = () => {
     const [invitationEmail, setInvitationEmail] = useState('');
 
     if (!token) {
-        redirect('/');
+        redirect(APP_ROUTES.LOGIN);
     }
 
     useEffect(() => {
         if (token) {
             API.get(`/invites/${token}`)
                 .then(res => setInvitationEmail(res.data))
-                .catch(() => redirect('/'));
+                .catch(() => redirect(APP_ROUTES.LOGIN));
         }
     }, [token]);
 
@@ -63,7 +64,7 @@ const InvitationForm = () => {
         mutationFn: invitationMutationFn,
         onSuccess: () => {
             setErrorMsg(null);
-            router.push('/dashboard'); // TODO: update link
+            router.push(APP_ROUTES.DASHBOARD.FILES);
         },
         onError: () => {
             form.reset();

@@ -10,7 +10,7 @@ import {
     CardHeader,
     CardTitle,
 } from '@/components/ui/common/card';
-import { cn } from '@/utils/tw-merge';
+import { cn } from '@/libs/utils/tw-merge';
 
 interface AuthWrapperProps {
     title: string;
@@ -35,7 +35,7 @@ const AuthWrapper = ({
                     href="#"
                     className="flex items-center gap-2 self-center text-xl font-semibold"
                 >
-                    <div className="bg-primary text-primary-foreground flex h-7 w-7 items-center justify-center rounded-md">
+                    <div className="bg-primary text-primary-foreground flex size-8 items-center justify-center rounded-md">
                         <Cloud className="size-5" />
                     </div>
                     Cloubee

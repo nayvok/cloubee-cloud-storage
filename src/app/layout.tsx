@@ -1,24 +1,16 @@
 import type { Metadata } from 'next';
 import { NextIntlClientProvider } from 'next-intl';
 import { getLocale, getMessages } from 'next-intl/server';
-import { Geist, Geist_Mono } from 'next/font/google';
+import { Inter } from 'next/font/google';
 import { ReactNode } from 'react';
 
 import { Toaster } from '@/components/ui/common/sonner';
-import QueryProvider from '@/providers/query-provider';
-import ThemeProvider from '@/providers/theme-provider';
+import QueryProvider from '@/libs/providers/query-provider';
+import ThemeProvider from '@/libs/providers/theme-provider';
 
 import '../styles/globals.css';
 
-const geistSans = Geist({
-    variable: '--font-geist-sans',
-    subsets: ['latin'],
-});
-
-const geistMono = Geist_Mono({
-    variable: '--font-geist-mono',
-    subsets: ['latin'],
-});
+const inter = Inter({ variable: '--font-inter', subsets: ['latin'] });
 
 export const metadata: Metadata = {
     title: 'Cloubee',
@@ -34,7 +26,7 @@ export default async function RootLayout({
 
     return (
         <html lang={locale} suppressHydrationWarning>
-            <body className={`${geistSans.variable} ${geistMono.variable}`}>
+            <body className={`${inter.variable}`}>
                 <QueryProvider>
                     <NextIntlClientProvider messages={messages}>
                         <ThemeProvider

@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation';
 
 import RegisterForm from '@/components/features/auth/forms/register-form';
+import { APP_ROUTES } from '@/libs/constants/routes';
 
 export default async function RegisterPage() {
     const response = await fetch(
@@ -13,7 +14,7 @@ export default async function RegisterPage() {
     const data = await response.json();
 
     if (data) {
-        redirect('/');
+        redirect(APP_ROUTES.LOGIN);
     }
 
     return <RegisterForm />;

@@ -12,10 +12,10 @@
   },
   "aliases": {
     "components": "@/components",
-    "utils": "@/utils/tw-merge",
+    "utils": "@/libs/utils/tw-merge",
     "ui": "@/components/ui/common",
     "lib": "@/libs",
-    "hooks": "@/hooks"
+    "hooks": "@/libs/hooks"
   },
   "iconLibrary": "lucide"
 }

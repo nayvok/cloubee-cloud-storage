@@ -18,7 +18,8 @@ import {
     FormMessage,
 } from '@/components/ui/common/form';
 import { Input } from '@/components/ui/common/input';
-import { registerMutationFn } from '@/libs/api/auth-api';
+import { registerMutationFn } from '@/libs/api/auth/auth-api';
+import { APP_ROUTES } from '@/libs/constants/routes';
 import {
     TypeRegisterSchema,
     useRegisterSchema,
@@ -46,7 +47,7 @@ const RegisterForm = () => {
         mutationFn: registerMutationFn,
         onSuccess: () => {
             setErrorMsg(null);
-            router.push('/dashboard');
+            router.push(APP_ROUTES.DASHBOARD.FILES);
         },
         onError: () => {
             form.reset();
@@ -63,6 +64,7 @@ const RegisterForm = () => {
             <Form {...form}>
                 <form
                     onSubmit={form.handleSubmit(data => {
+                        // eslint-disable-next-line @typescript-eslint/no-unused-vars
                         const { confirmPassword, ...submitData } = data;
                         registerMutation.mutate(submitData);
                     })}

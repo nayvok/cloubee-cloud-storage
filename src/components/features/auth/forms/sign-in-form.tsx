@@ -18,7 +18,8 @@ import {
     FormMessage,
 } from '@/components/ui/common/form';
 import { Input } from '@/components/ui/common/input';
-import { loginMutationFn } from '@/libs/api/auth-api';
+import { loginMutationFn } from '@/libs/api/auth/auth-api';
+import { APP_ROUTES } from '@/libs/constants/routes';
 import {
     TypeSignInSchema,
     useSignInSchema,
@@ -44,7 +45,7 @@ const SignInForm = () => {
         mutationFn: loginMutationFn,
         onSuccess: () => {
             setErrorMsg(null);
-            router.push('/dashboard'); // TODO: update link
+            router.push(APP_ROUTES.DASHBOARD.FILES);
         },
         onError: (error: Error) => {
             form.reset();

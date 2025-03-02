@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+import { APP_ROUTES } from '@/libs/constants/routes';
+
 const options = {
     baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
     withCredentials: true,
@@ -14,9 +16,8 @@ API.interceptors.response.use(
     },
     async error => {
         const { data, status } = error.response;
-        console.log(data, 'data');
         if (status === 401) {
-            window.location.href = '/';
+            window.location.href = APP_ROUTES.LOGIN;
         }
         return Promise.reject({
             ...data,

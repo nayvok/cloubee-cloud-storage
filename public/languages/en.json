@@ -1,7 +1,7 @@
 {
   "auth": {
     "login": {
-      "title": "Sing in",
+      "title": "Sign in",
       "description": "Enter your email and password to sign in",
       "emailLabel": "Email",
       "passwordLabel": "Password",
@@ -50,6 +50,33 @@
         "passwordRequired": "Password is required",
         "confirmPassword": "Passwords do not match",
         "invitationError": "Registration failed"
+      }
+    }
+  },
+  "layouts": {
+    "sidebar": {
+      "navUser": {
+        "logout": "Logout",
+        "logoutError": "An error occurred while logging out",
+        "settings": "Settings",
+        "themeSwitcher": {
+          "light": "Light",
+          "dark": "Dark",
+          "system": "System"
+        }
+      },
+      "navButtons": {
+        "upload": "Upload",
+        "create": {
+          "title": "Create",
+          "folder": "Folder",
+          "text": "Text File"
+        }
+      },
+      "navLinks": {
+        "files": "All Files",
+        "gallery": "Gallery",
+        "trash": "Trash"
       }
     }
   }

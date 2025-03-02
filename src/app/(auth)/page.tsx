@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation';
 
 import SignInForm from '@/components/features/auth/forms/sign-in-form';
+import { APP_ROUTES } from '@/libs/constants/routes';
 
 export default async function SignInPage() {
     const response = await fetch(
@@ -13,7 +14,7 @@ export default async function SignInPage() {
     const data = await response.json();
 
     if (!data) {
-        redirect('/register');
+        redirect(APP_ROUTES.REGISTER);
     }
 
     return <SignInForm />;

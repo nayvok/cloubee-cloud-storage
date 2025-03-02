@@ -1,6 +1,6 @@
-import type { ComponentProps } from 'react';
+import { type ComponentProps } from 'react';
 
-import { cn } from '@/utils/tw-merge';
+import { cn } from '@/libs/utils/tw-merge';
 
 function Card({ className, ...props }: ComponentProps<'div'>) {
     return (
