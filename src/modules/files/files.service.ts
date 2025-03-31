@@ -24,7 +24,30 @@ export class FilesService {
         private readonly config: ConfigService,
     ) {}
 
-    public async getAll(userId: string, directoryId?: string): Promise<File[]> {
+    public async getAll(
+        userId: string,
+        directoryId?: string,
+        idContext?: string,
+    ): Promise<File[]> {
+        let dirId = '';
+
+        if (idContext) {
+            const file = await this.prisma.file.findFirst({
+                where: {
+                    path: path.posix.join(userId, 'files', idContext),
+                    isDirectory: true,
+                },
+            });
+
+            if (!file || file.isDeleted) {
+                throw new NotFoundException(
+                    'Directory not found or is not directory',
+                );
+            }
+
+            dirId = file.id;
+        }
+
         if (directoryId) {
             const dir = await this.prisma.file
                 .findUniqueOrThrow({
@@ -48,7 +71,7 @@ export class FilesService {
         return this.prisma.file.findMany({
             where: {
                 userId: userId,
-                directoryId: directoryId ?? null,
+                directoryId: (directoryId ?? dirId) ? dirId : null,
                 isDeleted: false,
             },
         });
@@ -57,36 +80,43 @@ export class FilesService {
     public async mkdir(
         userId: string,
         folderName: string,
-        directoryId?: string,
+        idContext?: string,
     ): Promise<{ message: string }> {
+        let directory: File;
+
+        if (idContext) {
+            const file = await this.prisma.file.findFirst({
+                where: {
+                    path: path.posix.join(userId, 'files', idContext),
+                    isDirectory: true,
+                    isDeleted: false,
+                },
+            });
+
+            if (!file || file.isDeleted) {
+                throw new NotFoundException(
+                    'Directory not found or is not directory',
+                );
+            }
+
+            directory = file;
+        }
+
         const isNotFreeName = await this.prisma.file.findFirst({
             where: {
                 userId: userId,
                 name: folderName,
-                directoryId: directoryId ?? null,
+                directoryId: directory ? directory.id : null,
             },
         });
 
         if (isNotFreeName) {
-            throw new BadRequestException('Name already exists.');
+            throw new BadRequestException('NAME_ALREADY_TAKEN');
         }
 
-        let directory: File;
         let folderPath: string;
 
-        if (directoryId) {
-            directory = await this.prisma.file.findUnique({
-                where: { id: directoryId, userId: userId, isDeleted: false },
-            });
-
-            if (!directory) {
-                throw new NotFoundException('Directory not found.');
-            }
-
-            if (!directory.isDirectory) {
-                throw new BadRequestException('Is not a folder.');
-            }
-
+        if (directory) {
             folderPath = path.join(
                 this.config.getOrThrow<string>('STORAGE_PATH'),
                 directory.path,
@@ -109,11 +139,11 @@ export class FilesService {
             data: {
                 name: folderName,
                 userId: userId,
-                directoryId: directoryId ?? null,
+                directoryId: directory ? directory.id : null,
                 size: 0,
-                path: directoryId
-                    ? path.join(directory.path, folderName)
-                    : path.join(userId, 'files', folderName),
+                path: directory
+                    ? path.posix.join(directory.path, folderName)
+                    : path.posix.join(userId, 'files', folderName),
                 isDirectory: true,
             },
         });
@@ -232,8 +262,8 @@ export class FilesService {
                         if (uploadError) return;
 
                         const filePath = directoryId
-                            ? path.join(directory.path, fileName)
-                            : path.join(userId, 'files', fileName);
+                            ? path.posix.join(directory.path, fileName)
+                            : path.posix.join(userId, 'files', fileName);
 
                         const file = await this.prisma.file.create({
                             data: {
@@ -406,7 +436,7 @@ export class FilesService {
 
         if (!file.isDirectory) {
             const newName = `${name}${path.extname(file.name)}`;
-            const newPath = path.join(path.dirname(file.path), newName);
+            const newPath = path.posix.join(path.dirname(file.path), newName);
 
             await this.renamePath(
                 oldPath,
@@ -424,7 +454,7 @@ export class FilesService {
             return { message: 'File renamed successfully.' };
         }
 
-        const newPath = path.join(path.dirname(file.path), name);
+        const newPath = path.posix.join(path.dirname(file.path), name);
         const nestedFiles = await this.prisma.file.findMany({
             where: { directoryId: file.id },
         });
@@ -581,9 +611,9 @@ export class FilesService {
         files: File[],
     ) {
         for (const file of files) {
-            const newFilePath = path.join(
+            const newFilePath = path.posix.join(
                 newBasePath,
-                path.relative(oldBasePath, file.path),
+                path.posix.relative(oldBasePath, file.path),
             );
 
             await this.prisma.file.update({

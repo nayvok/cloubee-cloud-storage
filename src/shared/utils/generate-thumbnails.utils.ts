@@ -80,7 +80,7 @@ export const generateThumbnails = async (
             await sharp(fullFilePath).resize(size.width).toFile(thumbnailPath);
 
             thumbnailPaths.push(
-                path.join(
+                path.posix.join(
                     userId,
                     'thumbnails',
                     isVideo

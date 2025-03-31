@@ -18,6 +18,11 @@ export class UsersService {
             where: {
                 id: id,
             },
+            omit: {
+                password: true,
+                createdAt: true,
+                updatedAt: true,
+            },
         });
 
         if (!user) {

@@ -6,7 +6,7 @@ export class MkdirDto {
     @IsNotEmpty()
     @IsOptional()
     @ApiProperty()
-    directoryId: string;
+    idContext: string;
 
     @IsString()
     @IsNotEmpty()

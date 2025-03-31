@@ -30,16 +30,6 @@ import { FilesService } from './files.service';
 export class FilesController {
     constructor(private readonly filesService: FilesService) {}
 
-    @Get()
-    @ApiQuery({ name: 'directoryId', required: false })
-    @ApiBearerAuth()
-    getFiles(
-        @UserId() userId: string,
-        @Query('directoryId') directoryId?: string,
-    ) {
-        return this.filesService.getAll(userId, directoryId);
-    }
-
     @Get('trash')
     @ApiBearerAuth()
     getTrash(@UserId() userId: string) {
@@ -49,7 +39,7 @@ export class FilesController {
     @Post('mkdir')
     @ApiBearerAuth()
     mkdir(@UserId() userId: string, @Body() dto: MkdirDto) {
-        return this.filesService.mkdir(userId, dto.folderName, dto.directoryId);
+        return this.filesService.mkdir(userId, dto.folderName, dto.idContext);
     }
 
     @Post('upload')
@@ -73,7 +63,7 @@ export class FilesController {
         return this.filesService.upload(userId, req, res, directoryId);
     }
 
-    @Get(':fileId')
+    @Get('/file/:fileId')
     @ApiBearerAuth()
     getFile(
         @UserId() userId: string,
@@ -83,7 +73,7 @@ export class FilesController {
         return this.filesService.getFile(userId, fileId, res);
     }
 
-    @Get(':fileId/thumbnail/:size')
+    @Get('/thumbnail/:fileId/:size')
     @ApiParam({
         name: 'size',
         enum: ['small', 'medium', 'large'], // Допустимые значения
@@ -128,5 +118,17 @@ export class FilesController {
         @Param('fileId') fileId: string,
     ) {
         return this.filesService.deletePermanently(userId, fileId);
+    }
+
+    @Get(':idContext(*)?')
+    @ApiParam({ name: 'idContext', required: false })
+    @ApiQuery({ name: 'directoryId', required: false })
+    @ApiBearerAuth()
+    getFiles(
+        @UserId() userId: string,
+        @Param('idContext') idContext?: string,
+        @Query('directoryId') directoryId?: string,
+    ) {
+        return this.filesService.getAll(userId, directoryId, idContext);
     }
 }
