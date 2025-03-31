@@ -122,13 +122,28 @@ export class FilesController {
 
     @Get(':idContext(*)?')
     @ApiParam({ name: 'idContext', required: false })
-    @ApiQuery({ name: 'directoryId', required: false })
+    @ApiQuery({
+        name: 'sortMode',
+        required: true,
+        enum: ['byName', 'bySize', 'byLastChange'],
+    })
+    @ApiQuery({
+        name: 'sortDirection',
+        required: true,
+        enum: ['asc', 'desc'],
+    })
     @ApiBearerAuth()
     getFiles(
         @UserId() userId: string,
+        @Query('sortMode') sortMode: 'byName' | 'bySize' | 'byLastChange',
+        @Query('sortDirection') sortDirection: 'asc' | 'desc',
         @Param('idContext') idContext?: string,
-        @Query('directoryId') directoryId?: string,
     ) {
-        return this.filesService.getAll(userId, directoryId, idContext);
+        return this.filesService.getAll(
+            userId,
+            sortMode,
+            sortDirection,
+            idContext,
+        );
     }
 }

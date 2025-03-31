@@ -26,7 +26,8 @@ export class FilesService {
 
     public async getAll(
         userId: string,
-        directoryId?: string,
+        sortMode: 'byName' | 'bySize' | 'byLastChange',
+        sortDirection: 'asc' | 'desc',
         idContext?: string,
     ): Promise<File[]> {
         let dirId = '';
@@ -48,33 +49,26 @@ export class FilesService {
             dirId = file.id;
         }
 
-        if (directoryId) {
-            const dir = await this.prisma.file
-                .findUniqueOrThrow({
-                    where: {
-                        id: directoryId,
-                        userId: userId,
-                        isDirectory: true,
-                    },
-                })
-                .catch(() => {
-                    throw new NotFoundException(
-                        'Directory not found or is not directory',
-                    );
-                });
-
-            if (dir.isDeleted) {
-                throw new NotFoundException('Directory not found');
-            }
-        }
-
-        return this.prisma.file.findMany({
+        const allItems = await this.prisma.file.findMany({
             where: {
                 userId: userId,
-                directoryId: (directoryId ?? dirId) ? dirId : null,
+                directoryId: dirId || null,
                 isDeleted: false,
             },
         });
+
+        const folders = this.sortByMode(
+            allItems.filter(file => file.isDirectory),
+            sortMode,
+            sortDirection,
+        );
+        const files = this.sortByMode(
+            allItems.filter(file => !file.isDirectory),
+            sortMode,
+            sortDirection,
+        );
+
+        return [...folders, ...files];
     }
 
     public async mkdir(
@@ -571,6 +565,42 @@ export class FilesService {
             }
             throw new InternalServerErrorException('Unexpected error occurred');
         }
+    }
+
+    private readonly nameCollator = new Intl.Collator(undefined, {
+        sensitivity: 'base',
+    });
+
+    private sortByMode(
+        files: File[],
+        mode: 'byName' | 'bySize' | 'byLastChange',
+        direction: 'asc' | 'desc',
+    ) {
+        const items = [...files];
+        const directionMultiplier = direction === 'asc' ? 1 : -1;
+
+        if (mode === 'byName') {
+            return items.sort(
+                (a, b) =>
+                    directionMultiplier *
+                    this.nameCollator.compare(a.name, b.name),
+            );
+        }
+        if (mode === 'bySize') {
+            return items.sort(
+                (a, b) =>
+                    directionMultiplier *
+                    (a.size === b.size ? 0 : a.size > b.size ? 1 : -1),
+            );
+        }
+        if (mode === 'byLastChange') {
+            return items.sort(
+                (a, b) =>
+                    directionMultiplier *
+                    (a.updatedAt.getTime() - b.updatedAt.getTime()),
+            );
+        }
+        throw new Error(`Unknown sort mode: ${mode}`);
     }
 
     private async sendArchive(
