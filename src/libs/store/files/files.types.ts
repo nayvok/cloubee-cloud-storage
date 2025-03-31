@@ -1,8 +1,8 @@
 import { RefObject } from 'react';
 
 import { IFileResponse } from '@/libs/api/files/files.types';
-import { TypeChangeFilesSortModSchema } from '@/schemas/files/change-files-sort-mode';
-import { TypeChangeFilesViewModSchema } from '@/schemas/files/change-files-view-mode';
+import { TypeChangeFilesSortModSchema } from '@/schemas/files/change-files-sort-mode.schema';
+import { TypeChangeFilesViewModSchema } from '@/schemas/files/change-files-view-mode.schema';
 
 export interface IFilesStore {
     filesViewMode: TypeChangeFilesViewModSchema['mode'];
@@ -10,6 +10,9 @@ export interface IFilesStore {
 
     filesSortMode: TypeChangeFilesSortModSchema['mode'];
     setFilesSortMode: (value: TypeChangeFilesSortModSchema['mode']) => void;
+
+    filesSortDirection: 'asc' | 'desc';
+    setFilesSortDirection: () => void;
 
     selectedFiles: IFileResponse[];
     setSelectedFiles: (selectedFiles: IFileResponse[]) => void;

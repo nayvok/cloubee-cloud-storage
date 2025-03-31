@@ -4,12 +4,17 @@ import { API_ROUTES } from '@/libs/constants/api';
 import { TypeMkdirSchema } from '@/schemas/files/mkdir.schema';
 
 export const getFilesQueryFn = async (
+    sortMode: 'byName' | 'bySize' | 'byLastChange',
+    sortDirection: 'asc' | 'desc',
     idContext?: string,
 ): Promise<IFileResponse[]> => {
     const response = await API.get<IFileResponse[]>(
         idContext
             ? `${API_ROUTES.FILES.LIST}/${idContext}`
             : API_ROUTES.FILES.LIST,
+        {
+            params: { sortMode, sortDirection },
+        },
     );
 
     return response.data;

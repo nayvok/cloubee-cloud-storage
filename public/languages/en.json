@@ -95,7 +95,19 @@
       "files": "Files",
       "gallery": "Gallery",
       "trash": "Trash",
-      "settings": "Settings"
+      "settings": "Settings",
+      "filesSortingForm": {
+        "sortMode": {
+          "byName": "By name",
+          "bySize": "By size",
+          "byLastChange": "By modified"
+        },
+        "viewMode": {
+          "largeTile": "Large tiles",
+          "tile": "Tiles",
+          "list": "List"
+        }
+      }
     }
   }
 }

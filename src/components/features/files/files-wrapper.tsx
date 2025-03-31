@@ -15,7 +15,14 @@ const FilesWrapper = () => {
         useState<HTMLDivElement | null>(null);
     const filesViewMode = filesPersistStore(state => state.filesViewMode);
 
+    const filesSortMode = filesPersistStore(state => state.filesSortMode);
+    const filesSortDirection = filesPersistStore(
+        state => state.filesSortDirection,
+    );
+
     const { data } = useFilesQuery({
+        sortMode: filesSortMode,
+        sortDirection: filesSortDirection,
         idContext: decodeURIComponent(
             pathname.split('/').filter(Boolean).slice(2).join('/'),
         ),

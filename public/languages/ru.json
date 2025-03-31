@@ -95,7 +95,19 @@
       "files": "Файлы",
       "gallery": "Галерея",
       "trash": "Корзина",
-      "settings": "Настройки"
+      "settings": "Настройки",
+      "filesSortingForm": {
+        "sortMode": {
+          "byName": "По названию",
+          "bySize": "По размеру",
+          "byLastChange": "По изменению"
+        },
+        "viewMode": {
+          "largeTile": "Крупная плитка",
+          "tile": "Плитка",
+          "list": "Список"
+        }
+      }
     }
   }
 }

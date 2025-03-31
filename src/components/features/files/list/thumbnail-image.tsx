@@ -2,7 +2,7 @@ import Image from 'next/image';
 import { useEffect, useState } from 'react';
 
 import { useThumbnailQuery } from '@/libs/api/files/hooks/use-thumbnail-query';
-import { TypeChangeFilesViewModSchema } from '@/schemas/files/change-files-view-mode';
+import { TypeChangeFilesViewModSchema } from '@/schemas/files/change-files-view-mode.schema';
 
 interface ThumbnailImageProps {
     fileId: string;

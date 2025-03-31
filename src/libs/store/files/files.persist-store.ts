@@ -11,14 +11,25 @@ export const filesPersistStore = create(
             | 'setFilesViewMode'
             | 'filesSortMode'
             | 'setFilesSortMode'
+            | 'filesSortDirection'
+            | 'setFilesSortDirection'
         >
     >(
-        set => ({
+        (set, getState) => ({
             filesViewMode: 'tile',
             setFilesViewMode: value => set({ filesViewMode: value }),
 
             filesSortMode: 'byName',
             setFilesSortMode: value => set({ filesSortMode: value }),
+
+            filesSortDirection: 'asc',
+            setFilesSortDirection: () => {
+                const currentDirection = getState().filesSortDirection;
+                set({
+                    filesSortDirection:
+                        currentDirection === 'asc' ? 'desc' : 'asc',
+                });
+            },
         }),
         {
             name: 'files',

@@ -159,7 +159,7 @@ export function NavUser({
                                                 value={field.value}
                                             >
                                                 <SelectTrigger className="w-[180px]">
-                                                    <SelectValue placeholder="asdasd" />
+                                                    <SelectValue />
                                                 </SelectTrigger>
                                                 <SelectContent>
                                                     {Object.entries(
