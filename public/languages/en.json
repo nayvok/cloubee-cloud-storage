@@ -53,6 +53,18 @@
       }
     }
   },
+  "files": {
+    "mkdir": {
+      "title": "Enter folder name",
+      "create": "Create",
+      "defaultName": "New folder",
+      "error": {
+        "nameAlreadyTaken": "This name is already taken — choose another one",
+        "mkdirError": "An error occurred while creating the folder",
+        "nameRequired": "Name is required"
+      }
+    }
+  },
   "layouts": {
     "sidebar": {
       "navUser": {
@@ -74,10 +86,16 @@
         }
       },
       "navLinks": {
-        "files": "All Files",
+        "files": "Files",
         "gallery": "Gallery",
         "trash": "Trash"
       }
+    },
+    "header": {
+      "files": "Files",
+      "gallery": "Gallery",
+      "trash": "Trash",
+      "settings": "Settings"
     }
   }
 }

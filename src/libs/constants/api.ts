@@ -23,9 +23,9 @@ export const API_ROUTES = {
         TRASH: 'files/trash',
         MKDIR: 'files/mkdir',
         UPLOAD: 'files/upload',
-        BY_ID: (fileId: string) => `files/${fileId}`,
+        BY_ID: (fileId: string) => `files/file/${fileId}`,
         THUMBNAIL: (fileId: string, size: 'small' | 'medium' | 'large') =>
-            `files/${fileId}/thumbnail/${size}`,
+            `files/thumbnail/${fileId}/${size}`,
         RENAME: (fileId: string, fileName: string) =>
             `files/rename/${fileId}/${fileName}`,
         RESTORE: (fileId: string) => `files/trash/restore/${fileId}`,

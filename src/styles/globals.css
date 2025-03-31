@@ -127,6 +127,12 @@
     --color-sidebar: var(--sidebar);
 }
 
+@layer utilities {
+    .z-selecto {
+        z-index: 0 !important;
+    }
+}
+
 @layer base {
     * {
         @apply border-border outline-ring/50;

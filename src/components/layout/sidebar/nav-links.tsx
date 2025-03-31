@@ -24,17 +24,17 @@ export function NavLinks() {
     const navLinks: navLinkType[] = [
         {
             title: t('files'),
-            url: APP_ROUTES.DASHBOARD.FILES,
+            url: APP_ROUTES.DASHBOARD.FILES.path,
             icon: Files,
         },
         {
             title: t('gallery'),
-            url: APP_ROUTES.DASHBOARD.GALLERY,
+            url: APP_ROUTES.DASHBOARD.GALLERY.path,
             icon: Images,
         },
         {
             title: t('trash'),
-            url: APP_ROUTES.DASHBOARD.TRASH,
+            url: APP_ROUTES.DASHBOARD.TRASH.path,
             icon: Trash2,
         },
     ];
@@ -50,7 +50,7 @@ export function NavLinks() {
                             tooltip={navLink.title}
                             isActive={pathname === navLink.url}
                         >
-                            <Link href={navLink.url}>
+                            <Link href={navLink.url} scroll={false}>
                                 <navLink.icon />
                                 <span>{navLink.title}</span>
                             </Link>

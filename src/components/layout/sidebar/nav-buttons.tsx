@@ -2,7 +2,9 @@
 
 import { FilePlus, FolderPlus, Plus, Upload } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import { useState } from 'react';
 
+import MkdirForm from '@/components/features/files/forms/mkdir-form';
 import {
     SidebarGroup,
     SidebarMenu,
@@ -20,6 +22,7 @@ import {
 
 export function NavButtons() {
     const t = useTranslations('layouts.sidebar.navButtons');
+    const [isMkdirFormOpen, setIsMkdirFormOpen] = useState(false);
 
     return (
         <SidebarGroup>
@@ -51,7 +54,11 @@ export function NavButtons() {
                             sideOffset={4}
                         >
                             <DropdownMenuGroup>
-                                <DropdownMenuItem>
+                                <DropdownMenuItem
+                                    onClick={() =>
+                                        setIsMkdirFormOpen(!isMkdirFormOpen)
+                                    }
+                                >
                                     <FolderPlus />
                                     {t('create.folder')}
                                 </DropdownMenuItem>
@@ -62,6 +69,10 @@ export function NavButtons() {
                             </DropdownMenuGroup>
                         </DropdownMenuContent>
                     </DropdownMenu>
+                    <MkdirForm
+                        isOpen={isMkdirFormOpen}
+                        onClose={() => setIsMkdirFormOpen(false)}
+                    />
                 </SidebarMenuItem>
             </SidebarMenu>
         </SidebarGroup>

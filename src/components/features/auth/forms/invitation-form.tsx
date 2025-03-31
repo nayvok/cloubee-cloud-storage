@@ -64,7 +64,7 @@ const InvitationForm = () => {
         mutationFn: invitationMutationFn,
         onSuccess: () => {
             setErrorMsg(null);
-            router.push(APP_ROUTES.DASHBOARD.FILES);
+            router.push(APP_ROUTES.DASHBOARD.FILES.path);
         },
         onError: () => {
             form.reset();

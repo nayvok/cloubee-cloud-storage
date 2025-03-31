@@ -1,7 +1,7 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ChevronsUpDown, LogOut, Moon, Settings, Sun } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
 import { useTheme } from 'next-themes';
@@ -69,6 +69,7 @@ export function NavUser({
     const { setTheme } = useTheme();
     const { isMobile } = useSidebar();
     const t = useTranslations('layouts.sidebar.navUser');
+    const queryClient = useQueryClient();
 
     const form = useForm({
         resolver: zodResolver(changeLanguageSchema),
@@ -92,6 +93,7 @@ export function NavUser({
     const logoutMutation = useMutation({
         mutationFn: logoutMutationFn,
         onSuccess: () => {
+            queryClient.removeQueries();
             router.push(APP_ROUTES.LOGIN);
         },
         onError: () => {
@@ -211,7 +213,9 @@ export function NavUser({
                         <DropdownMenuGroup>
                             <DropdownMenuItem
                                 onClick={() =>
-                                    router.push(APP_ROUTES.DASHBOARD.SETTINGS)
+                                    router.push(
+                                        APP_ROUTES.DASHBOARD.SETTINGS.path,
+                                    )
                                 }
                             >
                                 <Settings />

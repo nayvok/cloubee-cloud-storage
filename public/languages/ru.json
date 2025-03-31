@@ -53,6 +53,18 @@
       }
     }
   },
+  "files": {
+    "mkdir": {
+      "title": "Укажите название папки",
+      "create": "Создать",
+      "defaultName": "Новая папка",
+      "error": {
+        "nameAlreadyTaken": "Такое название уже есть — придумайте другое",
+        "mkdirError": "Произошла ошибка при создании папки",
+        "nameRequired": "Название обязательно"
+      }
+    }
+  },
   "layouts": {
     "sidebar": {
       "navUser": {
@@ -74,10 +86,16 @@
         }
       },
       "navLinks": {
-        "files": "Все файлы",
+        "files": "Файлы",
         "gallery": "Галерея",
         "trash": "Корзина"
       }
+    },
+    "header": {
+      "files": "Файлы",
+      "gallery": "Галерея",
+      "trash": "Корзина",
+      "settings": "Настройки"
     }
   }
 }

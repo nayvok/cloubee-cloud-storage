@@ -6,6 +6,6 @@ export interface IUserResponse {
     email: string;
     role: RoleType;
     avatarPath?: string;
-    usedQuota: number;
-    storageQuota: number;
+    usedQuota: string;
+    storageQuota: string;
 }

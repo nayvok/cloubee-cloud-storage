@@ -45,7 +45,7 @@ const SignInForm = () => {
         mutationFn: loginMutationFn,
         onSuccess: () => {
             setErrorMsg(null);
-            router.push(APP_ROUTES.DASHBOARD.FILES);
+            router.push(APP_ROUTES.DASHBOARD.FILES.path);
         },
         onError: (error: Error) => {
             form.reset();

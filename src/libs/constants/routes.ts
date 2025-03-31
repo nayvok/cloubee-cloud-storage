@@ -3,9 +3,21 @@ export const APP_ROUTES = {
     REGISTER: '/register',
     INVITATION: '/invitation',
     DASHBOARD: {
-        FILES: '/dashboard',
-        GALLERY: '/dashboard/gallery',
-        TRASH: '/dashboard/trash',
-        SETTINGS: '/dashboard/settings',
+        FILES: {
+            path: '/dashboard/files',
+            title: 'layouts.header.files',
+        },
+        GALLERY: {
+            path: '/dashboard/gallery',
+            title: 'layouts.header.gallery',
+        },
+        TRASH: {
+            path: '/dashboard/trash',
+            title: 'layouts.header.trash',
+        },
+        SETTINGS: {
+            path: '/dashboard/settings',
+            title: 'layouts.header.settings',
+        },
     },
 };
