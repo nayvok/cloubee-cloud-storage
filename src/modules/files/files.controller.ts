@@ -99,10 +99,10 @@ export class FilesController {
         return this.filesService.rename(userId, fileId, fileName);
     }
 
-    @Delete(':fileId')
+    @Post(':fileId')
     @ApiBearerAuth()
-    moveToTrash(@UserId() userId: string, @Param('fileId') fileId: string) {
-        return this.filesService.moveToTrash(userId, fileId);
+    moveToTrash(@UserId() userId: string, @Body('fileIds') fileIds: string[]) {
+        return this.filesService.moveToTrash(userId, fileIds);
     }
 
     @Post('trash/restore/:fileId')

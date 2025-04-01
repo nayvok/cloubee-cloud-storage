@@ -100,6 +100,7 @@ export class FilesService {
             where: {
                 userId: userId,
                 name: folderName,
+                isDeleted: false,
                 directoryId: directory ? directory.id : null,
             },
         });
@@ -467,18 +468,25 @@ export class FilesService {
         return { message: 'Directory renamed successfully.' };
     }
 
-    public async moveToTrash(userId: string, fileId: string) {
+    public async moveToTrash(userId: string, fileIds: string[]) {
         try {
-            await this.prisma.file.update({
-                where: { id: fileId, userId: userId },
-                data: {
-                    isDeleted: true,
-                },
-            });
+            await this.prisma.$transaction([
+                this.prisma.file.updateMany({
+                    where: {
+                        id: { in: fileIds },
+                        userId: userId,
+                    },
+                    data: {
+                        isDeleted: true,
+                    },
+                }),
+            ]);
 
-            return { message: 'File moved to trash successfully' };
+            return {
+                message: 'File moved to trash successfully',
+            };
         } catch {
-            throw new NotFoundException('Error transferring file to trash');
+            throw new NotFoundException('Error moving files to trash');
         }
     }
 
