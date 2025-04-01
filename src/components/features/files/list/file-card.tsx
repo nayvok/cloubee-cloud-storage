@@ -14,13 +14,13 @@ import { filesStore } from '@/libs/store/files/files.store';
 import { convertBytes } from '@/libs/utils/convert-bytes';
 import { getFileIcon } from '@/libs/utils/get-file-icon';
 import { cn } from '@/libs/utils/tw-merge';
-import { TypeChangeFilesViewModSchema } from '@/schemas/files/change-files-view-mode.schema';
+import { type TypeChangeFilesViewModeSchema } from '@/schemas/files/change-files-view-mode.schema';
 
 import ThumbnailImage from './thumbnail-image';
 
 interface FileCardProps {
     file: IFileResponse;
-    viewMode: TypeChangeFilesViewModSchema['mode'];
+    viewMode: TypeChangeFilesViewModeSchema['mode'];
 }
 
 const FileCard = ({ file, viewMode }: FileCardProps) => {

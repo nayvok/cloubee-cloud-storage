@@ -2,11 +2,11 @@ import Image from 'next/image';
 import { useEffect, useState } from 'react';
 
 import { useThumbnailQuery } from '@/libs/api/files/hooks/use-thumbnail-query';
-import { TypeChangeFilesViewModSchema } from '@/schemas/files/change-files-view-mode.schema';
+import { type TypeChangeFilesViewModeSchema } from '@/schemas/files/change-files-view-mode.schema';
 
 interface ThumbnailImageProps {
     fileId: string;
-    viewMode: TypeChangeFilesViewModSchema['mode'];
+    viewMode: TypeChangeFilesViewModeSchema['mode'];
 }
 
 const ThumbnailImage = ({ fileId, viewMode }: ThumbnailImageProps) => {
@@ -23,7 +23,7 @@ const ThumbnailImage = ({ fileId, viewMode }: ThumbnailImageProps) => {
             size = 'small';
     }
 
-    const { data, isLoading } = useThumbnailQuery({ fileId, size: size });
+    const { data, isLoading } = useThumbnailQuery({ fileId, size });
     const [blobUrl, setBlobUrl] = useState<string | null>(null);
 
     useEffect(() => {
