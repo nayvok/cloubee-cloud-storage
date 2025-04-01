@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 
+import { Skeleton } from '@/components/ui/common/skeleton';
 import { useThumbnailQuery } from '@/libs/api/files/hooks/use-thumbnail-query';
 import { type TypeChangeFilesViewModeSchema } from '@/schemas/files/change-files-view-mode.schema';
 
@@ -36,11 +37,7 @@ const ThumbnailImage = ({ fileId, viewMode }: ThumbnailImageProps) => {
     }, [data]);
 
     if (isLoading) {
-        return (
-            <div className="h-[120px] w-[120px] animate-pulse bg-gray-200">
-                Loading...
-            </div>
-        );
+        return <Skeleton className="size-full" />;
     }
 
     if (!blobUrl) return null;
