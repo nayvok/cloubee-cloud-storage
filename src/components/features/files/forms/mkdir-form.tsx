@@ -23,6 +23,7 @@ import {
 import { Input } from '@/components/ui/common/input';
 import { mkdirMutationFn } from '@/libs/api/files/files-api';
 import { QUERY_KEYS } from '@/libs/api/query-keys';
+import { filesPersistStore } from '@/libs/store/files/files.persist-store';
 import { TypeMkdirSchema, useMkdirSchema } from '@/schemas/files/mkdir.schema';
 
 interface MkdirFormProps {
@@ -40,6 +41,11 @@ const MkdirForm = ({ isOpen, onClose }: MkdirFormProps) => {
 
     const mkdirSchema = useMkdirSchema();
     const queryClient = useQueryClient();
+
+    const filesSortMode = filesPersistStore(state => state.filesSortMode);
+    const filesSortDirection = filesPersistStore(
+        state => state.filesSortDirection,
+    );
 
     const form = useForm<TypeMkdirSchema>({
         resolver: zodResolver(mkdirSchema),
@@ -70,7 +76,12 @@ const MkdirForm = ({ isOpen, onClose }: MkdirFormProps) => {
         },
         async onSettled() {
             await queryClient.invalidateQueries({
-                queryKey: [QUERY_KEYS.FILES, decodeURIComponent(pathname)],
+                queryKey: [
+                    QUERY_KEYS.FILES,
+                    filesSortMode,
+                    filesSortDirection,
+                    decodeURIComponent(pathname),
+                ],
             });
         },
     });
