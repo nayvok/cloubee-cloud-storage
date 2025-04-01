@@ -65,7 +65,7 @@ const HeaderFilesSortingForm = () => {
                 <ListFilter
                     strokeWidth={3}
                     className={cn(
-                        'text-foreground h-[1.2rem] w-[1.2rem] scale-100 rotate-180 text-white transition-all',
+                        'text-foreground h-[1.2rem] w-[1.2rem] scale-100 rotate-180 transition-all',
                         filesSortDirection === 'desc' && 'scale-0',
                     )}
                 />
