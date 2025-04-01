@@ -58,9 +58,7 @@ const MkdirForm = ({ isOpen, onClose }: MkdirFormProps) => {
 
     const mkdirMutation = useMutation({
         mutationFn: mkdirMutationFn,
-        onSuccess: () => {
-            onClose();
-        },
+
         onError: (error: Error) => {
             if (error.message === 'NAME_ALREADY_TAKEN') {
                 setError('folderName', {
@@ -74,7 +72,8 @@ const MkdirForm = ({ isOpen, onClose }: MkdirFormProps) => {
                 });
             }
         },
-        async onSettled() {
+
+        async onSuccess() {
             await queryClient.invalidateQueries({
                 queryKey: [
                     QUERY_KEYS.FILES,
@@ -83,6 +82,7 @@ const MkdirForm = ({ isOpen, onClose }: MkdirFormProps) => {
                     decodeURIComponent(pathname),
                 ],
             });
+            onClose();
         },
     });
 
