@@ -63,6 +63,28 @@
         "mkdirError": "An error occurred while creating the folder",
         "nameRequired": "Name is required"
       }
+    },
+    "moveToTrash": {
+      "dialog": {
+        "title_multiple": "Delete selected items?",
+        "title_folder": "Delete folder?",
+        "title_file": "Delete file?",
+        "description": "Files and folders will be stored in trash for 30 days before permanent deletion",
+        "cancel": "Cancel",
+        "confirm": "Delete"
+      },
+      "toast": {
+        "loading": "Moving to trash",
+        "success": "Moved to trash successfully",
+        "error": "Error moving to trash"
+      }
+    },
+    "fileCard": {
+      "actions": {
+        "download": "Download",
+        "rename": "Rename",
+        "delete": "Delete"
+      }
     }
   },
   "layouts": {
@@ -106,6 +128,20 @@
           "largeTile": "Large tiles",
           "tile": "Tiles",
           "list": "List"
+        }
+      },
+      "actionBar": {
+        "actions": {
+          "download": "Download",
+          "rename": "Rename",
+          "delete": "Delete",
+          "close": "Close"
+        },
+        "info": {
+          "selectedCount": "Selected:",
+          "name": "Name:",
+          "size": "Size:",
+          "modified": "Modified:"
         }
       }
     }

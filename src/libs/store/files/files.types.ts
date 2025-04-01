@@ -1,4 +1,5 @@
 import { RefObject } from 'react';
+import Selecto from 'react-selecto';
 
 import { IFileResponse } from '@/libs/api/files/files.types';
 import { TypeChangeFilesSortModeSchema } from '@/schemas/files/change-files-sort-mode.schema';
@@ -15,12 +16,17 @@ export interface IFilesStore {
     setFilesSortDirection: () => void;
 
     selectedFiles: IFileResponse[];
+    lastSelectedFiles: IFileResponse[];
     setSelectedFiles: (selectedFiles: IFileResponse[]) => void;
+    setLastSelectedFiles: (files: IFileResponse[]) => void;
     addSelectedFile: (file: IFileResponse) => void;
     removeSelectedFile: (file: IFileResponse) => void;
 
     headerActionBarRef: RefObject<HTMLDivElement | null>;
     setHeaderActionBarRef: (
-        actionBarRef: RefObject<HTMLDivElement | null>,
+        headerActionBarRef: RefObject<HTMLDivElement | null>,
     ) => void;
+
+    selectoRef: RefObject<Selecto | null>;
+    setSelectoRef: (selectoRef: RefObject<Selecto | null>) => void;
 }

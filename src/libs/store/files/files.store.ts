@@ -1,4 +1,5 @@
 import { RefObject, createRef } from 'react';
+import Selecto from 'react-selecto';
 import { create } from 'zustand/react';
 
 import { IFilesStore } from '@/libs/store/files/files.types';
@@ -8,11 +9,15 @@ export const filesStore = create<
         IFilesStore,
         | 'filesViewMode'
         | 'filesSortMode'
+        | 'filesSortDirection'
         | 'setFilesViewMode'
         | 'setFilesSortMode'
+        | 'setFilesSortDirection'
     >
 >(set => ({
     selectedFiles: [],
+    lastSelectedFiles: [],
+    setLastSelectedFiles: lastSelectedFiles => set({ lastSelectedFiles }),
     setSelectedFiles: selectedFiles => set({ selectedFiles }),
 
     addSelectedFile: fileId =>
@@ -29,4 +34,8 @@ export const filesStore = create<
     setHeaderActionBarRef: (
         headerActionBarRef: RefObject<HTMLDivElement | null>,
     ) => set({ headerActionBarRef }),
+
+    selectoRef: createRef<Selecto>(),
+    setSelectoRef: (selectoRef: RefObject<Selecto | null>) =>
+        set({ selectoRef }),
 }));

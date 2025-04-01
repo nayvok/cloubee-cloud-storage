@@ -20,9 +20,13 @@ const FilesSelecto = ({
 
     const selectedFiles = filesStore(state => state.selectedFiles);
     const setSelectedFiles = filesStore(state => state.setSelectedFiles);
+    const setLastSelectedFiles = filesStore(
+        state => state.setLastSelectedFiles,
+    );
     const addSelectedFile = filesStore(state => state.addSelectedFile);
     const removeSelectedFile = filesStore(state => state.removeSelectedFile);
     const headerActionBarRef = filesStore(state => state.headerActionBarRef);
+    const setSelectoRef = filesStore(state => state.setSelectoRef);
 
     const selectoRef = useRef<Selecto>(null);
     const [selectStart, setSelectStart] = useState(false);
@@ -37,6 +41,12 @@ const FilesSelecto = ({
     );
 
     useEffect(() => {
+        if (selectoRef.current) {
+            setSelectoRef(selectoRef);
+        }
+    }, [selectoRef, setSelectoRef]);
+
+    useEffect(() => {
         const handleClickOutside = (e: MouseEvent) => {
             if (
                 !selectStart &&
@@ -47,7 +57,9 @@ const FilesSelecto = ({
                 !headerActionBarRef.current?.contains(e.target) &&
                 selectedFiles.length > 0
             ) {
+                setLastSelectedFiles(selectedFiles);
                 setSelectedFiles([]);
+                selectoRef.current?.setSelectedTargets([]);
             }
         };
 
@@ -72,6 +84,7 @@ const FilesSelecto = ({
         selectedFiles,
         setSelectedFiles,
         selectStart,
+        setLastSelectedFiles,
     ]);
 
     return (
