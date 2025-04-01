@@ -1,12 +1,22 @@
+import { cookies } from 'next/headers';
 import { ReactNode } from 'react';
 
 import Header from '@/components/layout/header/header';
 import SidebarLayout from '@/components/layout/sidebar/sidebar-layout';
 import { SidebarInset } from '@/components/ui/common/sidebar';
 
-export default function DashboardLayout({ children }: { children: ReactNode }) {
+export default async function DashboardLayout({
+    children,
+}: {
+    children: ReactNode;
+}) {
+    const cookieStore = await cookies();
+    const sidebarCookie = cookieStore.get('sidebar_state')?.value;
+
+    const initialOpen = sidebarCookie ? sidebarCookie === 'true' : true;
+
     return (
-        <SidebarLayout>
+        <SidebarLayout initialOpen={initialOpen}>
             <SidebarInset>
                 <Header />
                 <div className="flex flex-1 flex-col gap-4 p-2 pt-0">
