@@ -52,8 +52,9 @@ const ThumbnailImage = ({ fileId, viewMode }: ThumbnailImageProps) => {
             alt="Thumbnail"
             width="0"
             height="0"
-            className="h-auto w-full"
             unoptimized
+            draggable={false}
+            className="h-auto w-full"
         />
     );
 };
