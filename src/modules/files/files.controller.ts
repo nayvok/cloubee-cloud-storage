@@ -93,8 +93,8 @@ export class FilesController {
     @ApiBearerAuth()
     rename(
         @UserId() userId: string,
-        @Param('fileId') fileId: string,
-        @Param('fileName') fileName: string,
+        @Body('fileId') fileId: string,
+        @Body('fileName') fileName: string,
     ) {
         return this.filesService.rename(userId, fileId, fileName);
     }
