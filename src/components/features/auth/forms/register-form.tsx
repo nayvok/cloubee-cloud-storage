@@ -28,7 +28,7 @@ import {
 const RegisterForm = () => {
     const router = useRouter();
 
-    const t = useTranslations('auth.registerAdmin');
+    const t = useTranslations('auth.register');
     const registerSchema = useRegisterSchema();
 
     const [errorMsg, setErrorMsg] = useState<string | null>(null);
