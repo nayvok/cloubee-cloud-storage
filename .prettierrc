@@ -5,6 +5,7 @@
     "jsxSingleQuote": false,
     "bracketSpacing": true,
     "arrowParens": "avoid",
+    "endOfLine": "lf",
     "tabWidth": 4,
     "importOrderSeparation": true,
     "importOrderSortSpecifiers": true,
