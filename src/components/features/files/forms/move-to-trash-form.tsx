@@ -98,10 +98,7 @@ const MoveToTrashForm = ({ isOpen, onClose }: MoveToTrashFormProps) => {
 
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
-            <DialogContent
-                aria-describedby={undefined}
-                className="sm:max-w-[425px]"
-            >
+            <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
                     <DialogTitle>
                         {lastSelectedFiles.length > 1
