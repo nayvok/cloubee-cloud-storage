@@ -1,149 +1,149 @@
 {
-  "auth": {
-    "login": {
-      "title": "Войти",
-      "description": "Введите вашу почту и пароль, чтобы войти",
-      "emailLabel": "Почта",
-      "passwordLabel": "Пароль",
-      "submitButton": "Войти",
-      "forgotPassword": "Забыли пароль?",
-      "error": {
-        "email": "Неверный адрес электронной почты",
-        "emailRequired": "Почта обязательна",
-        "password": "Пароль должен содержать не менее 8 символов",
-        "passwordRequired": "Пароль обязателен",
-        "invalidCredentials": "Неверная почта или пароль",
-        "authError": "Ошибка авторизации"
-      }
-    },
-    "register": {
-      "title": "Настройка сервера",
-      "description": "Введите ваш email и пароль для настройки сервера",
-      "nameLabel": "Имя",
-      "emailLabel": "Почта",
-      "passwordLabel": "Пароль",
-      "confirmPasswordLabel": "Подтвердить пароль",
-      "submitButton": "Зарегистрироваться",
-      "error": {
-        "name": "Имя должно содержать не менее 2 символов",
-        "nameRequired": "Имя обязательно",
-        "email": "Неверный адрес электронной почты",
-        "emailRequired": "Почта обязательна",
-        "password": "Пароль должен содержать не менее 8 символов",
-        "passwordRequired": "Пароль обязателен",
-        "confirmPassword": "Пароли не совпадают",
-        "registerError": "Ошибка регистрации"
-      }
-    },
-    "invitation": {
-      "title": "Приглашение",
-      "description": "Заполните форму ниже, чтобы создать аккаунт",
-      "emailLabel": "Почта",
-      "nameLabel": "Имя",
-      "passwordLabel": "Пароль",
-      "confirmPasswordLabel": "Подтвердить пароль",
-      "submitButton": "Зарегистрироваться",
-      "error": {
-        "name": "Имя должно содержать не менее 2 символов",
-        "nameRequired": "Имя обязательно",
-        "password": "Пароль должен содержать не менее 8 символов",
-        "passwordRequired": "Пароль обязателен",
-        "confirmPassword": "Пароли не совпадают",
-        "invitationError": "Ошибка регистрации"
-      }
-    }
-  },
-  "files": {
-    "mkdir": {
-      "title": "Укажите название папки",
-      "create": "Создать",
-      "defaultName": "Новая папка",
-      "error": {
-        "nameAlreadyTaken": "Такое название уже есть — придумайте другое",
-        "mkdirError": "Произошла ошибка при создании папки",
-        "nameRequired": "Название обязательно"
-      }
-    },
-    "moveToTrash": {
-      "dialog": {
-        "title_multiple": "Удалить выбранные объекты?",
-        "title_folder": "Удалить папку?",
-        "title_file": "Удалить файл?",
-        "description": "В корзине файлы и папки будут храниться 30 дней, потом удалятся навсегда",
-        "cancel": "Отменить",
-        "confirm": "Удалить"
-      },
-      "toast": {
-        "loading": "Перемещение в корзину",
-        "success": "Успешно перемещено в корзину",
-        "error": "Ошибка перемещения в корзину"
-      }
-    },
-    "fileCard": {
-      "actions": {
-        "download": "Скачать",
-        "rename": "Переименовать",
-        "delete": "Удалить"
-      }
-    }
-  },
-  "layouts": {
-    "sidebar": {
-      "navUser": {
-        "logout": "Выход",
-        "logoutError": "Произошла ошибка при выходе из системы",
-        "settings": "Настройки",
-        "themeSwitcher": {
-          "light": "Светлая",
-          "dark": "Тёмная",
-          "system": "Системная"
-        }
-      },
-      "navButtons": {
-        "upload": "Загрузить",
-        "create": {
-          "title": "Создать",
-          "folder": "Папку",
-          "text": "Текстовый файл"
-        }
-      },
-      "navLinks": {
-        "files": "Файлы",
-        "gallery": "Галерея",
-        "trash": "Корзина"
-      }
-    },
-    "header": {
-      "files": "Файлы",
-      "gallery": "Галерея",
-      "trash": "Корзина",
-      "settings": "Настройки",
-      "filesSortingForm": {
-        "sortMode": {
-          "byName": "По названию",
-          "bySize": "По размеру",
-          "byLastChange": "По изменению"
+    "auth": {
+        "login": {
+            "title": "Войти",
+            "description": "Введите вашу почту и пароль, чтобы войти",
+            "emailLabel": "Почта",
+            "passwordLabel": "Пароль",
+            "submitButton": "Войти",
+            "forgotPassword": "Забыли пароль?",
+            "error": {
+                "email": "Неверный адрес электронной почты",
+                "emailRequired": "Почта обязательна",
+                "password": "Пароль должен содержать не менее 8 символов",
+                "passwordRequired": "Пароль обязателен",
+                "invalidCredentials": "Неверная почта или пароль",
+                "authError": "Ошибка авторизации"
+            }
         },
-        "viewMode": {
-          "largeTile": "Крупная плитка",
-          "tile": "Плитка",
-          "list": "Список"
-        }
-      },
-      "actionBar": {
-        "actions": {
-          "download": "Скачать",
-          "rename": "Переименовать",
-          "delete": "Удалить",
-          "close": "Закрыть"
+        "register": {
+            "title": "Настройка сервера",
+            "description": "Введите ваш email и пароль для настройки сервера",
+            "nameLabel": "Имя",
+            "emailLabel": "Почта",
+            "passwordLabel": "Пароль",
+            "confirmPasswordLabel": "Подтвердить пароль",
+            "submitButton": "Зарегистрироваться",
+            "error": {
+                "name": "Имя должно содержать не менее 2 символов",
+                "nameRequired": "Имя обязательно",
+                "email": "Неверный адрес электронной почты",
+                "emailRequired": "Почта обязательна",
+                "password": "Пароль должен содержать не менее 8 символов",
+                "passwordRequired": "Пароль обязателен",
+                "confirmPassword": "Пароли не совпадают",
+                "registerError": "Ошибка регистрации"
+            }
         },
-        "info": {
-          "selectedCount": "Выбрано:",
-          "name": "Имя:",
-          "size": "Размер:",
-          "modified": "Изменён:"
+        "invitation": {
+            "title": "Приглашение",
+            "description": "Заполните форму ниже, чтобы создать аккаунт",
+            "emailLabel": "Почта",
+            "nameLabel": "Имя",
+            "passwordLabel": "Пароль",
+            "confirmPasswordLabel": "Подтвердить пароль",
+            "submitButton": "Зарегистрироваться",
+            "error": {
+                "name": "Имя должно содержать не менее 2 символов",
+                "nameRequired": "Имя обязательно",
+                "password": "Пароль должен содержать не менее 8 символов",
+                "passwordRequired": "Пароль обязателен",
+                "confirmPassword": "Пароли не совпадают",
+                "invitationError": "Ошибка регистрации"
+            }
         }
-      }
+    },
+    "files": {
+        "mkdir": {
+            "title": "Укажите название папки",
+            "create": "Создать",
+            "defaultName": "Новая папка",
+            "error": {
+                "nameAlreadyTaken": "Такое название уже есть — придумайте другое",
+                "mkdirError": "Произошла ошибка при создании папки",
+                "nameRequired": "Название обязательно"
+            }
+        },
+        "moveToTrash": {
+            "dialog": {
+                "title_multiple": "Удалить выбранные объекты?",
+                "title_folder": "Удалить папку?",
+                "title_file": "Удалить файл?",
+                "description": "В корзине файлы и папки будут храниться 30 дней, потом удалятся навсегда",
+                "cancel": "Отменить",
+                "confirm": "Удалить"
+            },
+            "toast": {
+                "loading": "Перемещение в корзину",
+                "success": "Успешно перемещено в корзину",
+                "error": "Ошибка перемещения в корзину"
+            }
+        },
+        "fileCard": {
+            "actions": {
+                "download": "Скачать",
+                "rename": "Переименовать",
+                "delete": "Удалить"
+            }
+        }
+    },
+    "layouts": {
+        "sidebar": {
+            "navUser": {
+                "logout": "Выход",
+                "logoutError": "Произошла ошибка при выходе из системы",
+                "settings": "Настройки",
+                "themeSwitcher": {
+                    "light": "Светлая",
+                    "dark": "Тёмная",
+                    "system": "Системная"
+                }
+            },
+            "navButtons": {
+                "upload": "Загрузить",
+                "create": {
+                    "title": "Создать",
+                    "folder": "Папку",
+                    "text": "Текстовый файл"
+                }
+            },
+            "navLinks": {
+                "files": "Файлы",
+                "gallery": "Галерея",
+                "trash": "Корзина"
+            }
+        },
+        "header": {
+            "files": "Файлы",
+            "gallery": "Галерея",
+            "trash": "Корзина",
+            "settings": "Настройки",
+            "filesSortingForm": {
+                "sortMode": {
+                    "byName": "По названию",
+                    "bySize": "По размеру",
+                    "byLastChange": "По изменению"
+                },
+                "viewMode": {
+                    "largeTile": "Крупная плитка",
+                    "tile": "Плитка",
+                    "list": "Список"
+                }
+            },
+            "actionBar": {
+                "actions": {
+                    "download": "Скачать",
+                    "rename": "Переименовать",
+                    "delete": "Удалить",
+                    "close": "Закрыть"
+                },
+                "info": {
+                    "selectedCount": "Выбрано:",
+                    "name": "Имя:",
+                    "size": "Размер:",
+                    "modified": "Изменён:"
+                }
+            }
+        }
     }
-  }
 }
