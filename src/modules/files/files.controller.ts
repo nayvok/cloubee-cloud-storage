@@ -89,14 +89,14 @@ export class FilesController {
         return this.filesService.getThumbnail(userId, fileId, size, res);
     }
 
-    @Post('rename/:fileId/:fileName')
+    @Post('rename')
     @ApiBearerAuth()
     rename(
         @UserId() userId: string,
         @Body('fileId') fileId: string,
-        @Body('fileName') fileName: string,
+        @Body('newName') newName: string,
     ) {
-        return this.filesService.rename(userId, fileId, fileName);
+        return this.filesService.rename(userId, fileId, newName);
     }
 
     @Post(':fileId')
