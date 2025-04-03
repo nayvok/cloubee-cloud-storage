@@ -26,8 +26,7 @@ export const API_ROUTES = {
         BY_ID: (fileId: string) => `files/file/${fileId}`,
         THUMBNAIL: (fileId: string, size: 'small' | 'medium' | 'large') =>
             `files/thumbnail/${fileId}/${size}`,
-        RENAME: (fileId: string, fileName: string) =>
-            `files/rename/${fileId}/${fileName}`,
+        RENAME: 'files/rename',
         RESTORE: (fileId: string) => `files/trash/restore/${fileId}`,
         DELETE_PERMANENTLY: (fileId: string) => `files/trash/${fileId}`,
     },

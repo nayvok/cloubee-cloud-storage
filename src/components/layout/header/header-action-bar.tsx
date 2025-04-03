@@ -11,6 +11,7 @@ import { useTranslations } from 'next-intl';
 import { useEffect, useRef, useState } from 'react';
 
 import MoveToTrashForm from '@/components/features/files/forms/move-to-trash-form';
+import RenameForm from '@/components/features/files/forms/rename-form';
 import { Button } from '@/components/ui/common/button';
 import {
     DropdownMenu,
@@ -38,6 +39,7 @@ const HeaderActionBar = () => {
 
     const actionBarRef = useRef<HTMLDivElement | null>(null);
     const [showHeaderElement, setShowHeaderElement] = useState(false);
+    const [isRenameFormOpen, setIsRenameFormOpen] = useState(false);
     const [isMoveToTrashFormOpen, setIsMoveToTrashFormOpen] = useState(false);
 
     useEffect(() => {
@@ -75,7 +77,12 @@ const HeaderActionBar = () => {
             {
                 icon: <PencilLine />,
                 label: t('actions.rename'),
-                onClick: () => alert('Rename'),
+                onClick: () => {
+                    selectoRef.current?.setSelectedTargets([]);
+                    setLastSelectedFiles(selectedFiles);
+                    setSelectedFiles([]);
+                    setIsRenameFormOpen(true);
+                },
                 show: !isMultiple,
             },
             {
@@ -96,12 +103,6 @@ const HeaderActionBar = () => {
 
     return (
         <>
-            {isMoveToTrashFormOpen && (
-                <MoveToTrashForm
-                    isOpen={isMoveToTrashFormOpen}
-                    onClose={() => setIsMoveToTrashFormOpen(false)}
-                />
-            )}
             <div
                 ref={actionBarRef}
                 className={cn(
@@ -249,6 +250,20 @@ const HeaderActionBar = () => {
                     )}
                 </div>
             </div>
+
+            {isMoveToTrashFormOpen && (
+                <MoveToTrashForm
+                    isOpen={isMoveToTrashFormOpen}
+                    onClose={() => setIsMoveToTrashFormOpen(false)}
+                />
+            )}
+
+            {isRenameFormOpen && (
+                <RenameForm
+                    isOpen={isRenameFormOpen}
+                    onClose={() => setIsRenameFormOpen(false)}
+                />
+            )}
         </>
     );
 };

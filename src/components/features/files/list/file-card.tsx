@@ -4,6 +4,7 @@ import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 
 import MoveToTrashForm from '@/components/features/files/forms/move-to-trash-form';
+import RenameForm from '@/components/features/files/forms/rename-form';
 import { Card, CardContent } from '@/components/ui/common/card';
 import {
     ContextMenu,
@@ -29,6 +30,7 @@ interface FileCardProps {
 const FileCard = ({ file, viewMode }: FileCardProps) => {
     const isMobile = useIsMobile();
     const t = useTranslations('files.fileCard');
+    const [isRenameFormOpen, setIsRenameFormOpen] = useState(false);
     const [isMoveToTrashFormOpen, setIsMoveToTrashFormOpen] = useState(false);
 
     const selectedFiles = filesStore(state => state.selectedFiles);
@@ -51,7 +53,7 @@ const FileCard = ({ file, viewMode }: FileCardProps) => {
             {
                 icon: <PencilLine />,
                 label: t('actions.rename'),
-                onClick: () => alert('Rename'),
+                onClick: () => setIsRenameFormOpen(true),
                 show: !isMultiple,
             },
             {
@@ -222,10 +224,18 @@ const FileCard = ({ file, viewMode }: FileCardProps) => {
                     </ContextMenuContent>
                 )}
             </ContextMenu>
+
             {isMoveToTrashFormOpen && (
                 <MoveToTrashForm
                     isOpen={isMoveToTrashFormOpen}
                     onClose={() => setIsMoveToTrashFormOpen(false)}
+                />
+            )}
+
+            {isRenameFormOpen && (
+                <RenameForm
+                    isOpen={isRenameFormOpen}
+                    onClose={() => setIsRenameFormOpen(false)}
                 />
             )}
         </>

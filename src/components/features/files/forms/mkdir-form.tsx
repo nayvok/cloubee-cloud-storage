@@ -50,7 +50,7 @@ const MkdirForm = ({ isOpen, onClose }: MkdirFormProps) => {
     const form = useForm<TypeMkdirSchema>({
         resolver: zodResolver(mkdirSchema),
         defaultValues: {
-            folderName: 'Новая папка',
+            folderName: t('defaultName'),
         },
     });
 

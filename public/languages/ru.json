@@ -64,6 +64,22 @@
                 "nameRequired": "Название обязательно"
             }
         },
+        "rename": {
+            "title": "Переименовать",
+            "save": "Сохранить",
+            "confirmChangeExtension": {
+                "title": "Расширение будет изменено!",
+                "description": "После изменения расширения этот файл может перестать открываться в программах",
+                "cancel": "Оставить",
+                "confirm": "Использовать",
+                "confirmRemoveExtension": "Убрать расширение"
+            },
+            "error": {
+                "nameAlreadyTaken": "Такое название уже есть — придумайте другое",
+                "renameError": "Не удалось переименовать файл",
+                "nameRequired": "Название обязательно"
+            }
+        },
         "moveToTrash": {
             "dialog": {
                 "title_multiple": "Удалить выбранные объекты?",

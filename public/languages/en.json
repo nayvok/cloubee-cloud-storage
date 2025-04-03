@@ -64,6 +64,22 @@
                 "nameRequired": "Name is required"
             }
         },
+        "rename": {
+            "title": "Rename",
+            "save": "Save",
+            "confirmChangeExtension": {
+                "title": "Extension will be changed!",
+                "description": "After changing the extension, this file may no longer open in programs",
+                "cancel": "Keep",
+                "confirm": "Use",
+                "confirmRemoveExtension": "Remove extension"
+            },
+            "error": {
+                "nameAlreadyTaken": "This name is already taken — choose another one",
+                "renameError": "Failed to rename file",
+                "nameRequired": "Name is required"
+            }
+        },
         "moveToTrash": {
             "dialog": {
                 "title_multiple": "Delete selected items?",

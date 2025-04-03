@@ -3,6 +3,7 @@ import { IFileResponse } from '@/libs/api/files/files.types';
 import { API_ROUTES } from '@/libs/constants/api';
 import { TypeMkdirSchema } from '@/schemas/files/mkdir.schema';
 import { TypeMoveToTrashSchema } from '@/schemas/files/moveToTrash.schema';
+import { TypeRenameSchema } from '@/schemas/files/rename.schema';
 
 export const getFilesQueryFn = async (
     sortMode: 'byName' | 'bySize' | 'byLastChange',
@@ -36,6 +37,11 @@ export const getThumbnailQueryFn = async (
 
 export const mkdirMutationFn = async (data: TypeMkdirSchema) => {
     const response = await API.post(API_ROUTES.FILES.MKDIR, data);
+    return response.data;
+};
+
+export const renameMutationFn = async (data: TypeRenameSchema) => {
+    const response = await API.post(API_ROUTES.FILES.RENAME, data);
     return response.data;
 };
 
