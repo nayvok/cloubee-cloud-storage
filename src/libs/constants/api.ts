@@ -20,14 +20,14 @@ export const API_ROUTES = {
     },
     FILES: {
         LIST: 'files',
-        TRASH: 'files/trash',
         MKDIR: 'files/mkdir',
         UPLOAD: 'files/upload',
         BY_ID: (fileId: string) => `files/file/${fileId}`,
         THUMBNAIL: (fileId: string, size: 'small' | 'medium' | 'large') =>
             `files/thumbnail/${fileId}/${size}`,
         RENAME: 'files/rename',
-        RESTORE: (fileId: string) => `files/trash/restore/${fileId}`,
-        DELETE_PERMANENTLY: (fileId: string) => `files/trash/${fileId}`,
+        RESTORE: 'files/trash/restore',
+        SOFT_DELETE: 'files/trash/soft',
+        PERMANENT_DELETE: 'files/trash/permanent',
     },
 };

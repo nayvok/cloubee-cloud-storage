@@ -46,6 +46,6 @@ export const renameMutationFn = async (data: TypeRenameSchema) => {
 };
 
 export const moveToTrashMutationFn = async (data: TypeMoveToTrashSchema) => {
-    const response = await API.post(API_ROUTES.FILES.TRASH, data);
+    const response = await API.post(API_ROUTES.FILES.SOFT_DELETE, data);
     return response.data;
 };
