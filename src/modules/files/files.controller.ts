@@ -1,7 +1,6 @@
 import {
     Body,
     Controller,
-    Delete,
     Get,
     Param,
     Post,
@@ -30,12 +29,6 @@ import { FilesService } from './files.service';
 export class FilesController {
     constructor(private readonly filesService: FilesService) {}
 
-    @Get('trash')
-    @ApiBearerAuth()
-    getTrash(@UserId() userId: string) {
-        return this.filesService.getTrashFiles(userId);
-    }
-
     @Post('mkdir')
     @ApiBearerAuth()
     mkdir(@UserId() userId: string, @Body() dto: MkdirDto) {
@@ -61,6 +54,16 @@ export class FilesController {
         @Query('directoryId') directoryId?: string,
     ) {
         return this.filesService.upload(userId, req, res, directoryId);
+    }
+
+    @Post('rename')
+    @ApiBearerAuth()
+    rename(
+        @UserId() userId: string,
+        @Body('fileId') fileId: string,
+        @Body('newName') newName: string,
+    ) {
+        return this.filesService.rename(userId, fileId, newName);
     }
 
     @Get('/file/:fileId')
@@ -89,35 +92,57 @@ export class FilesController {
         return this.filesService.getThumbnail(userId, fileId, size, res);
     }
 
-    @Post('rename')
+    @Get('trash')
     @ApiBearerAuth()
-    rename(
+    getTrash(@UserId() userId: string) {
+        return this.filesService.getTrashFiles(userId);
+    }
+
+    @Post('trash/soft')
+    @ApiBody({
+        schema: {
+            type: 'object',
+            properties: {
+                fileIds: {
+                    type: 'array',
+                    items: { type: 'string' },
+                    description: 'Array of file IDs to soft delete',
+                },
+            },
+            required: ['fileIds'],
+        },
+    })
+    @ApiBearerAuth()
+    softDelete(@UserId() userId: string, @Body('fileIds') fileIds: string[]) {
+        return this.filesService.softDelete(userId, fileIds);
+    }
+
+    @Post('trash/restore')
+    @ApiBearerAuth()
+    restoreFile(@UserId() userId: string, @Body('fileId') fileId: string) {
+        return this.filesService.restoreFile(userId, fileId);
+    }
+
+    @Post('trash/permanent')
+    @ApiBody({
+        schema: {
+            type: 'object',
+            properties: {
+                fileIds: {
+                    type: 'array',
+                    items: { type: 'string' },
+                    description: 'Array of file IDs to permanent delete',
+                },
+            },
+            required: ['fileIds'],
+        },
+    })
+    @ApiBearerAuth()
+    permanentDelete(
         @UserId() userId: string,
-        @Body('fileId') fileId: string,
-        @Body('newName') newName: string,
+        @Body('fileIds') fileIds: string[],
     ) {
-        return this.filesService.rename(userId, fileId, newName);
-    }
-
-    @Post(':fileId')
-    @ApiBearerAuth()
-    moveToTrash(@UserId() userId: string, @Body('fileIds') fileIds: string[]) {
-        return this.filesService.moveToTrash(userId, fileIds);
-    }
-
-    @Post('trash/restore/:fileId')
-    @ApiBearerAuth()
-    moveFromTrash(@UserId() userId: string, @Param('fileId') fileId: string) {
-        return this.filesService.moveFromTrash(userId, fileId);
-    }
-
-    @Delete('trash/:fileId')
-    @ApiBearerAuth()
-    deletePermanently(
-        @UserId() userId: string,
-        @Param('fileId') fileId: string,
-    ) {
-        return this.filesService.deletePermanently(userId, fileId);
+        return this.filesService.permanentDelete(userId, fileIds);
     }
 
     @Get(':idContext(*)?')

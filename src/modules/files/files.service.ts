@@ -409,7 +409,7 @@ export class FilesService {
                 where: { id: fileId, userId },
             })
             .catch(() => {
-                throw new NotFoundException('File or directory not found');
+                throw new NotFoundException('NOT_FOUND');
             });
 
         const oldPath = path.join(
@@ -426,11 +426,11 @@ export class FilesService {
             },
         });
         if (isNotFreeName) {
-            throw new BadRequestException('Name already exists.');
+            throw new BadRequestException('NAME_ALREADY_TAKEN');
         }
 
         if (!file.isDirectory) {
-            const newName = `${name}${path.extname(file.name)}`;
+            const newName = `${name}`;
             const newPath = path.posix.join(path.dirname(file.path), newName);
 
             await this.renamePath(
@@ -468,7 +468,7 @@ export class FilesService {
         return { message: 'Directory renamed successfully.' };
     }
 
-    public async moveToTrash(userId: string, fileIds: string[]) {
+    public async softDelete(userId: string, fileIds: string[]) {
         try {
             await this.prisma.$transaction([
                 this.prisma.file.updateMany({
@@ -499,7 +499,7 @@ export class FilesService {
         });
     }
 
-    public async moveFromTrash(userId: string, fileId: string) {
+    public async restoreFile(userId: string, fileId: string) {
         const file = await this.prisma.file.findUniqueOrThrow({
             where: { id: fileId },
         });
@@ -533,44 +533,66 @@ export class FilesService {
         return { message: 'File restored successfully' };
     }
 
-    public async deletePermanently(userId: string, fileId: string) {
+    public async permanentDelete(userId: string, fileIds: string[]) {
         try {
-            const file = await this.prisma.file.findUniqueOrThrow({
-                where: { id: fileId, userId, isDeleted: true },
+            const files = await this.prisma.file.findMany({
+                where: {
+                    id: {
+                        in: fileIds,
+                    },
+                    userId,
+                    isDeleted: true,
+                },
             });
-
-            const filePath = path.join(
-                this.config.getOrThrow<string>('STORAGE_PATH'),
-                file.path,
-            );
-
-            if (!file.isDirectory) {
-                await this.deleteFile(filePath, {
-                    small: file.thumbnailSmall,
-                    medium: file.thumbnailMedium,
-                    large: file.thumbnailLarge,
-                });
-                await this.prisma.file.delete({ where: { id: fileId } });
-                return { message: 'File deleted successfully' };
-            }
 
             const allUserFiles = await this.prisma.file.findMany({
                 where: { userId },
             });
 
-            const fileIds = await this.getNestedFiles(fileId, allUserFiles);
-            fileIds.push(file.id);
+            for (const file of files) {
+                const filePath = path.join(
+                    this.config.getOrThrow<string>('STORAGE_PATH'),
+                    file.path,
+                );
 
-            await this.deleteDirectory(filePath, fileIds);
-            await this.prisma.file.deleteMany({
-                where: { id: { in: fileIds } },
-            });
+                if (!file.isDirectory) {
+                    if (
+                        file.thumbnailSmall &&
+                        file.thumbnailMedium &&
+                        file.thumbnailLarge
+                    ) {
+                        await this.deleteFile(filePath, {
+                            small: file.thumbnailSmall,
+                            medium: file.thumbnailMedium,
+                            large: file.thumbnailLarge,
+                        });
+                    } else {
+                        await this.deleteFile(filePath);
+                    }
 
-            return { message: 'Directory deleted successfully' };
+                    await this.prisma.file.delete({ where: { id: file.id } });
+                } else {
+                    const nestedFileIds = await this.getNestedFiles(
+                        file.id,
+                        allUserFiles,
+                    );
+
+                    nestedFileIds.push(file.id);
+
+                    await this.deleteDirectory(filePath, nestedFileIds);
+
+                    await this.prisma.file.deleteMany({
+                        where: { id: { in: nestedFileIds } },
+                    });
+                }
+            }
+
+            return { message: 'Deleting successfully' };
         } catch (error) {
             if (error instanceof NotFoundException) {
                 throw error;
             }
+
             throw new InternalServerErrorException('Unexpected error occurred');
         }
     }
@@ -682,29 +704,32 @@ export class FilesService {
     ) {
         try {
             await fs.promises.rm(filePath);
-            await Promise.all([
-                fs.promises.rm(
-                    path.join(
-                        this.config.getOrThrow<string>('STORAGE_PATH'),
-                        thumbnails.small,
+
+            if (thumbnails) {
+                await Promise.all([
+                    fs.promises.rm(
+                        path.join(
+                            this.config.getOrThrow<string>('STORAGE_PATH'),
+                            thumbnails.small,
+                        ),
+                        { force: true },
                     ),
-                    { force: true },
-                ),
-                fs.promises.rm(
-                    path.join(
-                        this.config.getOrThrow<string>('STORAGE_PATH'),
-                        thumbnails.medium,
+                    fs.promises.rm(
+                        path.join(
+                            this.config.getOrThrow<string>('STORAGE_PATH'),
+                            thumbnails.medium,
+                        ),
+                        { force: true },
                     ),
-                    { force: true },
-                ),
-                fs.promises.rm(
-                    path.join(
-                        this.config.getOrThrow<string>('STORAGE_PATH'),
-                        thumbnails.large,
+                    fs.promises.rm(
+                        path.join(
+                            this.config.getOrThrow<string>('STORAGE_PATH'),
+                            thumbnails.large,
+                        ),
+                        { force: true },
                     ),
-                    { force: true },
-                ),
-            ]);
+                ]);
+            }
         } catch {
             throw new InternalServerErrorException('Error deleting file');
         }
@@ -713,14 +738,10 @@ export class FilesService {
     private async deleteDirectory(dirPath: string, fileIds: string[]) {
         try {
             await fs.promises.rm(dirPath, { recursive: true });
+
             const filesWithThumbnails = await this.prisma.file.findMany({
                 where: {
                     id: { in: fileIds },
-                },
-                select: {
-                    thumbnailSmall: true,
-                    thumbnailMedium: true,
-                    thumbnailLarge: true,
                 },
             });
 
@@ -732,17 +753,19 @@ export class FilesService {
                 ].filter(Boolean),
             );
 
-            await Promise.all(
-                thumbnailPaths.map(thumbnail =>
-                    fs.promises.rm(
-                        path.join(
-                            this.config.getOrThrow<string>('STORAGE_PATH'),
-                            thumbnail,
+            if (thumbnailPaths) {
+                await Promise.all(
+                    thumbnailPaths.map(thumbnail =>
+                        fs.promises.rm(
+                            path.join(
+                                this.config.getOrThrow<string>('STORAGE_PATH'),
+                                thumbnail,
+                            ),
+                            { force: true },
                         ),
-                        { force: true },
                     ),
-                ),
-            );
+                );
+            }
         } catch {
             throw new InternalServerErrorException('Error deleting directory');
         }
