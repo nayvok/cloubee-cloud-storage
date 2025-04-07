@@ -37,7 +37,7 @@ export class FilesController {
 
     @Post('upload')
     @ApiConsumes('multipart/form-data')
-    @ApiQuery({ name: 'directoryId', required: false })
+    @ApiQuery({ name: 'idContext', required: false })
     @ApiBody({
         schema: {
             type: 'object',
@@ -51,9 +51,9 @@ export class FilesController {
         @UserId() userId: string,
         @Req() req: Request,
         @Res() res: Response,
-        @Query('directoryId') directoryId?: string,
+        @Query('idContext') idContext?: string,
     ) {
-        return this.filesService.upload(userId, req, res, directoryId);
+        return this.filesService.upload(userId, req, res, idContext);
     }
 
     @Post('rename')

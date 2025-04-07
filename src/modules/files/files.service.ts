@@ -150,12 +150,13 @@ export class FilesService {
         userId: string,
         req: Request,
         res: Response,
-        directoryId?: string,
+        idContext?: string,
     ) {
         const busboy = Busboy({ headers: req.headers });
 
         let uploadDir: string;
         let directory: File;
+        let directoryId: string;
         let fileName: string;
         let fileSize = 0;
 
@@ -167,22 +168,29 @@ export class FilesService {
         const usedSpace = user.usedQuota;
         const remainingSpace = quota - usedSpace;
 
-        if (directoryId) {
-            directory = await this.prisma.file.findUnique({
-                where: { id: directoryId, userId: userId },
+        if (idContext) {
+            const file = await this.prisma.file.findFirst({
+                where: {
+                    path: path.posix.join(userId, 'files', idContext),
+                    isDirectory: true,
+                    isDeleted: false,
+                },
             });
 
-            if (!directory) {
+            if (!file || file.isDeleted) {
                 return res.status(HttpStatus.NOT_FOUND).json({
                     message: 'Directory not found.',
                 });
             }
 
-            if (!directory.isDirectory) {
+            if (!file.isDirectory) {
                 return res.status(HttpStatus.BAD_REQUEST).json({
                     message: 'Is not a directory.',
                 });
             }
+
+            directory = file;
+            directoryId = file.id;
 
             uploadDir = path.join(
                 this.config.getOrThrow<string>('STORAGE_PATH'),
