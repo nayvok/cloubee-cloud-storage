@@ -1,5 +1,5 @@
 import API from '@/libs/api/axios-client';
-import { IFileResponse } from '@/libs/api/files/files.types';
+import { IFileResponse, IUploadResponse } from '@/libs/api/files/files.types';
 import { API_ROUTES } from '@/libs/constants/api';
 import { TypeMkdirSchema } from '@/schemas/files/mkdir.schema';
 import { TypeMoveToTrashSchema } from '@/schemas/files/moveToTrash.schema';
@@ -47,5 +47,16 @@ export const renameMutationFn = async (data: TypeRenameSchema) => {
 
 export const moveToTrashMutationFn = async (data: TypeMoveToTrashSchema) => {
     const response = await API.post(API_ROUTES.FILES.SOFT_DELETE, data);
+    return response.data;
+};
+
+export const uploadMutationFn = async (data: IUploadResponse) => {
+    const formData = new FormData();
+    formData.append('file', data.file);
+
+    const response = await API.post(
+        `${API_ROUTES.FILES.UPLOAD}${data.idContext ? `?idContext=${data.idContext}` : ''}`,
+        formData,
+    );
     return response.data;
 };

@@ -14,3 +14,8 @@ export interface IFileResponse {
     createdAt: Date;
     updatedAt: Date;
 }
+
+export interface IUploadResponse {
+    file: File;
+    idContext?: string;
+}

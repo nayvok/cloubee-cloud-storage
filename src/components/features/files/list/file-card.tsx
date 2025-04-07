@@ -114,7 +114,7 @@ const FileCard = ({ file, viewMode }: FileCardProps) => {
                         >
                             <div
                                 className={cn(
-                                    'flex shrink-0 justify-center',
+                                    'flex shrink-0 justify-center overflow-hidden',
                                     viewMode === 'largeTile'
                                         ? 'h-[115px] w-full items-end'
                                         : viewMode === 'tile'

@@ -75,12 +75,7 @@ const MoveToTrashForm = ({ isOpen, onClose }: MoveToTrashFormProps) => {
 
         async onSettled() {
             queryClient.invalidateQueries({
-                queryKey: [
-                    QUERY_KEYS.FILES,
-                    filesSortMode,
-                    filesSortDirection,
-                    decodeURIComponent(pathname),
-                ],
+                predicate: query => query.queryKey[0] === QUERY_KEYS.FILES,
             });
         },
     });

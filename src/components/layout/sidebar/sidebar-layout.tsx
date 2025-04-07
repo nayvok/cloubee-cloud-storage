@@ -21,7 +21,6 @@ const SidebarLayout = ({ children, initialOpen }: SidebarLayoutProps) => {
             defaultOpen={isOpen}
             onOpenChange={open => {
                 setIsOpen(open);
-                console.log(open);
                 document.cookie = `${SIDEBAR_COOKIE_NAME}=${open}`;
             }}
         >
