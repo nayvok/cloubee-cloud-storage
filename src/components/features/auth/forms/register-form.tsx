@@ -138,6 +138,7 @@ const RegisterForm = () => {
                                 <FormControl>
                                     <Input
                                         type="password"
+                                        autoComplete="off"
                                         placeholder="********"
                                         disabled={registerMutation.isPending}
                                         {...field}

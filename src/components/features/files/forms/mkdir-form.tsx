@@ -128,6 +128,7 @@ const MkdirForm = ({ isOpen, onClose }: MkdirFormProps) => {
                                     <FormControl>
                                         <Input
                                             type="text"
+                                            autoComplete="off"
                                             disabled={mkdirMutation.isPending}
                                             {...field}
                                         />

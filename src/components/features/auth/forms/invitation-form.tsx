@@ -148,6 +148,7 @@ const InvitationForm = () => {
                                 <FormControl>
                                     <Input
                                         type="password"
+                                        autoComplete="off"
                                         placeholder="********"
                                         disabled={invitationMutation.isPending}
                                         {...field}
