@@ -57,6 +57,9 @@ export const uploadMutationFn = async (data: IUploadResponse) => {
     const response = await API.post(
         `${API_ROUTES.FILES.UPLOAD}${data.idContext ? `?idContext=${data.idContext}` : ''}`,
         formData,
+        {
+            onUploadProgress: data.onUploadProgress || (() => {}),
+        },
     );
     return response.data;
 };

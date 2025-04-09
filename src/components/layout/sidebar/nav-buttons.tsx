@@ -53,11 +53,17 @@ export function NavButtons() {
                     uploadMutation.mutateAsync({
                         file: file,
                         idContext: pathname,
+                        onUploadProgress: progress => {
+                            console.log(
+                                'Custom upload progress: ' + progress.loaded,
+                            );
+                        },
                     }),
                     {
                         loading: 'Загрузка',
                         success: 'Успешно',
                         error: 'Ошибка',
+                        cancel: 'Cancel',
                     },
                 );
             }

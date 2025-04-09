@@ -1,3 +1,5 @@
+import { AxiosProgressEvent } from 'axios';
+
 export interface IFileResponse {
     id: string;
     userId: string;
@@ -18,4 +20,5 @@ export interface IFileResponse {
 export interface IUploadResponse {
     file: File;
     idContext?: string;
+    onUploadProgress?: (progressEvent: AxiosProgressEvent) => void;
 }
