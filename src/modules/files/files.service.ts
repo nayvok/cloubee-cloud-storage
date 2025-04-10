@@ -186,19 +186,16 @@ export class FilesService {
                 }
                 // Пытаемся удалить частично загруженный файл
                 if (fileName && uploadDir) {
-                    fs.unlink(path.join(uploadDir, fileName), err => {
-                        if (err)
-                            console.error(
-                                'UPLOAD_LOG: Ошибка удаления файла',
-                                err,
-                            );
-                        else
-                            console.log(
-                                'UPLOAD_LOG: Частично загруженный файл удалён',
-                            );
-                    });
+                    try {
+                        fs.unlinkSync(path.join(uploadDir, fileName));
+                        console.log('UPLOAD_LOG: Частично загруженный файл удалён');
+                    } catch (unlinkErr) {
+                        console.error('UPLOAD_LOG: Ошибка удаления файла', unlinkErr);
+                    }
                 }
-                sendError(499, 'Client closed the connection');
+                // Не отправляем ошибку клиенту, так как соединение уже закрыто
+                isResponseSent = true;
+                console.log('UPLOAD_LOG: Обработка закрытия соединения завершена');
             }
         });
 
@@ -331,6 +328,7 @@ export class FilesService {
                             console.error(
                                 'UPLOAD_LOG: Недостаточно места на диске',
                             );
+                            uploadError = true; // Устанавливаем флаг ошибки
                             file.resume();
                             writeStream?.destroy();
                             return sendError(
@@ -391,25 +389,33 @@ export class FilesService {
                                 console.log(
                                     'UPLOAD_LOG: Генерация превью для изображения',
                                 );
-                                const thumbnailPaths = await generateThumbnails(
-                                    userId,
-                                    fileRecord.id,
-                                    filePath,
-                                    this.config,
-                                );
-
-                                if (thumbnailPaths) {
-                                    await this.prisma.file.update({
-                                        where: { id: fileRecord.id },
-                                        data: {
-                                            thumbnailLarge: thumbnailPaths[0],
-                                            thumbnailMedium: thumbnailPaths[1],
-                                            thumbnailSmall: thumbnailPaths[2],
-                                        },
-                                    });
-                                    console.log(
-                                        'UPLOAD_LOG: Превью успешно сохранены',
+                                try {
+                                    const thumbnailPaths = await generateThumbnails(
+                                        userId,
+                                        fileRecord.id,
+                                        filePath,
+                                        this.config,
                                     );
+
+                                    if (thumbnailPaths) {
+                                        await this.prisma.file.update({
+                                            where: { id: fileRecord.id },
+                                            data: {
+                                                thumbnailLarge: thumbnailPaths[0],
+                                                thumbnailMedium: thumbnailPaths[1],
+                                                thumbnailSmall: thumbnailPaths[2],
+                                            },
+                                        });
+                                        console.log(
+                                            'UPLOAD_LOG: Превью успешно сохранены',
+                                        );
+                                    }
+                                } catch (thumbnailError) {
+                                    console.error(
+                                        'UPLOAD_LOG: Ошибка при создании превью:',
+                                        thumbnailError,
+                                    );
+                                    // Продолжаем выполнение, так как файл уже загружен
                                 }
                             }
 
@@ -485,6 +491,9 @@ export class FilesService {
                 if (!uploadError && !isResponseSent) {
                     if (!fileName) {
                         sendError(HttpStatus.BAD_REQUEST, 'No file uploaded');
+                    } else if (writeStream && !writeStream.destroyed && !writeStream.closed) {
+                        // Убедимся, что поток закрыт, если он все еще открыт
+                        writeStream.end();
                     }
                 }
             });
