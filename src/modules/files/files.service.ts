@@ -152,367 +152,278 @@ export class FilesService {
         res: Response,
         idContext?: string,
     ) {
-        console.log('UPLOAD_LOG: Начало загрузки для пользователя', userId);
-        // Устанавливаем таймаут соединения (30 минут)
-        req.socket.setTimeout(30 * 60 * 1000);
+        console.log(
+            `[UPLOAD] Start upload for user: ${userId}, idContext: ${idContext}`,
+        );
 
-        let uploadError = false;
-        let isResponseSent = false;
-        let writeStream: fs.WriteStream | null = null;
-        let fileName = '';
+        const busboy = Busboy({ headers: req.headers });
+
+        let uploadDir: string;
+        let directory: File;
+        let directoryId: string;
+        let fileName: string;
         let fileSize = 0;
-        let uploadDir = '';
-        let directoryId: string | null = null;
+        let fileReceived = false;
+        let uploadError = false;
+        let saveTo: string;
 
-        // Функция для отправки ошибок
-        const sendError = (status: number, message: string, error?: any) => {
-            if (!isResponseSent) {
-                isResponseSent = true;
-                console.error('UPLOAD_LOG: Ошибка', message, error);
-                res.status(status).json({ message, error: error?.message });
-                if (writeStream && !writeStream.destroyed) {
-                    writeStream.destroy();
-                }
-            }
-        };
-
-        // Обработка закрытия соединения клиентом
-        req.on('close', () => {
-            console.warn('UPLOAD_LOG: Соединение закрыто клиентом.');
-            if (!isResponseSent) {
-                uploadError = true;
-                if (writeStream && !writeStream.destroyed) {
-                    writeStream.destroy();
-                }
-                // Пытаемся удалить частично загруженный файл
-                if (fileName && uploadDir) {
-                    try {
-                        fs.unlinkSync(path.join(uploadDir, fileName));
-                        console.log('UPLOAD_LOG: Частично загруженный файл удалён');
-                    } catch (unlinkErr) {
-                        console.error('UPLOAD_LOG: Ошибка удаления файла', unlinkErr);
-                    }
-                }
-                // Не отправляем ошибку клиенту, так как соединение уже закрыто
-                isResponseSent = true;
-                console.log('UPLOAD_LOG: Обработка закрытия соединения завершена');
-            }
+        const user = await this.prisma.user.findUnique({
+            where: { id: userId },
         });
 
-        // Таймаут запроса
-        req.on('timeout', () => {
-            console.warn('UPLOAD_LOG: Превышен таймаут запроса');
-            uploadError = true;
-            sendError(408, 'Request timeout');
-            req.destroy();
-        });
+        const quota = user.storageQuota;
+        const usedSpace = user.usedQuota;
+        const remainingSpace = quota - usedSpace;
 
-        try {
-            console.log('UPLOAD_LOG: Проверка пользователя', userId);
-            // Получаем информацию о пользователе
-            const user = await this.prisma.user.findUnique({
-                where: { id: userId },
+        if (idContext) {
+            const file = await this.prisma.file.findFirst({
+                where: {
+                    path: path.posix.join(userId, 'files', idContext),
+                    isDirectory: true,
+                    isDeleted: false,
+                },
             });
 
-            if (!user) {
-                return sendError(HttpStatus.NOT_FOUND, 'User not found');
+            if (!file || file.isDeleted) {
+                console.log(
+                    `[UPLOAD] Directory not found for idContext: ${idContext}`,
+                );
+                return res.status(HttpStatus.NOT_FOUND).json({
+                    message: 'Directory not found.',
+                });
             }
 
-            const quota = user.storageQuota;
-            const usedSpace = user.usedQuota;
-            const remainingSpace = quota - usedSpace;
-            console.log(
-                'UPLOAD_LOG: Доступное место (в байтах):',
-                remainingSpace,
-            );
-            // Определяем директорию для загрузки
-            if (idContext) {
+            if (!file.isDirectory) {
                 console.log(
-                    'UPLOAD_LOG: Поиск директории с idContext:',
-                    idContext,
+                    `[UPLOAD] idContext is not a directory: ${idContext}`,
                 );
-                const directory = await this.prisma.file.findFirst({
+                return res.status(HttpStatus.BAD_REQUEST).json({
+                    message: 'Is not a directory.',
+                });
+            }
+
+            directory = file;
+            directoryId = file.id;
+
+            uploadDir = path.join(
+                this.config.getOrThrow<string>('STORAGE_PATH'),
+                directory.path,
+            );
+        } else {
+            uploadDir = path.join(
+                this.config.getOrThrow<string>('STORAGE_PATH'),
+                userId,
+                'files',
+            );
+        }
+
+        if (!fs.existsSync(uploadDir)) {
+            console.log(
+                `[UPLOAD] Upload directory does not exist: ${uploadDir}`,
+            );
+            return res.status(HttpStatus.NOT_FOUND).json({
+                message: 'Upload directory not found.',
+            });
+        }
+
+        busboy.on('file', async (_, file, fileInfo) => {
+            if (fileReceived) {
+                file.resume();
+                return;
+            }
+            fileReceived = true;
+
+            try {
+                fileName = Buffer.from(fileInfo.filename, 'binary').toString(
+                    'utf8',
+                );
+                fileName = path.basename(fileName);
+
+                console.log(`[UPLOAD] Receiving file: ${fileName}`);
+
+                const isNotFreeName = await this.prisma.file.findFirst({
                     where: {
-                        path: path.posix.join(userId, 'files', idContext),
-                        isDirectory: true,
+                        userId: userId,
+                        name: fileName,
+                        directoryId: directoryId ?? null,
                         isDeleted: false,
                     },
                 });
 
-                if (!directory) {
-                    return sendError(
-                        HttpStatus.NOT_FOUND,
-                        'Directory not found',
+                if (isNotFreeName) {
+                    console.log(
+                        `[UPLOAD] File name already taken: ${fileName}`,
                     );
-                }
-
-                if (!directory.isDirectory) {
-                    return sendError(HttpStatus.BAD_REQUEST, 'Not a directory');
-                }
-
-                directoryId = directory.id;
-                uploadDir = path.join(
-                    this.config.getOrThrow<string>('STORAGE_PATH'),
-                    directory.path,
-                );
-            } else {
-                uploadDir = path.join(
-                    this.config.getOrThrow<string>('STORAGE_PATH'),
-                    userId,
-                    'files',
-                );
-            }
-
-            // Проверяем существование директории (асинхронно)
-            try {
-                await fs.promises.access(uploadDir);
-                console.log(
-                    'UPLOAD_LOG: Директория для загрузки найдена:',
-                    uploadDir,
-                );
-            } catch {
-                return sendError(
-                    HttpStatus.NOT_FOUND,
-                    'Upload directory not found',
-                );
-            }
-
-            const busboy = Busboy({ headers: req.headers });
-            console.log('UPLOAD_LOG: Инициализирован Busboy');
-
-            busboy.on('file', async (_, file, fileInfo) => {
-                console.log(
-                    'UPLOAD_LOG: Получен файл:',
-                    fileInfo.filename,
-                    'MIME тип:',
-                    fileInfo.mimeType,
-                );
-                try {
-                    fileName = fileInfo.filename;
-
-                    // Проверяем уникальность имени файла
-                    const existingFile = await this.prisma.file.findFirst({
-                        where: {
-                            userId: userId,
-                            name: fileName,
-                            directoryId: directoryId ?? null,
-                            isDeleted: false,
-                        },
+                    file.resume();
+                    uploadError = true;
+                    return res.status(HttpStatus.BAD_REQUEST).json({
+                        message: 'The file name is already taken',
                     });
+                }
 
-                    if (existingFile) {
-                        console.warn(
-                            'UPLOAD_LOG: Файл с таким именем уже существует:',
-                            fileName,
+                fileSize = 0;
+                saveTo = path.join(uploadDir, fileName);
+                const writeStream = fs.createWriteStream(saveTo);
+
+                file.on('data', chunk => {
+                    fileSize += chunk.length;
+                    if (fileSize > remainingSpace) {
+                        console.log(
+                            `[UPLOAD] Not enough disk space for file: ${fileName}`,
                         );
                         file.resume();
-                        return sendError(
-                            HttpStatus.BAD_REQUEST,
-                            'Filename already exists',
-                        );
+                        uploadError = true;
+                        writeStream.destroy();
+                        fs.promises.rm(saveTo, { force: true }).catch(() => {});
+                        return res.status(HttpStatus.BAD_REQUEST).json({
+                            message: 'Not enough disk space available.',
+                        });
                     }
+                });
 
-                    const saveTo = path.join(uploadDir, fileName);
-                    writeStream = fs.createWriteStream(saveTo);
-                    console.log(
-                        'UPLOAD_LOG: Создан поток для записи файла:',
-                        saveTo,
+                file.pipe(writeStream);
+
+                file.on('error', err => {
+                    console.error(
+                        `[UPLOAD] Error uploading file: ${fileName}`,
+                        err,
                     );
-
-                    file.on('data', chunk => {
-                        fileSize += chunk.length;
-                        process.stdout.write(
-                            `\rUPLOAD_LOG: Получен кусок данных: ${chunk.length} байт. Общий размер: ${(fileSize / (1024 * 1024)).toFixed(2)} MB`,
-                        );
-                        if (fileSize > remainingSpace) {
-                            console.error(
-                                'UPLOAD_LOG: Недостаточно места на диске',
-                            );
-                            uploadError = true; // Устанавливаем флаг ошибки
-                            file.resume();
-                            writeStream?.destroy();
-                            return sendError(
-                                HttpStatus.BAD_REQUEST,
-                                'Not enough disk space',
-                            );
-                        }
-                    });
-
-                    file.pipe(writeStream);
-
-                    file.on('error', err => {
-                        console.error('UPLOAD_LOG: Ошибка файла:', err);
-                        uploadError = true;
-                        sendError(
-                            HttpStatus.INTERNAL_SERVER_ERROR,
-                            'File upload error',
-                            err,
-                        );
-                    });
-
-                    writeStream.on('finish', async () => {
-                        console.log('UPLOAD_LOG: Запись файла завершена');
-                        if (uploadError || isResponseSent) return;
-
-                        try {
-                            const filePath = directoryId
-                                ? path.posix.join(
-                                      userId,
-                                      'files',
-                                      idContext!,
-                                      fileName,
-                                  )
-                                : path.posix.join(userId, 'files', fileName);
-
-                            console.log(
-                                'UPLOAD_LOG: Путь файла для записи в базу:',
-                                filePath,
-                            );
-                            // Создаем запись в базе данных
-                            const fileRecord = await this.prisma.file.create({
-                                data: {
-                                    name: fileName,
-                                    userId: userId,
-                                    directoryId: directoryId,
-                                    size: fileSize,
-                                    mimeType: fileInfo.mimeType,
-                                    path: filePath,
-                                },
-                            });
-
-                            console.log(
-                                'UPLOAD_LOG: Запись в базе данных успешно создана, ID:',
-                                fileRecord.id,
-                            );
-                            // Генерируем превью (если нужно)
-                            if (fileInfo.mimeType.startsWith('image/')) {
-                                console.log(
-                                    'UPLOAD_LOG: Генерация превью для изображения',
-                                );
-                                try {
-                                    const thumbnailPaths = await generateThumbnails(
-                                        userId,
-                                        fileRecord.id,
-                                        filePath,
-                                        this.config,
-                                    );
-
-                                    if (thumbnailPaths) {
-                                        await this.prisma.file.update({
-                                            where: { id: fileRecord.id },
-                                            data: {
-                                                thumbnailLarge: thumbnailPaths[0],
-                                                thumbnailMedium: thumbnailPaths[1],
-                                                thumbnailSmall: thumbnailPaths[2],
-                                            },
-                                        });
-                                        console.log(
-                                            'UPLOAD_LOG: Превью успешно сохранены',
-                                        );
-                                    }
-                                } catch (thumbnailError) {
-                                    console.error(
-                                        'UPLOAD_LOG: Ошибка при создании превью:',
-                                        thumbnailError,
-                                    );
-                                    // Продолжаем выполнение, так как файл уже загружен
-                                }
-                            }
-
-                            // Обновляем квоту пользователя
-                            await this.prisma.user.update({
-                                where: { id: userId },
-                                data: {
-                                    usedQuota: { increment: fileSize },
-                                },
-                            });
-                            console.log(
-                                'UPLOAD_LOG: Квота пользователя обновлена',
-                            );
-
-                            if (!isResponseSent) {
-                                isResponseSent = true;
-                                console.log(
-                                    'UPLOAD_LOG: Отправка успешного ответа клиенту',
-                                );
-                                res.status(HttpStatus.OK).json({
-                                    message: 'File uploaded successfully',
-                                    fileId: fileRecord.id,
-                                });
-                            }
-                        } catch (dbError) {
-                            console.error(
-                                'UPLOAD_LOG: Ошибка при работе с базой данных:',
-                                dbError,
-                            );
-                            uploadError = true;
-                            sendError(
-                                HttpStatus.INTERNAL_SERVER_ERROR,
-                                'Database error',
-                                dbError,
-                            );
-                            // Удаляем загруженный файл при ошибке БД
-                            fs.unlink(saveTo, err => {
-                                if (err)
-                                    console.error(
-                                        'UPLOAD_LOG: Ошибка удаления файла после БД ошибки:',
-                                        err,
-                                    );
-                                else
-                                    console.log(
-                                        'UPLOAD_LOG: Файл удалён после ошибки базы',
-                                    );
-                            });
-                        }
-                    });
-
-                    writeStream.on('error', err => {
-                        console.error('UPLOAD_LOG: Ошибка записи в файл:', err);
-                        uploadError = true;
-                        sendError(
-                            HttpStatus.INTERNAL_SERVER_ERROR,
-                            'File write error',
-                            err,
-                        );
-                    });
-                } catch (error) {
-                    console.error('UPLOAD_LOG: Ошибка обработки файла:', error);
+                    writeStream.destroy();
                     uploadError = true;
-                    sendError(
-                        HttpStatus.INTERNAL_SERVER_ERROR,
-                        'File processing error',
-                        error,
+                    fs.promises.rm(saveTo, { force: true }).catch(() => {});
+                    return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+                        message: 'Error uploading file.',
+                    });
+                });
+
+                writeStream.on('error', err => {
+                    uploadError = true;
+                    console.error(
+                        `[UPLOAD] Error writing file: ${fileName}`,
+                        err,
                     );
-                }
-            });
+                    fs.promises.rm(saveTo, { force: true }).catch(() => {});
+                    return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+                        message: 'Error writing file.',
+                    });
+                });
 
-            busboy.on('finish', () => {
-                console.log('UPLOAD_LOG: Завершена обработка данных Busboy');
-                if (!uploadError && !isResponseSent) {
-                    if (!fileName) {
-                        sendError(HttpStatus.BAD_REQUEST, 'No file uploaded');
-                    } else if (writeStream && !writeStream.destroyed && !writeStream.closed) {
-                        // Убедимся, что поток закрыт, если он все еще открыт
-                        writeStream.end();
+                writeStream.on('finish', async () => {
+                    if (uploadError) return;
+                    try {
+                        const filePath = directoryId
+                            ? path.posix.join(directory.path, fileName)
+                            : path.posix.join(userId, 'files', fileName);
+
+                        const dbFile = await this.prisma.file.create({
+                            data: {
+                                name: fileName,
+                                userId: userId,
+                                directoryId: directoryId ?? null,
+                                size: fileSize,
+                                mimeType: fileInfo.mimeType,
+                                path: filePath,
+                            },
+                        });
+
+                        console.log(
+                            `[UPLOAD] File saved to DB: ${fileName}, id: ${dbFile.id}`,
+                        );
+
+                        const thumbnailPaths = await generateThumbnails(
+                            userId,
+                            dbFile.id,
+                            filePath,
+                            this.config,
+                        );
+
+                        if (thumbnailPaths) {
+                            await this.prisma.file.update({
+                                where: { id: dbFile.id },
+                                data: {
+                                    thumbnailLarge: thumbnailPaths[0],
+                                    thumbnailMedium: thumbnailPaths[1],
+                                    thumbnailSmall: thumbnailPaths[2],
+                                },
+                            });
+                            console.log(
+                                `[UPLOAD] Thumbnails generated for: ${fileName}`,
+                            );
+                        }
+
+                        await this.prisma.user.update({
+                            where: { id: userId },
+                            data: {
+                                usedQuota: usedSpace + BigInt(fileSize),
+                            },
+                        });
+                        console.log(
+                            `[UPLOAD] User quota updated for user: ${userId}`,
+                        );
+
+                        res.status(HttpStatus.OK).json({
+                            message: 'File uploaded successfully.',
+                        });
+                    } catch (dbError) {
+                        uploadError = true;
+                        console.error(
+                            `[UPLOAD] Database error for file: ${fileName}`,
+                            dbError,
+                        );
+                        fs.promises.rm(saveTo, { force: true }).catch(() => {});
+                        return res
+                            .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                            .json({
+                                message:
+                                    'Database error while saving file metadata.',
+                                error: dbError,
+                            });
                     }
-                }
-            });
-
-            busboy.on('error', error => {
-                console.error('UPLOAD_LOG: Ошибка Busboy:', error);
+                });
+            } catch (error) {
                 uploadError = true;
-                sendError(
-                    HttpStatus.INTERNAL_SERVER_ERROR,
-                    'Upload processing error',
+                console.error(
+                    `[UPLOAD] Error processing file upload: ${fileName}`,
                     error,
                 );
-            });
+                if (saveTo)
+                    fs.promises.rm(saveTo, { force: true }).catch(() => {});
+                return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+                    message: 'Error processing file upload.',
+                    error: error,
+                });
+            }
+        });
 
-            req.pipe(busboy);
-        } catch (error) {
-            console.error('UPLOAD_LOG: Общая ошибка сервера:', error);
-            sendError(HttpStatus.INTERNAL_SERVER_ERROR, 'Server error', error);
-        }
+        busboy.on('finish', () => {
+            if (!uploadError && !fileReceived) {
+                res.status(HttpStatus.BAD_REQUEST).json({
+                    message: 'No file uploaded.',
+                });
+            }
+        });
+
+        busboy.on('error', error => {
+            console.error(`[UPLOAD] Busboy error:`, error);
+            res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+                message: 'Error processing request.',
+                error: error,
+            });
+        });
+
+        const handleAbort = () => {
+            if (!uploadError && fileReceived && saveTo) {
+                uploadError = true;
+                console.warn(
+                    `[UPLOAD] Upload aborted by client for file: ${fileName}`,
+                );
+                fs.promises.rm(saveTo, { force: true }).catch(() => {});
+            }
+        };
+        req.on('aborted', handleAbort);
+        req.on('close', handleAbort);
+
+        req.pipe(busboy);
     }
 
     public async getFile(
