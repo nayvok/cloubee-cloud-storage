@@ -6,15 +6,13 @@ services:
         container_name: postgres
         # Образ для создания контейнера
         image: postgres:15.2
-        # Политика перезапуска контейнера
-        restart: always
         # Переменные окружения для настройки базы данных
         environment:
             - POSTGRES_USER=${POSTGRES_USER}
             - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
         # Порты для доступа к базе данных
         ports:
-            - '5433:5432'
+            - '5432:5432'
         # Подключение постоянного хранилища для данных базы данных
         volumes:
             - postgres_data:/var/lib/postgresql/data
