@@ -1,6 +1,7 @@
 'use client';
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
 import { FilePlus, FolderPlus, Plus, Upload } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { usePathname } from 'next/navigation';
@@ -16,6 +17,7 @@ import {
 } from '@/components/ui/common/sidebar';
 import { uploadMutationFn } from '@/libs/api/files/files-api';
 import { QUERY_KEYS } from '@/libs/api/query-keys';
+import { filesStore } from '@/libs/store/files/files.store';
 
 import {
     DropdownMenu,
@@ -27,7 +29,11 @@ import {
 
 export function NavButtons() {
     const t = useTranslations('layouts.sidebar.navButtons');
+    const tUploading = useTranslations('files.uploader');
     const [isMkdirFormOpen, setIsMkdirFormOpen] = useState(false);
+
+    const setUploadedFile = filesStore(state => state.setUploadedFile);
+    const removeUploadedFile = filesStore(state => state.removeUploadedFile);
 
     const queryClient = useQueryClient();
     const pathname = usePathname()
@@ -43,29 +49,100 @@ export function NavButtons() {
             queryClient.invalidateQueries({
                 predicate: query => query.queryKey[0] === QUERY_KEYS.FILES,
             });
+            queryClient.invalidateQueries({
+                queryKey: [QUERY_KEYS.USER],
+            });
         },
     });
 
-    const onChange = async (e: ChangeEvent<HTMLInputElement>) => {
+    const onUpload = async (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
             for (const file of e.target.files) {
-                toast.promise(
-                    uploadMutation.mutateAsync({
+                setUploadedFile({
+                    fileName: file.name,
+                    fileSize: file.size,
+                    fileLoaded: 0,
+                    fileTotal: file.size,
+                    isUploaded: false,
+                    isNameError: false,
+                    isSpaceError: false,
+                    fileOnCancel: () => {},
+                });
+            }
+
+            for (const file of e.target.files) {
+                const controller = new AbortController();
+
+                try {
+                    await uploadMutation.mutateAsync({
                         file: file,
                         idContext: pathname,
-                        onUploadProgress: progress => {
-                            console.log(
-                                'Custom upload progress: ' + progress.loaded,
-                            );
+                        onUploadProgress: progressEvent => {
+                            setUploadedFile({
+                                fileName: file.name,
+                                fileSize: file.size,
+                                fileLoaded: progressEvent.loaded,
+                                fileTotal: progressEvent.total || file.size,
+                                isUploaded: false,
+                                isNameError: false,
+                                isSpaceError: false,
+                                fileOnCancel: () => {
+                                    controller.abort();
+                                },
+                            });
                         },
-                    }),
-                    {
-                        loading: 'Загрузка',
-                        success: 'Успешно',
-                        error: 'Ошибка',
-                        cancel: 'Cancel',
-                    },
-                );
+                        abortController: controller,
+                    });
+
+                    setUploadedFile({
+                        fileName: file.name,
+                        fileSize: file.size,
+                        fileLoaded: 100,
+                        fileTotal: file.size,
+                        isUploaded: true,
+                        isNameError: false,
+                        isSpaceError: false,
+                        fileOnCancel: () => {},
+                    });
+                } catch (error: unknown) {
+                    if ((error as Error).message === 'NAME_ALREADY_TAKEN') {
+                        setUploadedFile({
+                            fileName: file.name,
+                            fileSize: file.size,
+                            fileLoaded: 100,
+                            fileTotal: file.size,
+                            isUploaded: true,
+                            isNameError: true,
+                            isSpaceError: false,
+                            fileOnCancel: () => {},
+                        });
+                    } else {
+                        if (
+                            (error as Error).message === 'NOT_ENOUGH_DISK_SPACE'
+                        ) {
+                            setUploadedFile({
+                                fileName: file.name,
+                                fileSize: file.size,
+                                fileLoaded: 100,
+                                fileTotal: file.size,
+                                isUploaded: true,
+                                isNameError: false,
+                                isSpaceError: true,
+                                fileOnCancel: () => {},
+                            });
+                        } else {
+                            const response = (error as AxiosError).response;
+                            removeUploadedFile({
+                                fileName: file.name,
+                            });
+                            if (response?.data) {
+                                toast.error(
+                                    `${t('fileUploadingError')} ${file.name}`,
+                                );
+                            }
+                        }
+                    }
+                }
             }
         }
     };
@@ -79,16 +156,16 @@ export function NavButtons() {
                         tooltip={t('upload')}
                         className="bg-primary text-primary-foreground hover:bg-primary/75 hover:text-primary-foreground/100 active:bg-primary/75 active:text-primary-foreground/100 cursor-pointer"
                     >
-                        <label className="flex cursor-pointer items-center gap-2">
+                        <label className="relative flex cursor-pointer items-center gap-2">
                             <Upload className="h-4 w-4 cursor-pointer" />
                             <span className="cursor-pointer">
                                 {t('upload')}
                             </span>
                             <input
                                 type="file"
-                                className="absolute h-full w-full cursor-pointer opacity-0"
+                                className="invisible absolute h-full w-full cursor-pointer"
                                 multiple
-                                onChange={onChange}
+                                onChange={onUpload}
                             />
                         </label>
                     </SidebarMenuButton>

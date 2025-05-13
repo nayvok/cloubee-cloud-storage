@@ -1,6 +1,7 @@
 import { RefObject } from 'react';
 import Selecto from 'react-selecto';
 
+import { IUploadedFile } from '@/components/ui/elements/file-uploader-list';
 import { IFileResponse } from '@/libs/api/files/files.types';
 import { TypeChangeFilesSortModeSchema } from '@/schemas/files/change-files-sort-mode.schema';
 import { TypeChangeFilesViewModeSchema } from '@/schemas/files/change-files-view-mode.schema';
@@ -29,4 +30,9 @@ export interface IFilesStore {
 
     selectoRef: RefObject<Selecto | null>;
     setSelectoRef: (selectoRef: RefObject<Selecto | null>) => void;
+
+    uploadedFiles: IUploadedFile[];
+    setUploadedFile: (uploadedFile: IUploadedFile) => void;
+    removeUploadedFile: (uploadedFile: Pick<IUploadedFile, 'fileName'>) => void;
+    clearUploadedFiles: () => void;
 }

@@ -50,16 +50,26 @@ export const moveToTrashMutationFn = async (data: TypeMoveToTrashSchema) => {
     return response.data;
 };
 
-export const uploadMutationFn = async (data: IUploadResponse) => {
+export const uploadMutationFn = async (
+    data: IUploadResponse & { abortController?: AbortController },
+) => {
     const formData = new FormData();
     formData.append('file', data.file);
 
     const response = await API.post(
-        `${API_ROUTES.FILES.UPLOAD}${data.idContext ? `?idContext=${data.idContext}` : ''}`,
+        `${API_ROUTES.FILES.UPLOAD}${data.idContext ? `?idContext=${data.idContext}&fileName=${data.file.name}&fileSize=${data.file.size}` : `?fileName=${data.file.name}&fileSize=${data.file.size}`}`,
         formData,
         {
             onUploadProgress: data.onUploadProgress || (() => {}),
+            timeout: 900000,
+            maxContentLength: Infinity,
+            maxBodyLength: Infinity,
+            signal: data.abortController?.signal,
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
         },
     );
+
     return response.data;
 };

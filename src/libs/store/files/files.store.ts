@@ -38,4 +38,36 @@ export const filesStore = create<
     selectoRef: createRef<Selecto>(),
     setSelectoRef: (selectoRef: RefObject<Selecto | null>) =>
         set({ selectoRef }),
+
+    uploadedFiles: [],
+    setUploadedFile: uploadedFile =>
+        set(state => {
+            const existingIndex = state.uploadedFiles.findIndex(
+                file => file.fileName === uploadedFile.fileName,
+            );
+
+            if (existingIndex !== -1) {
+                const updatedFiles = [...state.uploadedFiles];
+                updatedFiles[existingIndex] = {
+                    ...updatedFiles[existingIndex],
+                    ...uploadedFile,
+                };
+                return { uploadedFiles: updatedFiles };
+            }
+
+            return {
+                uploadedFiles: [...state.uploadedFiles, uploadedFile],
+            };
+        }),
+    removeUploadedFile: uploadedFile =>
+        set(state => {
+            const filteredUploadedFiles = state.uploadedFiles.filter(
+                file => file.fileName !== uploadedFile.fileName,
+            );
+
+            return {
+                uploadedFiles: [...filteredUploadedFiles],
+            };
+        }),
+    clearUploadedFiles: () => set({ uploadedFiles: [] }),
 }));

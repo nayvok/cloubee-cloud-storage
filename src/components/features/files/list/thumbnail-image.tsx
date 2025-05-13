@@ -24,8 +24,6 @@ const ThumbnailImage = ({ fileId, viewMode }: ThumbnailImageProps) => {
             size = 'small';
     }
 
-    console.log(fileId);
-
     const { data, isLoading } = useThumbnailQuery({ fileId, size });
     const [blobUrl, setBlobUrl] = useState<string | null>(null);
 

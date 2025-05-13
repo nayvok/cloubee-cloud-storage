@@ -4,6 +4,7 @@ import { ReactNode } from 'react';
 import Header from '@/components/layout/header/header';
 import SidebarLayout from '@/components/layout/sidebar/sidebar-layout';
 import { SidebarInset } from '@/components/ui/common/sidebar';
+import FileUploaderList from '@/components/ui/elements/file-uploader-list';
 
 export default async function DashboardLayout({
     children,
@@ -24,6 +25,7 @@ export default async function DashboardLayout({
                         {children}
                     </div>
                 </div>
+                <FileUploaderList />
             </SidebarInset>
         </SidebarLayout>
     );

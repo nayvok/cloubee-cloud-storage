@@ -101,6 +101,14 @@
                 "rename": "Rename",
                 "delete": "Delete"
             }
+        },
+        "uploader": {
+            "isNameError": "Already exists in the folder",
+            "isSpaceError": "Not enough disk space",
+            "listTitle": "Uploads",
+            "listCollapsedTrue": "Expand",
+            "listCollapsedFalse": "Collapse",
+            "fileUploadingError": "An error occurred while uploading the file:"
         }
     },
     "layouts": {

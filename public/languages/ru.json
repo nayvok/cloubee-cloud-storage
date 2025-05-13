@@ -101,6 +101,14 @@
                 "rename": "Переименовать",
                 "delete": "Удалить"
             }
+        },
+        "uploader": {
+            "isNameError": "Уже есть в папке",
+            "isSpaceError": "Не хватает места на диске",
+            "listTitle": "Загрузки",
+            "listCollapsedTrue": "Развернуть",
+            "listCollapsedFalse": "Свернуть",
+            "fileUploadingError": "Произошла ошибка при загрузке файла:"
         }
     },
     "layouts": {
