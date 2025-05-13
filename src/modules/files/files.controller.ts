@@ -38,6 +38,8 @@ export class FilesController {
     @Post('upload')
     @ApiConsumes('multipart/form-data')
     @ApiQuery({ name: 'idContext', required: false })
+    @ApiQuery({ name: 'fileName', required: false })
+    @ApiQuery({ name: 'fileSize', required: false })
     @ApiBody({
         schema: {
             type: 'object',
@@ -52,8 +54,17 @@ export class FilesController {
         @Req() req: Request,
         @Res() res: Response,
         @Query('idContext') idContext?: string,
+        @Query('fileName') fileName?: string,
+        @Query('fileSize') fileSize?: string,
     ) {
-        return this.filesService.upload(userId, req, res, idContext);
+        return this.filesService.upload(
+            userId,
+            req,
+            res,
+            idContext,
+            fileName,
+            Number(fileSize),
+        );
     }
 
     @Post('rename')

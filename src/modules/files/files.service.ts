@@ -151,21 +151,17 @@ export class FilesService {
         req: Request,
         res: Response,
         idContext?: string,
+        fileName?: string,
+        fileSizeClient?: number,
     ) {
         console.log(
             `[UPLOAD] Start upload for user: ${userId}, idContext: ${idContext}`,
         );
 
-        const busboy = Busboy({ headers: req.headers });
-
+        // Проверки перед инициализацией Busboy
         let uploadDir: string;
         let directory: File;
         let directoryId: string;
-        let fileName: string;
-        let fileSize = 0;
-        let fileReceived = false;
-        let uploadError = false;
-        let saveTo: string;
 
         const user = await this.prisma.user.findUnique({
             where: { id: userId },
@@ -180,7 +176,6 @@ export class FilesService {
                 where: {
                     path: path.posix.join(userId, 'files', idContext),
                     isDirectory: true,
-                    isDeleted: false,
                 },
             });
 
@@ -226,6 +221,35 @@ export class FilesService {
             });
         }
 
+        const isNotFreeName = await this.prisma.file.findFirst({
+            where: {
+                userId: userId,
+                name: fileName,
+                directoryId: directoryId ?? null,
+                isDeleted: false,
+            },
+        });
+
+        if (isNotFreeName) {
+            console.log(`[UPLOAD] File name already taken: ${fileName}`);
+            return res.status(HttpStatus.BAD_REQUEST).json({
+                message: 'NAME_ALREADY_TAKEN',
+            });
+        }
+
+        if (fileSizeClient > Number(remainingSpace)) {
+            console.log(`[UPLOAD] Not enough disk space for file: ${fileName}`);
+            return res.status(HttpStatus.BAD_REQUEST).json({
+                message: 'NOT_ENOUGH_DISK_SPACE',
+            });
+        }
+
+        const busboy = Busboy({ headers: req.headers });
+        let fileSize = 0;
+        let fileReceived = false;
+        let uploadError = false;
+        let saveTo: string;
+
         busboy.on('file', async (_, file, fileInfo) => {
             if (fileReceived) {
                 file.resume();
@@ -241,44 +265,12 @@ export class FilesService {
 
                 console.log(`[UPLOAD] Receiving file: ${fileName}`);
 
-                const isNotFreeName = await this.prisma.file.findFirst({
-                    where: {
-                        userId: userId,
-                        name: fileName,
-                        directoryId: directoryId ?? null,
-                        isDeleted: false,
-                    },
-                });
-
-                if (isNotFreeName) {
-                    console.log(
-                        `[UPLOAD] File name already taken: ${fileName}`,
-                    );
-                    file.resume();
-                    uploadError = true;
-                    return res.status(HttpStatus.BAD_REQUEST).json({
-                        message: 'The file name is already taken',
-                    });
-                }
-
                 fileSize = 0;
                 saveTo = path.join(uploadDir, fileName);
                 const writeStream = fs.createWriteStream(saveTo);
 
                 file.on('data', chunk => {
                     fileSize += chunk.length;
-                    if (fileSize > remainingSpace) {
-                        console.log(
-                            `[UPLOAD] Not enough disk space for file: ${fileName}`,
-                        );
-                        file.resume();
-                        uploadError = true;
-                        writeStream.destroy();
-                        fs.promises.rm(saveTo, { force: true }).catch(() => {});
-                        return res.status(HttpStatus.BAD_REQUEST).json({
-                            message: 'Not enough disk space available.',
-                        });
-                    }
                 });
 
                 file.pipe(writeStream);
@@ -411,17 +403,16 @@ export class FilesService {
             });
         });
 
-        const handleAbort = () => {
+        const handleAbort = (text: string) => {
             if (!uploadError && fileReceived && saveTo) {
                 uploadError = true;
                 console.warn(
-                    `[UPLOAD] Upload aborted by client for file: ${fileName}`,
+                    `[UPLOAD] Upload ${text} by client for file: ${fileName}`,
                 );
                 fs.promises.rm(saveTo, { force: true }).catch(() => {});
             }
         };
-        req.on('aborted', handleAbort);
-        req.on('close', handleAbort);
+        req.on('aborted', () => handleAbort('aborted'));
 
         req.pipe(busboy);
     }
