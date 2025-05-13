@@ -137,7 +137,7 @@ export function NavButtons() {
                             });
                             if (response?.data) {
                                 toast.error(
-                                    `${t('fileUploadingError')} ${file.name}`,
+                                    `${tUploading('fileUploadingError')} ${file.name}`,
                                 );
                             }
                         }
