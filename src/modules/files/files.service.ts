@@ -419,43 +419,54 @@ export class FilesService {
 
     public async getFile(
         userId: string,
-        fileId: string,
+        fileIds: string[],
         res: Response,
         filePathFunc?: (file: File) => string,
     ) {
         try {
-            const file = await this.prisma.file.findUnique({
-                where: { id: fileId, userId: userId },
-            });
-
-            if (!file) {
-                return res.status(HttpStatus.NOT_FOUND).json({
-                    message: 'File not found',
+            if (fileIds.length === 1) {
+                const file = await this.prisma.file.findUnique({
+                    where: { id: fileIds[0], userId: userId },
                 });
-            }
 
-            const filePath = filePathFunc
-                ? filePathFunc(file)
-                : path.join(
-                      this.config.getOrThrow<string>('STORAGE_PATH'),
-                      file.path,
-                  );
+                const filePath = filePathFunc
+                    ? filePathFunc(file)
+                    : path.join(
+                          this.config.getOrThrow<string>('STORAGE_PATH'),
+                          file.path,
+                      );
 
-            if (!fs.existsSync(filePath)) {
-                return res.status(HttpStatus.NOT_FOUND).json({
-                    message: 'File not found',
+                if (file.isDirectory) {
+                    return res.status(HttpStatus.BAD_REQUEST).json({
+                        message: 'File is directory',
+                    });
+                }
+
+                return res.sendFile(filePath);
+            } else {
+                const files = await this.prisma.file.findMany({
+                    where: {
+                        id: {
+                            in: fileIds,
+                        },
+                        userId: userId,
+                    },
                 });
-            }
 
-            if (file.isDirectory) {
-                await this.sendArchive(res, filePath, path.basename(filePath));
-                return;
-            }
+                const haveDirs = files.every(file => Boolean(file.isDirectory));
 
-            return res.sendFile(filePath);
-        } catch {
+                if (haveDirs) {
+                    return res.status(HttpStatus.BAD_REQUEST).json({
+                        message: 'File is directory',
+                    });
+                }
+
+                return this.sendArchive(res, files);
+            }
+        } catch (error) {
             return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
                 message: 'Internal server error',
+                error: error,
             });
         }
     }
@@ -466,7 +477,7 @@ export class FilesService {
         size: 'small' | 'medium' | 'large',
         res: Response,
     ) {
-        return this.getFile(userId, fileId, res, file => {
+        return this.getFile(userId, [fileId], res, file => {
             const thumbnailPath = {
                 small: file.thumbnailSmall,
                 medium: file.thumbnailMedium,
@@ -710,26 +721,29 @@ export class FilesService {
         throw new Error(`Unknown sort mode: ${mode}`);
     }
 
-    private async sendArchive(
-        res: Response,
-        filePath: string,
-        filename: string,
-    ) {
+    private async sendArchive(res: Response, files: File[]) {
         res.setHeader('Content-Type', 'application/zip');
         res.setHeader(
             'Content-Disposition',
-            `attachment; filename="${filename}.zip"`,
+            `attachment; filename="archive.zip"`,
         );
 
         const archive = archiver('zip', { zlib: { level: 1 } });
 
         archive.on('error', () => {
-            res.status(500).send('Ошибка создания архива');
+            res.status(500).send('ERROR_CREATE_ARCHIVE');
         });
 
         archive.pipe(res);
 
-        archive.directory(filePath, false);
+        for (const file of files) {
+            const filePath = path.join(
+                this.config.getOrThrow<string>('STORAGE_PATH'),
+                file.path,
+            );
+
+            archive.file(filePath, { name: file.name });
+        }
 
         await archive.finalize();
     }

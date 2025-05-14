@@ -77,14 +77,14 @@ export class FilesController {
         return this.filesService.rename(userId, fileId, newName);
     }
 
-    @Get('/file/:fileId')
+    @Post('/file/download')
     @ApiBearerAuth()
     getFile(
         @UserId() userId: string,
-        @Param('fileId') fileId: string,
+        @Body('fileIds') fileIds: string[],
         @Res() res: Response,
     ) {
-        return this.filesService.getFile(userId, fileId, res);
+        return this.filesService.getFile(userId, fileIds, res);
     }
 
     @Get('/thumbnail/:fileId/:size')
