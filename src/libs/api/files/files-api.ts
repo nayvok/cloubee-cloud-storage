@@ -73,3 +73,20 @@ export const uploadMutationFn = async (
 
     return response.data;
 };
+
+export const downloadQueryFn = async (fileIds: string[]): Promise<Blob> => {
+    const response = await API.post<Blob>(
+        API_ROUTES.FILES.DOWNLOAD,
+        {
+            fileIds: fileIds,
+        },
+        {
+            responseType: 'blob',
+            timeout: 900000,
+            maxContentLength: Infinity,
+            maxBodyLength: Infinity,
+        },
+    );
+
+    return response.data;
+};

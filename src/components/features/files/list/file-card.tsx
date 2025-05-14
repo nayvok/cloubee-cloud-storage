@@ -13,6 +13,7 @@ import {
     ContextMenuTrigger,
 } from '@/components/ui/common/context-menu';
 import { IFileResponse } from '@/libs/api/files/files.types';
+import { useFileDownloader } from '@/libs/hooks/use-file-downloader';
 import { useIsMobile } from '@/libs/hooks/use-mobile';
 import { filesStore } from '@/libs/store/files/files.store';
 import { convertBytes } from '@/libs/utils/convert-bytes';
@@ -30,6 +31,8 @@ interface FileCardProps {
 const FileCard = ({ file, viewMode }: FileCardProps) => {
     const isMobile = useIsMobile();
     const t = useTranslations('files.fileCard');
+    const downloadFile = useFileDownloader();
+
     const [isRenameFormOpen, setIsRenameFormOpen] = useState(false);
     const [isMoveToTrashFormOpen, setIsMoveToTrashFormOpen] = useState(false);
 
@@ -42,13 +45,13 @@ const FileCard = ({ file, viewMode }: FileCardProps) => {
 
     const FileIcon = getFileIcon(file.mimeType, file.name, file.isDirectory);
 
-    const getMenuItems = (isMultiple: boolean) => {
+    const getMenuItems = (isMultiple: boolean, isHaveDir: boolean) => {
         const baseItems = [
             {
                 icon: <Download />,
                 label: t('actions.download'),
-                onClick: () => alert('Download'),
-                show: true,
+                onClick: () => downloadFile(),
+                show: !isHaveDir && !file.isDirectory,
             },
             {
                 icon: <PencilLine />,
@@ -210,19 +213,20 @@ const FileCard = ({ file, viewMode }: FileCardProps) => {
                         </CardContent>
                     </Card>
                 </ContextMenuTrigger>
-                {!isMoveToTrashFormOpen && (
-                    <ContextMenuContent>
-                        {getMenuItems(selectedFiles.length > 1).map(item => (
-                            <ContextMenuItem
-                                key={item.label}
-                                onClick={item.onClick}
-                            >
-                                {item.icon}
-                                {item.label}
-                            </ContextMenuItem>
-                        ))}
-                    </ContextMenuContent>
-                )}
+                <ContextMenuContent>
+                    {getMenuItems(
+                        selectedFiles.length > 1,
+                        !selectedFiles.every(file => !file.isDirectory),
+                    ).map(item => (
+                        <ContextMenuItem
+                            key={item.label}
+                            onClick={item.onClick}
+                        >
+                            {item.icon}
+                            {item.label}
+                        </ContextMenuItem>
+                    ))}
+                </ContextMenuContent>
             </ContextMenu>
 
             {isMoveToTrashFormOpen && (

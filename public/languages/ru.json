@@ -109,6 +109,11 @@
             "listCollapsedTrue": "Развернуть",
             "listCollapsedFalse": "Свернуть",
             "fileUploadingError": "Произошла ошибка при загрузке файла:"
+        },
+        "download": {
+            "inProgress": "Идёт скачивание, пожалуйста, подождите",
+            "success": "Скачивание завершено",
+            "error": "Произошла ошибка при скачивании"
         }
     },
     "layouts": {

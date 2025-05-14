@@ -22,7 +22,7 @@ export const API_ROUTES = {
         LIST: 'files',
         MKDIR: 'files/mkdir',
         UPLOAD: 'files/upload',
-        BY_ID: (fileId: string) => `files/file/${fileId}`,
+        DOWNLOAD: 'files/file/download',
         THUMBNAIL: (fileId: string, size: 'small' | 'medium' | 'large') =>
             `files/thumbnail/${fileId}/${size}`,
         RENAME: 'files/rename',

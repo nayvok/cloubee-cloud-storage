@@ -18,6 +18,7 @@ import {
     DropdownMenuContent,
     DropdownMenuTrigger,
 } from '@/components/ui/common/dropdown-menu';
+import { useFileDownloader } from '@/libs/hooks/use-file-downloader';
 import { useIsMobile } from '@/libs/hooks/use-mobile';
 import { filesStore } from '@/libs/store/files/files.store';
 import { convertBytes } from '@/libs/utils/convert-bytes';
@@ -26,6 +27,7 @@ import { cn } from '@/libs/utils/tw-merge';
 const HeaderActionBar = () => {
     const isMobile = useIsMobile();
     const t = useTranslations('layouts.header.actionBar');
+    const downloadFile = useFileDownloader();
 
     const selectedFiles = filesStore(state => state.selectedFiles);
     const setSelectedFiles = filesStore(state => state.setSelectedFiles);
@@ -66,13 +68,13 @@ const HeaderActionBar = () => {
         };
     }, [selectedFiles]);
 
-    const getActionItems = (isMultiple: boolean) => {
+    const getActionItems = (isMultiple: boolean, isHaveDir: boolean) => {
         const baseItems = [
             {
                 icon: <Download />,
                 label: t('actions.download'),
-                onClick: () => alert('Download'),
-                show: true,
+                onClick: () => downloadFile(),
+                show: !isHaveDir,
             },
             {
                 icon: <PencilLine />,
@@ -219,18 +221,21 @@ const HeaderActionBar = () => {
                                 )}
                             </div>
                             <div className="flex">
-                                {getActionItems(selectedFiles.length > 1).map(
-                                    item => (
-                                        <Button
-                                            variant="ghost"
-                                            key={item.label}
-                                            onClick={item.onClick}
-                                        >
-                                            {item.icon}
-                                            {item.label}
-                                        </Button>
+                                {getActionItems(
+                                    selectedFiles.length > 1,
+                                    !selectedFiles.every(
+                                        file => !file.isDirectory,
                                     ),
-                                )}
+                                ).map(item => (
+                                    <Button
+                                        variant="ghost"
+                                        key={item.label}
+                                        onClick={item.onClick}
+                                    >
+                                        {item.icon}
+                                        {item.label}
+                                    </Button>
+                                ))}
 
                                 <Button
                                     variant="ghost"

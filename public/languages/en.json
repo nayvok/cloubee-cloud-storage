@@ -109,6 +109,11 @@
             "listCollapsedTrue": "Expand",
             "listCollapsedFalse": "Collapse",
             "fileUploadingError": "An error occurred while uploading the file:"
+        },
+        "download": {
+            "inProgress": "Downloading, please wait",
+            "success": "Download completed",
+            "error": "An error occurred during download"
         }
     },
     "layouts": {
