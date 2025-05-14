@@ -35,4 +35,7 @@ export interface IFilesStore {
     setUploadedFile: (uploadedFile: IUploadedFile) => void;
     removeUploadedFile: (uploadedFile: Pick<IUploadedFile, 'fileName'>) => void;
     clearUploadedFiles: () => void;
+
+    isFileUploaderListCollapsed: boolean;
+    setIsFileUploaderListCollapsed: () => void;
 }

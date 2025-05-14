@@ -5,6 +5,18 @@
 @custom-variant dark (&:is(.dark *));
 
 @layer base {
+    * {
+        @apply border-border outline-ring/50;
+    }
+
+    html {
+        @apply scroll-smooth;
+    }
+
+    body {
+        @apply bg-background text-foreground font-inter;
+    }
+
     button,
     [role='button'] {
         cursor: pointer;
@@ -13,6 +25,13 @@
     button:disabled,
     [role='button']:disabled {
         cursor: default;
+    }
+}
+
+
+@layer utilities {
+    .z-selecto {
+        z-index: 0 !important;
     }
 }
 
@@ -125,24 +144,4 @@
     --color-sidebar-primary: var(--sidebar-primary);
     --color-sidebar-foreground: var(--sidebar-foreground);
     --color-sidebar: var(--sidebar);
-}
-
-@layer utilities {
-    .z-selecto {
-        z-index: 0 !important;
-    }
-}
-
-@layer base {
-    * {
-        @apply border-border outline-ring/50;
-    }
-
-    html {
-        @apply scroll-smooth;
-    }
-
-    body {
-        @apply bg-background text-foreground font-inter;
-    }
 }

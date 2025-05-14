@@ -2,7 +2,6 @@
 
 import { Check, X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { useState } from 'react';
 
 import { Button } from '@/components/ui/common/button';
 import { Progress } from '@/components/ui/common/progress';
@@ -23,13 +22,15 @@ export interface IUploadedFile {
 }
 
 const FileUploaderList = () => {
-    const [collapsed, setCollapsed] = useState(false);
-
     const t = useTranslations('files.uploader');
 
     const uploadedFiles = filesStore(state => state.uploadedFiles);
     const removeUploadedFile = filesStore(state => state.removeUploadedFile);
     const clearUploadedFiles = filesStore(state => state.clearUploadedFiles);
+    const collapsed = filesStore(state => state.isFileUploaderListCollapsed);
+    const setCollapsed = filesStore(
+        state => state.setIsFileUploaderListCollapsed,
+    );
 
     return (
         <>
@@ -39,10 +40,7 @@ const FileUploaderList = () => {
                         <div className="inline-flex h-[56px] w-full items-center justify-between border-b-1 p-2">
                             <span>{t('listTitle')}</span>
                             <div className="inline-flex items-center">
-                                <Button
-                                    variant="ghost"
-                                    onClick={() => setCollapsed(!collapsed)}
-                                >
+                                <Button variant="ghost" onClick={setCollapsed}>
                                     {collapsed
                                         ? t('listCollapsedTrue')
                                         : t('listCollapsedFalse')}
@@ -64,7 +62,7 @@ const FileUploaderList = () => {
 
                         <div
                             className={cn(
-                                'h-[304px] w-full overflow-hidden overflow-y-auto transition-all duration-300 ease-in-out',
+                                'h-[304px] w-full overflow-hidden overflow-y-auto',
                                 collapsed && 'h-0 overflow-hidden',
                             )}
                         >

@@ -70,4 +70,12 @@ export const filesStore = create<
             };
         }),
     clearUploadedFiles: () => set({ uploadedFiles: [] }),
+
+    isFileUploaderListCollapsed: false,
+    setIsFileUploaderListCollapsed: () =>
+        set(state => {
+            return {
+                isFileUploaderListCollapsed: !state.isFileUploaderListCollapsed,
+            };
+        }),
 }));
