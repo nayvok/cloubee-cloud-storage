@@ -26,6 +26,7 @@ export const API_ROUTES = {
         THUMBNAIL: (fileId: string, size: 'small' | 'medium' | 'large') =>
             `files/thumbnail/${fileId}/${size}`,
         RENAME: 'files/rename',
+        TRASH: 'files/trash',
         RESTORE: 'files/trash/restore',
         SOFT_DELETE: 'files/trash/soft',
         PERMANENT_DELETE: 'files/trash/permanent',

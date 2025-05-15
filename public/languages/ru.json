@@ -95,7 +95,7 @@
                 "error": "Ошибка перемещения в корзину"
             }
         },
-        "fileCard": {
+        "filesCard": {
             "actions": {
                 "download": "Скачать",
                 "rename": "Переименовать",

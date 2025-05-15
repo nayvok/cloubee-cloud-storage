@@ -95,7 +95,7 @@
                 "error": "Error moving to trash"
             }
         },
-        "fileCard": {
+        "filesCard": {
             "actions": {
                 "download": "Download",
                 "rename": "Rename",

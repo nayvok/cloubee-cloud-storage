@@ -90,3 +90,9 @@ export const downloadQueryFn = async (fileIds: string[]): Promise<Blob> => {
 
     return response.data;
 };
+
+export const getTrashQueryFn = async () => {
+    const response = await API.get<IFileResponse[]>(API_ROUTES.FILES.TRASH);
+
+    return response.data;
+};
