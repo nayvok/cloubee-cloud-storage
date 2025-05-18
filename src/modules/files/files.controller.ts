@@ -130,8 +130,8 @@ export class FilesController {
 
     @Post('trash/restore')
     @ApiBearerAuth()
-    restoreFile(@UserId() userId: string, @Body('fileId') fileId: string) {
-        return this.filesService.restoreFile(userId, fileId);
+    restoreFile(@UserId() userId: string, @Body('fileIds') fileIds: string[]) {
+        return this.filesService.restoreFiles(userId, fileIds);
     }
 
     @Post('trash/permanent')

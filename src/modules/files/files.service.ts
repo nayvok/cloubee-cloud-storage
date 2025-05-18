@@ -587,38 +587,68 @@ export class FilesService {
         });
     }
 
-    public async restoreFile(userId: string, fileId: string) {
-        const file = await this.prisma.file.findUniqueOrThrow({
-            where: { id: fileId },
-        });
-
-        if (!file) {
-            throw new NotFoundException('File not found');
-        }
-
-        if (!file.isDeleted) {
-            throw new BadRequestException('File is not in trash');
-        }
-
-        const isNotFreeName = await this.prisma.file.findFirst({
+    public async restoreFiles(userId: string, fileIds: string[]) {
+        const files = await this.prisma.file.findMany({
             where: {
+                id: { in: fileIds },
                 userId: userId,
-                name: file.name,
-                directoryId: file.directoryId,
-                isDeleted: false,
+                isDeleted: true,
             },
         });
 
-        if (isNotFreeName) {
-            throw new BadRequestException('Name already exists.');
+        const missingFileIds = fileIds.filter(
+            id => !files.some(file => file.id === id),
+        );
+
+        const results = await Promise.all(
+            files.map(async file => {
+                const nameConflict = await this.prisma.file.findFirst({
+                    where: {
+                        userId: userId,
+                        name: file.name,
+                        directoryId: file.directoryId,
+                        isDeleted: false,
+                    },
+                });
+
+                return {
+                    file,
+                    hasConflict: !!nameConflict,
+                };
+            }),
+        );
+
+        const filesToRestore = results.filter(r => !r.hasConflict);
+        const conflictedFiles = results.filter(r => r.hasConflict);
+
+        if (filesToRestore.length > 0) {
+            await this.prisma.file.updateMany({
+                where: {
+                    id: { in: filesToRestore.map(f => f.file.id) },
+                },
+                data: { isDeleted: false },
+            });
         }
 
-        await this.prisma.file.update({
-            where: { id: fileId, userId: userId, isDeleted: true },
-            data: { isDeleted: false },
-        });
-
-        return { message: 'File restored successfully' };
+        return {
+            success: true,
+            restored: filesToRestore.map(f => ({
+                id: f.file.id,
+                name: f.file.name,
+            })),
+            errors: [
+                ...conflictedFiles.map(f => ({
+                    fileId: f.file.id,
+                    code: 'NAME_CONFLICT',
+                    message: `File "${f.file.name}" already exists in target directory`,
+                })),
+                ...missingFileIds.map(id => ({
+                    fileId: id,
+                    code: 'NOT_FOUND',
+                    message: 'File not found in trash',
+                })),
+            ],
+        };
     }
 
     public async permanentDelete(
@@ -868,8 +898,7 @@ export class FilesService {
                     ),
                 ]);
             }
-        } catch (error) {
-            console.log(error);
+        } catch {
             throw new InternalServerErrorException('Error deleting file');
         }
     }
