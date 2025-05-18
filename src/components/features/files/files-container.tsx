@@ -5,8 +5,10 @@ import { useState } from 'react';
 
 import Selection from '@/components/features/controls/selection';
 import FilesCard from '@/components/features/files/files-card';
+import FilesPlaceholder from '@/components/features/files/files-placeholder';
 import FilesWrapper from '@/components/ui/elements/files/wrapper/files-wrapper';
 import GridGhostItems from '@/components/ui/elements/files/wrapper/grid-ghost-items';
+import PageLoader from '@/components/ui/elements/page-loader';
 import { useFilesQuery } from '@/libs/api/files/hooks/use-files-query';
 import { filesPersistStore } from '@/libs/store/files/files.persist-store';
 
@@ -22,7 +24,7 @@ const FilesContainer = () => {
         state => state.filesSortDirection,
     );
 
-    const { data } = useFilesQuery({
+    const { data, isPending } = useFilesQuery({
         sortMode: filesSortMode,
         sortDirection: filesSortDirection,
         idContext: decodeURIComponent(
@@ -41,17 +43,27 @@ const FilesContainer = () => {
             )}
 
             <FilesWrapper ref={setContainerElement} viewMode={filesViewMode}>
-                {data &&
-                    data.length > 0 &&
-                    data.map(file => (
-                        <FilesCard
-                            key={file.id}
-                            file={file}
-                            viewMode={filesViewMode}
-                        />
-                    ))}
+                {isPending ? (
+                    <PageLoader />
+                ) : (
+                    <>
+                        {data && data.length > 0 ? (
+                            <>
+                                {data.map(file => (
+                                    <FilesCard
+                                        key={file.id}
+                                        file={file}
+                                        viewMode={filesViewMode}
+                                    />
+                                ))}
 
-                <GridGhostItems viewMode={filesViewMode} />
+                                <GridGhostItems viewMode={filesViewMode} />
+                            </>
+                        ) : (
+                            <FilesPlaceholder />
+                        )}
+                    </>
+                )}
             </FilesWrapper>
         </>
     );

@@ -112,6 +112,10 @@
             "inProgress": "Downloading, please wait",
             "success": "Download completed",
             "error": "An error occurred during download"
+        },
+        "placeholder": {
+            "title": "No files yet",
+            "description": "Everything will appear here once uploaded"
         }
     },
     "trash": {
@@ -174,7 +178,8 @@
             },
             "cancel": "Cancel",
             "confirm": "Restore"
-        }
+        },
+        "placeholder": "Trash is empty"
     },
     "layouts": {
         "sidebar": {

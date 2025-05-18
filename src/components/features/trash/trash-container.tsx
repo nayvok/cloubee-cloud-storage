@@ -4,13 +4,15 @@ import { useState } from 'react';
 
 import Selection from '@/components/features/controls/selection';
 import TrashCard from '@/components/features/trash/trash-card';
+import TrashPlaceholder from '@/components/features/trash/trash-placeholder';
 import FilesWrapper from '@/components/ui/elements/files/wrapper/files-wrapper';
 import GridGhostItems from '@/components/ui/elements/files/wrapper/grid-ghost-items';
+import PageLoader from '@/components/ui/elements/page-loader';
 import { useTrashQuery } from '@/libs/api/files/hooks/use-trash-query';
 import { filesPersistStore } from '@/libs/store/files/files.persist-store';
 
 const TrashContainer = () => {
-    const { data } = useTrashQuery();
+    const { data, isPending } = useTrashQuery();
     const filesViewMode = filesPersistStore(state => state.filesViewMode);
     const [containerElement, setContainerElement] =
         useState<HTMLDivElement | null>(null);
@@ -22,17 +24,27 @@ const TrashContainer = () => {
             )}
 
             <FilesWrapper ref={setContainerElement} viewMode={filesViewMode}>
-                {data &&
-                    data.length > 0 &&
-                    data.map(file => (
-                        <TrashCard
-                            key={file.id}
-                            file={file}
-                            viewMode={filesViewMode}
-                        />
-                    ))}
+                {isPending ? (
+                    <PageLoader />
+                ) : (
+                    <>
+                        {data && data.length > 0 ? (
+                            <>
+                                {data.map(file => (
+                                    <TrashCard
+                                        key={file.id}
+                                        file={file}
+                                        viewMode={filesViewMode}
+                                    />
+                                ))}
 
-                <GridGhostItems viewMode={filesViewMode} />
+                                <GridGhostItems viewMode={filesViewMode} />
+                            </>
+                        ) : (
+                            <TrashPlaceholder />
+                        )}
+                    </>
+                )}
             </FilesWrapper>
         </>
     );
