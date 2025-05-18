@@ -3,15 +3,16 @@ import { useTranslations } from 'next-intl';
 import { usePathname } from 'next/navigation';
 import { toast } from 'sonner';
 
-import { Button } from '@/components/ui/common/button';
 import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-} from '@/components/ui/common/dialog';
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from '@/components/ui/common/alert-dialog';
 import { moveToTrashMutationFn } from '@/libs/api/files/files-api';
 import { IFileResponse } from '@/libs/api/files/files.types';
 import { QUERY_KEYS } from '@/libs/api/query-keys';
@@ -95,28 +96,30 @@ const MoveToTrashForm = ({ isOpen, onClose }: MoveToTrashFormProps) => {
     };
 
     return (
-        <Dialog open={isOpen} onOpenChange={onClose}>
-            <DialogContent className="sm:max-w-[425px]">
-                <DialogHeader>
-                    <DialogTitle>
+        <AlertDialog open={isOpen} onOpenChange={onClose}>
+            <AlertDialogContent className="sm:max-w-[425px]">
+                <AlertDialogHeader>
+                    <AlertDialogTitle>
                         {lastSelectedFiles.length > 1
                             ? t('dialog.title_multiple')
                             : lastSelectedFiles[0]?.isDirectory
                               ? t('dialog.title_folder')
                               : t('dialog.title_file')}
-                    </DialogTitle>
-                    <DialogDescription>
+                    </AlertDialogTitle>
+                    <AlertDialogDescription>
                         {t('dialog.description')}
-                    </DialogDescription>
-                </DialogHeader>
-                <DialogFooter>
-                    <Button variant="secondary" onClick={onClose}>
+                    </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                    <AlertDialogCancel onClick={onClose}>
                         {t('dialog.cancel')}
-                    </Button>
-                    <Button onClick={moveToTrash}>{t('dialog.confirm')}</Button>
-                </DialogFooter>
-            </DialogContent>
-        </Dialog>
+                    </AlertDialogCancel>
+                    <AlertDialogAction onClick={moveToTrash}>
+                        {t('dialog.confirm')}
+                    </AlertDialogAction>
+                </AlertDialogFooter>
+            </AlertDialogContent>
+        </AlertDialog>
     );
 };
 
