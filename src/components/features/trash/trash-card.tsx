@@ -1,24 +1,21 @@
 import { useState } from 'react';
 
-import MoveToTrashForm from '@/components/features/files/forms/move-to-trash-form';
-import RenameForm from '@/components/features/files/forms/rename-form';
-import useFilesActionItems from '@/components/features/files/hooks/use-files-action-items';
+import EmptyTrashForm from '@/components/features/trash/forms/empty-trash-form';
+import RestoreForm from '@/components/features/trash/forms/restore-form';
+import useTrashActionItems from '@/components/features/trash/hooks/use-trash-action-items';
 import FileCard from '@/components/ui/elements/files/file-card';
 import { IFileResponse } from '@/libs/api/files/files.types';
-import { useFileDownloader } from '@/libs/hooks/use-file-downloader';
 import { filesStore } from '@/libs/store/files/files.store';
 import { type TypeChangeFilesViewModeSchema } from '@/schemas/files/change-files-view-mode.schema';
 
-interface FileCardProps {
+interface TrashCardProps {
     file: IFileResponse;
     viewMode: TypeChangeFilesViewModeSchema['mode'];
 }
 
-const FilesCard = ({ file, viewMode }: FileCardProps) => {
-    const downloadFile = useFileDownloader();
-
-    const [isRenameFormOpen, setIsRenameFormOpen] = useState(false);
-    const [isMoveToTrashFormOpen, setIsMoveToTrashFormOpen] = useState(false);
+const TrashCard = ({ file, viewMode }: TrashCardProps) => {
+    const [isEmptyTrashFormOpen, setIsEmptyTrashFormOpen] = useState(false);
+    const [isRestoreFormOpen, setIsRestoreFormOpen] = useState(false);
 
     const selectedFiles = filesStore(state => state.selectedFiles);
     const setSelectedFiles = filesStore(state => state.setSelectedFiles);
@@ -27,13 +24,9 @@ const FilesCard = ({ file, viewMode }: FileCardProps) => {
     );
     const selectoRef = filesStore(state => state.selectoRef);
 
-    const contextMenuItems = useFilesActionItems({
-        downloadAction: () => downloadFile(),
-        renameAction: () => setIsRenameFormOpen(true),
-        deleteAction: () => setIsMoveToTrashFormOpen(true),
-        isMultiple: selectedFiles.length > 1,
-        isHaveDir:
-            !selectedFiles.every(file => !file.isDirectory) || file.isDirectory,
+    const contextMenuItems = useTrashActionItems({
+        restoreAction: () => setIsRestoreFormOpen(true),
+        permanentDeleteAction: () => setIsEmptyTrashFormOpen(true),
     });
 
     return (
@@ -54,21 +47,22 @@ const FilesCard = ({ file, viewMode }: FileCardProps) => {
                 }}
             />
 
-            {isMoveToTrashFormOpen && (
-                <MoveToTrashForm
-                    isOpen={isMoveToTrashFormOpen}
-                    onClose={() => setIsMoveToTrashFormOpen(false)}
+            {isEmptyTrashFormOpen && (
+                <EmptyTrashForm
+                    isOpen={isEmptyTrashFormOpen}
+                    onClose={() => setIsEmptyTrashFormOpen(false)}
+                    deleteAll={false}
                 />
             )}
 
-            {isRenameFormOpen && (
-                <RenameForm
-                    isOpen={isRenameFormOpen}
-                    onClose={() => setIsRenameFormOpen(false)}
+            {isRestoreFormOpen && (
+                <RestoreForm
+                    isOpen={isRestoreFormOpen}
+                    onClose={() => setIsRestoreFormOpen(false)}
                 />
             )}
         </>
     );
 };
 
-export default FilesCard;
+export default TrashCard;

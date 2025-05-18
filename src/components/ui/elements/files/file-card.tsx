@@ -1,5 +1,4 @@
 import { format } from 'date-fns';
-import { LucideIcon } from 'lucide-react';
 
 import { Card, CardContent } from '@/components/ui/common/card';
 import {
@@ -11,23 +10,17 @@ import {
 import ThumbnailImage from '@/components/ui/elements/files/file-thumbnail';
 import { IFileResponse } from '@/libs/api/files/files.types';
 import { useIsMobile } from '@/libs/hooks/use-mobile';
+import { ActionItem } from '@/libs/types/action-item.types';
 import { convertBytes } from '@/libs/utils/convert-bytes';
 import { getFileIcon } from '@/libs/utils/get-file-icon';
 import { cn } from '@/libs/utils/tw-merge';
 import { type TypeChangeFilesViewModeSchema } from '@/schemas/files/change-files-view-mode.schema';
 
-export type ContextMenuItemType = {
-    icon: LucideIcon;
-    label: string;
-    onClick: () => void;
-    show: boolean;
-};
-
 interface FileCardProps {
     file: IFileResponse;
     viewMode: TypeChangeFilesViewModeSchema['mode'];
     isFileSelected: boolean;
-    contextMenuItems: ContextMenuItemType[];
+    contextMenuItems: ActionItem[];
     onOpenChangeContextMenu: () => void;
 }
 

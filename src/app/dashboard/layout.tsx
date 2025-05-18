@@ -21,7 +21,7 @@ export default async function DashboardLayout({
             <SidebarInset>
                 <Header />
                 <div className="flex flex-1 flex-col gap-4 p-2 pt-0">
-                    <div className="bg-sidebar border-sidebar-border flex min-h-[100vh] flex-1 flex-col overflow-hidden rounded-xl border shadow-sm md:min-h-min">
+                    <div className="bg-sidebar border-sidebar-border flex min-h-[100vh] flex-1 flex-col overflow-hidden rounded-lg border shadow-sm md:min-h-min">
                         {children}
                     </div>
                 </div>

@@ -1,9 +1,15 @@
 import API from '@/libs/api/axios-client';
-import { IFileResponse, IUploadResponse } from '@/libs/api/files/files.types';
+import {
+    IFileResponse,
+    IRestoreResponse,
+    IUploadResponse,
+} from '@/libs/api/files/files.types';
 import { API_ROUTES } from '@/libs/constants/api';
 import { TypeMkdirSchema } from '@/schemas/files/mkdir.schema';
 import { TypeMoveToTrashSchema } from '@/schemas/files/moveToTrash.schema';
+import { TypePermanentDeleteSchema } from '@/schemas/files/permanent-delete.schema';
 import { TypeRenameSchema } from '@/schemas/files/rename.schema';
+import { TypeRestoreSchema } from '@/schemas/files/restore.schema';
 
 export const getFilesQueryFn = async (
     sortMode: 'byName' | 'bySize' | 'byLastChange',
@@ -57,7 +63,11 @@ export const uploadMutationFn = async (
     formData.append('file', data.file);
 
     const response = await API.post(
-        `${API_ROUTES.FILES.UPLOAD}${data.idContext ? `?idContext=${data.idContext}&fileName=${data.file.name}&fileSize=${data.file.size}` : `?fileName=${data.file.name}&fileSize=${data.file.size}`}`,
+        `${API_ROUTES.FILES.UPLOAD}${
+            data.idContext
+                ? `?idContext=${data.idContext}&fileName=${data.file.name}&fileSize=${data.file.size}`
+                : `?fileName=${data.file.name}&fileSize=${data.file.size}`
+        }`,
         formData,
         {
             onUploadProgress: data.onUploadProgress || (() => {}),
@@ -94,5 +104,20 @@ export const downloadQueryFn = async (fileIds: string[]): Promise<Blob> => {
 export const getTrashQueryFn = async () => {
     const response = await API.get<IFileResponse[]>(API_ROUTES.FILES.TRASH);
 
+    return response.data;
+};
+
+export const permanentMutationFn = async (data: TypePermanentDeleteSchema) => {
+    const response = await API.post(API_ROUTES.FILES.PERMANENT_DELETE, data);
+    return response.data;
+};
+
+export const restoreMutationFn = async (
+    data: TypeRestoreSchema,
+): Promise<IRestoreResponse> => {
+    const response = await API.post<IRestoreResponse>(
+        API_ROUTES.FILES.RESTORE,
+        data,
+    );
     return response.data;
 };

@@ -5,17 +5,13 @@ import Selecto from 'react-selecto';
 import { IFileResponse } from '@/libs/api/files/files.types';
 import { filesStore } from '@/libs/store/files/files.store';
 
-interface FilesSelectoProps {
+interface BaseSelectoProps {
     files: IFileResponse[];
-    pathname: string;
     containerElement: HTMLElement | null;
+    pathname?: string;
 }
 
-const FilesSelecto = ({
-    files,
-    pathname,
-    containerElement,
-}: FilesSelectoProps) => {
+const Selection = ({ files, pathname, containerElement }: BaseSelectoProps) => {
     const router = useRouter();
 
     const selectedFiles = filesStore(state => state.selectedFiles);
@@ -89,9 +85,7 @@ const FilesSelecto = ({
 
     return (
         <Selecto
-            key={pathname}
             ref={selectoRef}
-            className="z-selecto"
             dragContainer={containerElement}
             selectableTargets={['.file-card']}
             onSelectStart={() => setSelectStart(true)}
@@ -114,7 +108,7 @@ const FilesSelecto = ({
                     setSelectStart(false);
                 }, 10);
 
-                if (isDouble && selected.length === 1) {
+                if (pathname && isDouble && selected.length === 1) {
                     const fileId = selected[0].id;
                     const file = files.find(f => f.id === fileId);
                     setSelectedFiles([]);
@@ -144,4 +138,4 @@ const FilesSelecto = ({
     );
 };
 
-export default FilesSelecto;
+export default Selection;

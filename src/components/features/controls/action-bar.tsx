@@ -1,33 +1,28 @@
 import { format } from 'date-fns';
-import {
-    CheckCircle,
-    Download,
-    Info,
-    PencilLine,
-    Trash2,
-    X,
-} from 'lucide-react';
+import { CheckCircle, Info, X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useEffect, useRef, useState } from 'react';
 
-import MoveToTrashForm from '@/components/features/files/forms/move-to-trash-form';
-import RenameForm from '@/components/features/files/forms/rename-form';
 import { Button } from '@/components/ui/common/button';
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuTrigger,
 } from '@/components/ui/common/dropdown-menu';
-import { useFileDownloader } from '@/libs/hooks/use-file-downloader';
 import { useIsMobile } from '@/libs/hooks/use-mobile';
 import { filesStore } from '@/libs/store/files/files.store';
+import { ActionItem } from '@/libs/types/action-item.types';
 import { convertBytes } from '@/libs/utils/convert-bytes';
 import { cn } from '@/libs/utils/tw-merge';
 
-const HeaderActionBar = () => {
-    const isMobile = useIsMobile();
+interface ActionBarProps {
+    actionItems: ActionItem[];
+}
+
+const ActionBar = ({ actionItems }: ActionBarProps) => {
     const t = useTranslations('layouts.header.actionBar');
-    const downloadFile = useFileDownloader();
+
+    const isMobile = useIsMobile();
 
     const selectedFiles = filesStore(state => state.selectedFiles);
     const setSelectedFiles = filesStore(state => state.setSelectedFiles);
@@ -41,8 +36,6 @@ const HeaderActionBar = () => {
 
     const actionBarRef = useRef<HTMLDivElement | null>(null);
     const [showHeaderElement, setShowHeaderElement] = useState(false);
-    const [isRenameFormOpen, setIsRenameFormOpen] = useState(false);
-    const [isMoveToTrashFormOpen, setIsMoveToTrashFormOpen] = useState(false);
 
     useEffect(() => {
         if (actionBarRef.current) {
@@ -68,41 +61,6 @@ const HeaderActionBar = () => {
         };
     }, [selectedFiles]);
 
-    const getActionItems = (isMultiple: boolean, isHaveDir: boolean) => {
-        const baseItems = [
-            {
-                icon: <Download />,
-                label: t('actions.download'),
-                onClick: () => downloadFile(),
-                show: !isHaveDir,
-            },
-            {
-                icon: <PencilLine />,
-                label: t('actions.rename'),
-                onClick: () => {
-                    selectoRef.current?.setSelectedTargets([]);
-                    setLastSelectedFiles(selectedFiles);
-                    setSelectedFiles([]);
-                    setIsRenameFormOpen(true);
-                },
-                show: !isMultiple,
-            },
-            {
-                icon: <Trash2 />,
-                label: t('actions.delete'),
-                onClick: () => {
-                    selectoRef.current?.setSelectedTargets([]);
-                    setLastSelectedFiles(selectedFiles);
-                    setSelectedFiles([]);
-                    setIsMoveToTrashFormOpen(!isMoveToTrashFormOpen);
-                },
-                show: true,
-            },
-        ];
-
-        return baseItems.filter(item => item.show);
-    };
-
     return (
         <>
             <div
@@ -125,7 +83,7 @@ const HeaderActionBar = () => {
                 />
                 <div
                     className={cn(
-                        'bg-sidebar flex size-full items-center justify-between rounded-lg border p-2 text-sm shadow-sm',
+                        'bg-sidebar flex size-full items-center justify-between gap-2 rounded-lg border p-2 text-sm shadow-sm',
                         'transition-all duration-300 ease-in-out',
                         showHeaderElement
                             ? 'translate-y-0 opacity-100 delay-100'
@@ -163,6 +121,7 @@ const HeaderActionBar = () => {
                                                 <Button
                                                     variant="ghost"
                                                     size="icon"
+                                                    className="shrink-0"
                                                 >
                                                     <Info />
                                                 </Button>
@@ -171,7 +130,7 @@ const HeaderActionBar = () => {
                                                 side="bottom"
                                                 align="start"
                                                 sideOffset={4}
-                                                className="flex flex-col p-2 text-sm"
+                                                className="flex max-w-[500px] flex-col p-2 text-sm"
                                             >
                                                 <div>
                                                     <span>
@@ -216,23 +175,20 @@ const HeaderActionBar = () => {
                                             </DropdownMenuContent>
                                         </DropdownMenu>
 
-                                        <span>{selectedFiles[0].name}</span>
+                                        <span className="line-clamp-1">
+                                            {selectedFiles[0].name}
+                                        </span>
                                     </>
                                 )}
                             </div>
                             <div className="flex">
-                                {getActionItems(
-                                    selectedFiles.length > 1,
-                                    !selectedFiles.every(
-                                        file => !file.isDirectory,
-                                    ),
-                                ).map(item => (
+                                {actionItems.map(item => (
                                     <Button
                                         variant="ghost"
                                         key={item.label}
                                         onClick={item.onClick}
                                     >
-                                        {item.icon}
+                                        <item.icon />
                                         {item.label}
                                     </Button>
                                 ))}
@@ -255,22 +211,8 @@ const HeaderActionBar = () => {
                     )}
                 </div>
             </div>
-
-            {isMoveToTrashFormOpen && (
-                <MoveToTrashForm
-                    isOpen={isMoveToTrashFormOpen}
-                    onClose={() => setIsMoveToTrashFormOpen(false)}
-                />
-            )}
-
-            {isRenameFormOpen && (
-                <RenameForm
-                    isOpen={isRenameFormOpen}
-                    onClose={() => setIsRenameFormOpen(false)}
-                />
-            )}
         </>
     );
 };
 
-export default HeaderActionBar;
+export default ActionBar;

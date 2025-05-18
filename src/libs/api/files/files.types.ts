@@ -22,3 +22,16 @@ export interface IUploadResponse {
     idContext?: string;
     onUploadProgress?: (progressEvent: AxiosProgressEvent) => void;
 }
+
+export interface IRestoreResponse {
+    success: boolean;
+    restored: {
+        id: string;
+        name: string;
+    }[];
+    errors: {
+        fileId: string;
+        code: string;
+        message: string;
+    }[];
+}

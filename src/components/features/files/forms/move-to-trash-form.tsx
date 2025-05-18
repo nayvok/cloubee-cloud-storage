@@ -77,6 +77,9 @@ const MoveToTrashForm = ({ isOpen, onClose }: MoveToTrashFormProps) => {
             queryClient.invalidateQueries({
                 predicate: query => query.queryKey[0] === QUERY_KEYS.FILES,
             });
+            queryClient.invalidateQueries({
+                queryKey: [QUERY_KEYS.TRASH],
+            });
         },
     });
 

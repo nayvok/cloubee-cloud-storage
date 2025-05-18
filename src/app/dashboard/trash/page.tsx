@@ -1,9 +1,5 @@
-import type { Metadata } from 'next';
-
-export const metadata: Metadata = {
-    title: '',
-};
+import TrashContainer from '@/components/features/trash/trash-container';
 
 export default function Page() {
-    return <div></div>;
+    return <TrashContainer />;
 }

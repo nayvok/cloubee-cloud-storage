@@ -54,6 +54,11 @@
         }
     },
     "files": {
+        "actions": {
+            "download": "Download",
+            "rename": "Rename",
+            "delete": "Delete"
+        },
         "mkdir": {
             "title": "Enter folder name",
             "create": "Create",
@@ -95,13 +100,6 @@
                 "error": "Error moving to trash"
             }
         },
-        "filesCard": {
-            "actions": {
-                "download": "Download",
-                "rename": "Rename",
-                "delete": "Delete"
-            }
-        },
         "uploader": {
             "isNameError": "Already exists in the folder",
             "isSpaceError": "Not enough disk space",
@@ -114,6 +112,68 @@
             "inProgress": "Downloading, please wait",
             "success": "Download completed",
             "error": "An error occurred during download"
+        }
+    },
+    "trash": {
+        "actions": {
+            "restore": "Restore",
+            "permanentDelete": "Delete permanently"
+        },
+        "headerPanel": {
+            "clear": "Empty trash"
+        },
+        "emptyTrash": {
+            "allTrash": {
+                "title": "Empty trash",
+                "description": "All items in the trash will be permanently deleted.<br></br>Are you sure?",
+                "cancel": "Cancel",
+                "confirm": "Empty",
+                "toast": {
+                    "loading": "Emptying trash",
+                    "success": "Trash emptied",
+                    "error": "Failed to empty trash"
+                }
+            },
+            "title": "Delete permanently",
+            "description": "The content will be permanently deleted.<br></br>Are you sure?",
+            "cancel": "Cancel",
+            "confirm": "Delete",
+            "toast": {
+                "loading": "Deleting",
+                "success": "Successfully deleted",
+                "error": "Deletion error occurred"
+            }
+        },
+        "restore": {
+            "single": {
+                "title": "Restore file?"
+            },
+            "many": {
+                "title": "Restore files?"
+            },
+            "toast": {
+                "loading": {
+                    "single": "Restoring file",
+                    "many": "Restoring files"
+                },
+                "success": {
+                    "single": "{fileName} restored",
+                    "many": "Files restored: {count}"
+                },
+                "errors": {
+                    "default": "Restoration error",
+                    "single": {
+                        "text": "Failed to restore file",
+                        "type": "Error: file name already exists or file not found"
+                    },
+                    "many": {
+                        "text": "Failed to restore files: {count}",
+                        "type": "Error: file names already exist or files not found"
+                    }
+                }
+            },
+            "cancel": "Cancel",
+            "confirm": "Restore"
         }
     },
     "layouts": {

@@ -2,5 +2,5 @@ export const QUERY_KEYS = {
     USER: 'user',
     FILES: 'files',
     THUMBNAIL: 'thumbnail',
-    TRASH: 'TRASH',
+    TRASH: 'trash',
 };
