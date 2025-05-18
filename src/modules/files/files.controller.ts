@@ -152,8 +152,9 @@ export class FilesController {
     permanentDelete(
         @UserId() userId: string,
         @Body('fileIds') fileIds: string[],
+        @Body('deleteAll') deleteAll: boolean,
     ) {
-        return this.filesService.permanentDelete(userId, fileIds);
+        return this.filesService.permanentDelete(userId, fileIds, deleteAll);
     }
 
     @Get(':idContext(*)?')

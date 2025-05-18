@@ -621,17 +621,36 @@ export class FilesService {
         return { message: 'File restored successfully' };
     }
 
-    public async permanentDelete(userId: string, fileIds: string[]) {
+    public async permanentDelete(
+        userId: string,
+        fileIds: string[],
+        deleteAll: boolean = false,
+    ) {
         try {
-            const files = await this.prisma.file.findMany({
-                where: {
-                    id: {
-                        in: fileIds,
+            let files: File[];
+
+            if (deleteAll) {
+                files = await this.prisma.file.findMany({
+                    where: {
+                        userId,
+                        isDeleted: true,
                     },
-                    userId,
-                    isDeleted: true,
-                },
-            });
+                });
+            } else {
+                files = await this.prisma.file.findMany({
+                    where: {
+                        id: {
+                            in: fileIds,
+                        },
+                        userId,
+                        isDeleted: true,
+                    },
+                });
+            }
+
+            if (files.length === 0) {
+                return { message: 'No files to delete' };
+            }
 
             const allUserFiles = await this.prisma.file.findMany({
                 where: { userId },
@@ -658,6 +677,15 @@ export class FilesService {
                         await this.deleteFile(filePath);
                     }
 
+                    await this.prisma.user.update({
+                        where: { id: userId },
+                        data: {
+                            usedQuota: {
+                                decrement: file.size,
+                            },
+                        },
+                    });
+
                     await this.prisma.file.delete({ where: { id: file.id } });
                 } else {
                     const nestedFileIds = await this.getNestedFiles(
@@ -668,6 +696,25 @@ export class FilesService {
                     nestedFileIds.push(file.id);
 
                     await this.deleteDirectory(filePath, nestedFileIds);
+
+                    const files = await this.prisma.file.findMany({
+                        where: { id: { in: nestedFileIds } },
+                    });
+
+                    const filesSize = files
+                        .map(file => file.size)
+                        .reduce((a, b) => {
+                            return a + b;
+                        }, BigInt(0));
+
+                    await this.prisma.user.update({
+                        where: { id: userId },
+                        data: {
+                            usedQuota: {
+                                decrement: filesSize,
+                            },
+                        },
+                    });
 
                     await this.prisma.file.deleteMany({
                         where: { id: { in: nestedFileIds } },
@@ -821,7 +868,8 @@ export class FilesService {
                     ),
                 ]);
             }
-        } catch {
+        } catch (error) {
+            console.log(error);
             throw new InternalServerErrorException('Error deleting file');
         }
     }
@@ -830,13 +878,13 @@ export class FilesService {
         try {
             await fs.promises.rm(dirPath, { recursive: true });
 
-            const filesWithThumbnails = await this.prisma.file.findMany({
+            const files = await this.prisma.file.findMany({
                 where: {
                     id: { in: fileIds },
                 },
             });
 
-            const thumbnailPaths = filesWithThumbnails.flatMap(file =>
+            const thumbnailPaths = files.flatMap(file =>
                 [
                     file.thumbnailSmall,
                     file.thumbnailMedium,
