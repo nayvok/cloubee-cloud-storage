@@ -871,7 +871,7 @@ export class FilesService {
         },
     ) {
         try {
-            await fs.promises.rm(filePath);
+            await fs.promises.rm(filePath, { force: true });
 
             if (thumbnails) {
                 await Promise.all([
