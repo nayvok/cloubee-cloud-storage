@@ -1,4 +1,4 @@
-import { Files, Images, type LucideIcon, Trash2 } from 'lucide-react';
+import { Files, type LucideIcon, Trash2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -26,11 +26,6 @@ export function NavLinks() {
             title: t('files'),
             url: APP_ROUTES.DASHBOARD.FILES.path,
             icon: Files,
-        },
-        {
-            title: t('gallery'),
-            url: APP_ROUTES.DASHBOARD.GALLERY.path,
-            icon: Images,
         },
         {
             title: t('trash'),

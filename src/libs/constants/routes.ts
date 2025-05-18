@@ -7,10 +7,6 @@ export const APP_ROUTES = {
             path: '/dashboard/files',
             title: 'layouts.header.files',
         },
-        GALLERY: {
-            path: '/dashboard/gallery',
-            title: 'layouts.header.gallery',
-        },
         TRASH: {
             path: '/dashboard/trash',
             title: 'layouts.header.trash',
