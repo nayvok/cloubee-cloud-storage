@@ -16,10 +16,12 @@ export class InvitesService {
             where: { email: email },
         });
 
-        if (existingInvite) {
-            throw new BadRequestException(
-                'Invite with this email already exists',
-            );
+        const existingUser = await this.prisma.user.findFirst({
+            where: { email: email },
+        });
+
+        if (existingInvite || existingUser) {
+            throw new BadRequestException('EMAIL_ALREADY_EXISTS');
         }
 
         const token = uuidv4();
@@ -32,6 +34,15 @@ export class InvitesService {
                 email: email,
                 storageQuota: storageQuota,
                 token: token,
+            },
+        });
+
+        await this.prisma.user.updateMany({
+            where: { role: 'ADMIN' },
+            data: {
+                storageQuota: {
+                    decrement: storageQuota,
+                },
             },
         });
 
@@ -57,6 +68,22 @@ export class InvitesService {
     }
 
     public async deleteInvite(id: string) {
+        const invite = await this.prisma.invite.findUnique({
+            where: { id: id },
+            select: {
+                storageQuota: true,
+            },
+        });
+
+        await this.prisma.user.updateMany({
+            where: { role: 'ADMIN' },
+            data: {
+                storageQuota: {
+                    increment: invite.storageQuota,
+                },
+            },
+        });
+
         return this.prisma.invite.delete({
             where: {
                 id: id,

@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import {
+    Body,
+    Controller,
+    Delete,
+    Get,
+    Param,
+    Post,
+    UseGuards,
+} from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 import { UpdateCurrentUserDto } from '@/modules/users/dto/update-current-user.dto';
@@ -50,10 +58,14 @@ export class UsersController {
         @Param('id') id: string,
         @Body() dto: UpdateUserByAdminDto,
     ) {
-        return this.usersService.updateUserByAdmin(
-            id,
-            dto.role,
-            dto.storageQuota,
-        );
+        return this.usersService.updateUserByAdmin(id, dto.storageQuota);
+    }
+
+    @Delete(':id')
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles(Role.ADMIN)
+    @ApiBearerAuth()
+    deleteUser(@Param('id') id: string) {
+        return this.usersService.deleteUser(id);
     }
 }

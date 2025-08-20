@@ -762,6 +762,34 @@ export class FilesService {
         }
     }
 
+    public async getFreeSpace() {
+        const adminQuotaData = await this.prisma.user.findMany({
+            where: {
+                role: 'ADMIN',
+            },
+            select: {
+                usedQuota: true,
+                storageQuota: true,
+            },
+        });
+
+        const adminReservedBytes = 1024 * 1024 * 1024;
+
+        if (
+            Number(adminQuotaData[0].storageQuota) -
+                Number(adminQuotaData[0].usedQuota) >=
+            adminReservedBytes
+        ) {
+            return (
+                Number(adminQuotaData[0].storageQuota) -
+                Number(adminQuotaData[0].usedQuota) -
+                adminReservedBytes
+            );
+        } else {
+            return 0;
+        }
+    }
+
     private readonly nameCollator = new Intl.Collator(undefined, {
         sensitivity: 'base',
     });

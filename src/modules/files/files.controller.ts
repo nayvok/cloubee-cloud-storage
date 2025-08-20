@@ -35,6 +35,12 @@ export class FilesController {
         return this.filesService.mkdir(userId, dto.folderName, dto.idContext);
     }
 
+    @Get('free-space')
+    @ApiBearerAuth()
+    getFreeSpace() {
+        return this.filesService.getFreeSpace();
+    }
+
     @Post('upload')
     @ApiConsumes('multipart/form-data')
     @ApiQuery({ name: 'idContext', required: false })
