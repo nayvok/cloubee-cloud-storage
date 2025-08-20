@@ -181,6 +181,99 @@
         },
         "placeholder": "Trash is empty"
     },
+    "settings": {
+        "users": {
+            "title": "Users",
+            "description": "Manage your users",
+            "table": {
+                "caption": "User list",
+                "head": {
+                    "email": "Email",
+                    "name": "Name",
+                    "role": "Role",
+                    "used_quota": "Used",
+                    "quota": "Quota",
+                    "created_at": "Updated",
+                    "actions": "Actions"
+                },
+                "dropdown": {
+                    "edit": "Edit",
+                    "delete": "Delete"
+                }
+            },
+            "dialogs": {
+                "edit": {
+                    "title": "Edit quota",
+                    "description": {
+                        "quota_info": "User {email} is currently using {used} of {quota}.",
+                        "quota_action": "You can increase or decrease the user's quota."
+                    },
+                    "form": {
+                        "quota_label": "Quota",
+                        "quota_description": "Select a value between {minQuota} and {maxQuota} GB"
+                    },
+                    "submit": "Update",
+                    "errors": {
+                        "quota_conflict": "Quota conflict",
+                        "unexpected_error": "An unexpected error occurred"
+                    }
+                },
+                "delete": {
+                    "title": "Delete User",
+                    "description": "Are you sure you want to delete {email} and all their data?",
+                    "cancel": "Cancel",
+                    "action": "Delete",
+                    "errors": {
+                        "not_found": "User not found"
+                    }
+                }
+            }
+        },
+        "invitations": {
+            "title": "Invitations",
+            "description": "Grant others access to the storage",
+            "table": {
+                "caption": "Invitation List",
+                "head": {
+                    "email": "Email",
+                    "role": "Role",
+                    "quota": "Quota",
+                    "created_at": "Invited At",
+                    "actions": "Actions"
+                },
+                "dropdown": {
+                    "copy": "Copy",
+                    "delete": "Delete"
+                },
+                "toast": {
+                    "copy_success": "Copied to clipboard",
+                    "copy_error": "Could not copy to clipboard"
+                }
+            },
+            "invite_btn": "Invite",
+            "placeholder": "No invitations yet",
+            "dialogs": {
+                "add": {
+                    "title": "Create Invitation",
+                    "description": {
+                        "invite": "Invite a new user",
+                        "storage_warning": "Not enough space. Free up at least 1 GB to continue."
+                    },
+                    "form": {
+                        "email_label": "Email",
+                        "email_description": "This will be the email of the new user",
+                        "quota_label": "Quota",
+                        "quota_description": "Choose a value up to {maxQuota} GB"
+                    },
+                    "submit": "Invite",
+                    "errors": {
+                        "email_already_exist": "A user with this email has already been invited or registered",
+                        "unexpected_error": "An unexpected error occurred"
+                    }
+                }
+            }
+        }
+    },
     "layouts": {
         "sidebar": {
             "navUser": {

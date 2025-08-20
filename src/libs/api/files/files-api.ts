@@ -121,3 +121,8 @@ export const restoreMutationFn = async (
     );
     return response.data;
 };
+
+export const getFreeSpaceQueryFn = async (): Promise<string> => {
+    const response = await API.get<string>(API_ROUTES.FILES.FREE_SPACE);
+    return response.data;
+};

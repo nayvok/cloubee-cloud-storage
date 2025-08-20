@@ -1,9 +1,8 @@
-import type { Metadata } from 'next';
+import SettingsContainer from '@/components/features/settings/settings-container';
+import { getUserRole } from '@/libs/utils/get-user-role';
 
-export const metadata: Metadata = {
-    title: '',
-};
+export default async function Page() {
+    const role = await getUserRole();
 
-export default function Page() {
-    return <div></div>;
+    return <SettingsContainer role={role} />;
 }

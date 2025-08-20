@@ -1,12 +1,10 @@
 import { RoleType } from '@/libs/constants/roles';
 
-export interface IUserResponse {
+export interface IInvitation {
     id: string;
-    name: string;
     email: string;
+    token: string;
     role: RoleType;
-    avatarPath?: string;
-    createdAt: Date;
-    usedQuota: string;
     storageQuota: string;
+    createdAt: Date;
 }

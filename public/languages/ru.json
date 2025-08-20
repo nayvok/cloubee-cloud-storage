@@ -182,6 +182,99 @@
         },
         "placeholder": "Корзина пуста"
     },
+    "settings": {
+        "users": {
+            "title": "Пользователи",
+            "description": "Управляйте вашими пользователями",
+            "table": {
+                "caption": "Список пользователей",
+                "head": {
+                    "email": "Почта",
+                    "name": "Имя",
+                    "role": "Роль",
+                    "used_quota": "Использовано",
+                    "quota": "Квота",
+                    "created_at": "Обновлен",
+                    "actions": "Действия"
+                },
+                "dropdown": {
+                    "edit": "Изменить",
+                    "delete": "Удалить"
+                }
+            },
+            "dialogs": {
+                "edit": {
+                    "title": "Изменить квоту",
+                    "description": {
+                        "quota_info": "У пользователя {email} сейчас занято {used} из {quota}.",
+                        "quota_action": "Вы можете увеличить или уменьшить квоту пользователя."
+                    },
+                    "form": {
+                        "quota_label": "Квота",
+                        "quota_description": "Выберете значение от {minQuota} до {maxQuota} GB"
+                    },
+                    "submit": "Изменить",
+                    "errors": {
+                        "quota_conflict": "Конфликт при изменении квоты",
+                        "unexpected_error": "Произошла непредвиденная ошибка"
+                    }
+                },
+                "delete": {
+                    "title": "Удаление пользователя",
+                    "description": "Вы уверены, что хотите удалить {email} и все его данные?",
+                    "cancel": "Отмена",
+                    "action": "Удалить",
+                    "errors": {
+                        "not_found": "Пользователь не найден"
+                    }
+                }
+            }
+        },
+        "invitations": {
+            "title": "Приглашения",
+            "description": "Предоставьте другим доступ к хранилищу",
+            "table": {
+                "caption": "Список приглашений",
+                "head": {
+                    "email": "Почта",
+                    "role": "Роль",
+                    "quota": "Квота",
+                    "created_at": "Приглашен",
+                    "actions": "Действия"
+                },
+                "dropdown": {
+                    "copy": "Скопировать",
+                    "delete": "Удалить"
+                },
+                "toast": {
+                    "copy_success": "Скопировано в буфер обмена",
+                    "copy_error": "Не удалось скопировать в буфер обмена"
+                }
+            },
+            "invite_btn": "Пригласить",
+            "placeholder": "Приглашений пока нет",
+            "dialogs": {
+                "add": {
+                    "title": "Создать приглашение",
+                    "description": {
+                        "invite": "Пригласить нового пользователя",
+                        "storage_warning": "Недостаточно места. Освободите минимум 1 ГБ для продолжения."
+                    },
+                    "form": {
+                        "email_label": "Почта",
+                        "email_description": "Это будет почта нового пользователя",
+                        "quota_label": "Квота",
+                        "quota_description": "Выберете значение до {maxQuota} GB"
+                    },
+                    "submit": "Пригласить",
+                    "errors": {
+                        "email_already_exist": "Пользователь с такой почтой уже приглашён или зарегистрирован",
+                        "unexpected_error": "Произошла непредвиденная ошибка"
+                    }
+                }
+            }
+        }
+    },
     "layouts": {
         "sidebar": {
             "navUser": {

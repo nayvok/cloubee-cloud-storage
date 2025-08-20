@@ -10,24 +10,24 @@ export async function middleware(request: NextRequest) {
 
     const token = cookies.get('access_token')?.value;
 
-    if (isSignInRoute || isRegisterAdminRoute || isInvitationRoute) {
-        const response = await fetch(
-            `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/validate-request`,
-            {
-                cache: 'no-store',
-                headers: {
-                    Cookie: `access_token=${token}`,
-                },
+    const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/validate-request`,
+        {
+            cache: 'no-store',
+            headers: {
+                Cookie: `access_token=${token}`,
             },
-        );
+        },
+    );
 
+    if (isSignInRoute || isRegisterAdminRoute || isInvitationRoute) {
         if (response.ok) {
             return NextResponse.redirect(new URL('/dashboard', url));
         }
     }
 
     if (isDashboardRoute) {
-        if (!token) {
+        if (!token || !response.ok) {
             return NextResponse.redirect(new URL('/', url));
         }
     }

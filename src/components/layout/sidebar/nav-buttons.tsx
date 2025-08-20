@@ -52,6 +52,9 @@ export function NavButtons() {
             queryClient.invalidateQueries({
                 queryKey: [QUERY_KEYS.USER],
             });
+            queryClient.invalidateQueries({
+                queryKey: [QUERY_KEYS.FREE_SPACE],
+            });
         },
     });
 

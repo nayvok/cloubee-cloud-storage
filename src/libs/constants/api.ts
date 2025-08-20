@@ -2,7 +2,8 @@ export const API_ROUTES = {
     USERS: {
         LIST: 'users/list',
         ME: 'users/me',
-        BY_ID: (id: string) => `users/${id}`,
+        BY_ID: 'users',
+        DELETE: (id: string) => `users/${id}`,
     },
     AUTH: {
         LOGIN: 'auth/login',
@@ -30,5 +31,6 @@ export const API_ROUTES = {
         RESTORE: 'files/trash/restore',
         SOFT_DELETE: 'files/trash/soft',
         PERMANENT_DELETE: 'files/trash/permanent',
+        FREE_SPACE: 'files/free-space',
     },
 };

@@ -1,5 +1,5 @@
 export function convertBytes(bytes: number): string {
-    const units = ['Байт', 'КБ', 'МБ', 'ГБ', 'ТБ'];
+    const units = ['B', 'KB', 'MB', 'GB', 'TB'];
     let unitIndex = 0;
 
     while (bytes >= 1024 && unitIndex < units.length - 1) {
