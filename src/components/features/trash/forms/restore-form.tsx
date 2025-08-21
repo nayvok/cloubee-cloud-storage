@@ -82,22 +82,20 @@ const RestoreForm = ({ isOpen, onClose }: RestoreFormProps) => {
                         },
                     );
                 }
-            } else {
-                if (data.restored.length === 1) {
-                    toast.success(
-                        t('toast.success.single', {
-                            fileName: data.restored[0].name,
-                        }),
-                        {
-                            id: toastId,
-                        },
-                    );
-                } else {
-                    toast.error(t('toast.errors.single.text'), {
+            } else if (data.restored.length === 1) {
+                toast.success(
+                    t('toast.success.single', {
+                        fileName: data.restored[0].name,
+                    }),
+                    {
                         id: toastId,
-                        description: t('toast.errors.single.type'),
-                    });
-                }
+                    },
+                );
+            } else {
+                toast.error(t('toast.errors.single.text'), {
+                    id: toastId,
+                    description: t('toast.errors.single.type'),
+                });
             }
         } catch {
             toast.error(t('toast.errors.default'), { id: toastId });

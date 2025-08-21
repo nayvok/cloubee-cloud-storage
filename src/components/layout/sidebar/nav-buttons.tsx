@@ -119,30 +119,28 @@ export function NavButtons() {
                             isSpaceError: false,
                             fileOnCancel: () => {},
                         });
+                    } else if (
+                        (error as Error).message === 'NOT_ENOUGH_DISK_SPACE'
+                    ) {
+                        setUploadedFile({
+                            fileName: file.name,
+                            fileSize: file.size,
+                            fileLoaded: 100,
+                            fileTotal: file.size,
+                            isUploaded: true,
+                            isNameError: false,
+                            isSpaceError: true,
+                            fileOnCancel: () => {},
+                        });
                     } else {
-                        if (
-                            (error as Error).message === 'NOT_ENOUGH_DISK_SPACE'
-                        ) {
-                            setUploadedFile({
-                                fileName: file.name,
-                                fileSize: file.size,
-                                fileLoaded: 100,
-                                fileTotal: file.size,
-                                isUploaded: true,
-                                isNameError: false,
-                                isSpaceError: true,
-                                fileOnCancel: () => {},
-                            });
-                        } else {
-                            const response = (error as AxiosError).response;
-                            removeUploadedFile({
-                                fileName: file.name,
-                            });
-                            if (response?.data) {
-                                toast.error(
-                                    `${tUploading('fileUploadingError')} ${file.name}`,
-                                );
-                            }
+                        const response = (error as AxiosError).response;
+                        removeUploadedFile({
+                            fileName: file.name,
+                        });
+                        if (response?.data) {
+                            toast.error(
+                                `${tUploading('fileUploadingError')} ${file.name}`,
+                            );
                         }
                     }
                 }

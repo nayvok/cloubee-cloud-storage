@@ -66,7 +66,7 @@ const FileUploaderList = () => {
                                 collapsed && 'h-0 overflow-hidden',
                             )}
                         >
-                            {uploadedFiles.map((uploadedFile, idx) => {
+                            {uploadedFiles.map(uploadedFile => {
                                 const FileIcon = getFileIcon(
                                     null,
                                     uploadedFile.fileName,
@@ -75,7 +75,7 @@ const FileUploaderList = () => {
 
                                 return (
                                     <div
-                                        key={idx}
+                                        key={uploadedFile.fileName}
                                         className="flex items-center gap-2 p-2 transition-all"
                                     >
                                         <div className="relative size-[36px]">

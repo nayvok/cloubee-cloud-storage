@@ -3,7 +3,7 @@ import { useTranslations } from 'next-intl';
 
 import { ActionItem } from '@/libs/types/action-item.types';
 
-interface useTrashActionItemsProps {
+interface UseTrashActionItemsProps {
     restoreAction: () => void;
     permanentDeleteAction: () => void;
 }
@@ -11,7 +11,7 @@ interface useTrashActionItemsProps {
 const useTrashActionItems = ({
     restoreAction,
     permanentDeleteAction,
-}: useTrashActionItemsProps) => {
+}: UseTrashActionItemsProps) => {
     const t = useTranslations('trash.actions');
 
     const trashActionItems: ActionItem[] = [

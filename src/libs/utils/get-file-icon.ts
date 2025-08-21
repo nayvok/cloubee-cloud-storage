@@ -1,9 +1,4 @@
-import {
-    FILE_ICON_CONFIG,
-    FileIconCategory,
-    FileIconType,
-    SPECIAL_FILES,
-} from '@/libs/constants/file-icons';
+import { FILE_ICON_CONFIG, SPECIAL_FILES } from '@/libs/constants/file-icons';
 
 export const getFileIcon = (
     mimeType: string | null,
@@ -21,10 +16,7 @@ export const getFileIcon = (
         return FILE_ICON_CONFIG[specialEntry[1]].icon;
     }
 
-    const entries = Object.entries(FILE_ICON_CONFIG) as [
-        FileIconType,
-        FileIconCategory,
-    ][];
+    const entries = Object.entries(FILE_ICON_CONFIG);
 
     const extension = fileName.includes('.')
         ? fileName.slice(fileName.lastIndexOf('.')).toLowerCase()
@@ -41,8 +33,8 @@ export const getFileIcon = (
     );
 
     return (
-        (extMatch && extMatch[1].icon) ||
-        (mimeMatch && mimeMatch[1].icon) ||
+        extMatch?.[1].icon ||
+        mimeMatch?.[1].icon ||
         FILE_ICON_CONFIG.default.icon
     );
 };

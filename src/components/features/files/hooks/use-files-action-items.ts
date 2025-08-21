@@ -3,7 +3,7 @@ import { useTranslations } from 'next-intl';
 
 import { ActionItem } from '@/libs/types/action-item.types';
 
-interface useFilesActionItemsProps {
+interface UseFilesActionItemsProps {
     downloadAction: () => void;
     renameAction: () => void;
     deleteAction: () => void;
@@ -17,7 +17,7 @@ const useFilesActionItems = ({
     deleteAction,
     isMultiple,
     isHaveDir,
-}: useFilesActionItemsProps) => {
+}: UseFilesActionItemsProps) => {
     const t = useTranslations('files.actions');
 
     const filesActionItems: ActionItem[] = [

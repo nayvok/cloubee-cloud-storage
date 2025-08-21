@@ -28,8 +28,8 @@ export function AppSidebar({ ...props }: ComponentProps<typeof Sidebar>) {
             <SidebarContent className="justify-end">
                 <DiskUsageSidebar
                     isLoading={isPending}
-                    usedQuota={Number(data?.usedQuota) ?? 0}
-                    storageQuota={Number(data?.storageQuota) ?? 0}
+                    usedQuota={Number(data?.usedQuota) || 0}
+                    storageQuota={Number(data?.storageQuota) || 0}
                 />
             </SidebarContent>
             <SidebarFooter>

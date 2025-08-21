@@ -62,156 +62,146 @@ const ActionBar = ({ actionItems }: ActionBarProps) => {
     }, [selectedFiles]);
 
     return (
-        <>
+        <div
+            ref={actionBarRef}
+            className={cn(
+                'fixed right-0 z-1 h-16 w-full p-2 pl-[calc(var(--sidebar-width)+(var(--spacing)*2))]',
+                'group-has-data-[collapsible=icon]/sidebar-wrapper:pl-[calc(var(--sidebar-width-icon)+(--spacing(4))+(var(--spacing)*2))]',
+                'transition-all duration-200 ease-linear',
+                showHeaderElement ? 'top-0' : '-top-full delay-300',
+                isMobile && 'pl-2 duration-0',
+            )}
+        >
             <div
-                ref={actionBarRef}
                 className={cn(
-                    'fixed right-0 z-1 h-16 w-full p-2 pl-[calc(var(--sidebar-width)+(var(--spacing)*2))]',
-                    'group-has-data-[collapsible=icon]/sidebar-wrapper:pl-[calc(var(--sidebar-width-icon)+(--spacing(4))+(var(--spacing)*2))]',
-                    'transition-all duration-200 ease-linear',
-                    showHeaderElement ? 'top-0' : '-top-full delay-300',
-                    isMobile && 'pl-2 duration-0',
+                    'bg-background absolute top-0 left-0 h-4 w-full transition-all duration-300 ease-in-out',
+                    showHeaderElement
+                        ? 'translate-y-0 opacity-100 delay-100'
+                        : '-translate-y-full opacity-0',
+                )}
+            />
+            <div
+                className={cn(
+                    'bg-sidebar flex size-full items-center justify-between gap-2 rounded-lg border p-2 text-sm shadow-sm',
+                    'transition-all duration-300 ease-in-out',
+                    showHeaderElement
+                        ? 'translate-y-0 opacity-100 delay-100'
+                        : '-translate-y-full opacity-0',
                 )}
             >
-                <div
-                    className={cn(
-                        'bg-background absolute top-0 left-0 h-4 w-full transition-all duration-300 ease-in-out',
-                        showHeaderElement
-                            ? 'translate-y-0 opacity-100 delay-100'
-                            : '-translate-y-full opacity-0',
-                    )}
-                />
-                <div
-                    className={cn(
-                        'bg-sidebar flex size-full items-center justify-between gap-2 rounded-lg border p-2 text-sm shadow-sm',
-                        'transition-all duration-300 ease-in-out',
-                        showHeaderElement
-                            ? 'translate-y-0 opacity-100 delay-100'
-                            : '-translate-y-full opacity-0',
-                    )}
-                >
-                    {selectedFiles && selectedFiles.length !== 0 && (
-                        <>
-                            <div className="inline-flex items-center gap-2">
-                                {selectedFiles.length > 1 ? (
-                                    <>
-                                        <Button
-                                            variant="ghost"
-                                            size="icon"
-                                            onClick={() => {
-                                                selectoRef.current?.setSelectedTargets(
-                                                    [],
-                                                );
-                                                setLastSelectedFiles(
-                                                    selectedFiles,
-                                                );
-                                                setSelectedFiles([]);
-                                            }}
-                                        >
-                                            <CheckCircle />
-                                        </Button>
-                                        <span>
-                                            {`${t('info.selectedCount')} ${selectedFiles.length}`}
-                                        </span>
-                                    </>
-                                ) : (
-                                    <>
-                                        <DropdownMenu modal={false}>
-                                            <DropdownMenuTrigger asChild>
-                                                <Button
-                                                    variant="ghost"
-                                                    size="icon"
-                                                    className="shrink-0"
-                                                >
-                                                    <Info />
-                                                </Button>
-                                            </DropdownMenuTrigger>
-                                            <DropdownMenuContent
-                                                side="bottom"
-                                                align="start"
-                                                sideOffset={4}
-                                                className="flex max-w-[500px] flex-col p-2 text-sm"
-                                            >
-                                                <div>
-                                                    <span>
-                                                        {t('info.name')}
-                                                    </span>{' '}
-                                                    <span className="font-medium">
-                                                        {selectedFiles[0].name}
-                                                    </span>
-                                                </div>
-                                                <span>
-                                                    <span>
-                                                        {t('info.size')}
-                                                    </span>{' '}
-                                                    <span className="font-medium">
-                                                        {convertBytes(
-                                                            Number(
-                                                                selectedFiles[0]
-                                                                    .size,
-                                                            ),
-                                                        )}
-                                                    </span>
-                                                </span>
-                                                <span>
-                                                    <span>
-                                                        {t('info.modified')}
-                                                    </span>{' '}
-                                                    <span className="font-medium">
-                                                        {format(
-                                                            new Date(
-                                                                selectedFiles[0].updatedAt,
-                                                            ),
-                                                            'dd.MM.yyyy',
-                                                        )}{' '}
-                                                        {format(
-                                                            new Date(
-                                                                selectedFiles[0].updatedAt,
-                                                            ),
-                                                            'HH:mm',
-                                                        )}
-                                                    </span>
-                                                </span>
-                                            </DropdownMenuContent>
-                                        </DropdownMenu>
-
-                                        <span className="line-clamp-1">
-                                            {selectedFiles[0].name}
-                                        </span>
-                                    </>
-                                )}
-                            </div>
-                            <div className="flex">
-                                {actionItems.map(item => (
+                {selectedFiles && selectedFiles.length !== 0 && (
+                    <>
+                        <div className="inline-flex items-center gap-2">
+                            {selectedFiles.length > 1 ? (
+                                <>
                                     <Button
                                         variant="ghost"
-                                        key={item.label}
-                                        onClick={item.onClick}
+                                        size="icon"
+                                        onClick={() => {
+                                            selectoRef.current?.setSelectedTargets(
+                                                [],
+                                            );
+                                            setLastSelectedFiles(selectedFiles);
+                                            setSelectedFiles([]);
+                                        }}
                                     >
-                                        <item.icon />
-                                        {item.label}
+                                        <CheckCircle />
                                     </Button>
-                                ))}
+                                    <span>
+                                        {`${t('info.selectedCount')} ${selectedFiles.length}`}
+                                    </span>
+                                </>
+                            ) : (
+                                <>
+                                    <DropdownMenu modal={false}>
+                                        <DropdownMenuTrigger asChild>
+                                            <Button
+                                                variant="ghost"
+                                                size="icon"
+                                                className="shrink-0"
+                                            >
+                                                <Info />
+                                            </Button>
+                                        </DropdownMenuTrigger>
+                                        <DropdownMenuContent
+                                            side="bottom"
+                                            align="start"
+                                            sideOffset={4}
+                                            className="flex max-w-[500px] flex-col p-2 text-sm"
+                                        >
+                                            <div>
+                                                <span>{t('info.name')}</span>{' '}
+                                                <span className="font-medium">
+                                                    {selectedFiles[0].name}
+                                                </span>
+                                            </div>
+                                            <span>
+                                                <span>{t('info.size')}</span>{' '}
+                                                <span className="font-medium">
+                                                    {convertBytes(
+                                                        Number(
+                                                            selectedFiles[0]
+                                                                .size,
+                                                        ),
+                                                    )}
+                                                </span>
+                                            </span>
+                                            <span>
+                                                <span>
+                                                    {t('info.modified')}
+                                                </span>{' '}
+                                                <span className="font-medium">
+                                                    {format(
+                                                        new Date(
+                                                            selectedFiles[0].updatedAt,
+                                                        ),
+                                                        'dd.MM.yyyy',
+                                                    )}{' '}
+                                                    {format(
+                                                        new Date(
+                                                            selectedFiles[0].updatedAt,
+                                                        ),
+                                                        'HH:mm',
+                                                    )}
+                                                </span>
+                                            </span>
+                                        </DropdownMenuContent>
+                                    </DropdownMenu>
 
+                                    <span className="line-clamp-1">
+                                        {selectedFiles[0].name}
+                                    </span>
+                                </>
+                            )}
+                        </div>
+                        <div className="flex">
+                            {actionItems.map(item => (
                                 <Button
                                     variant="ghost"
-                                    size="icon"
-                                    onClick={() => {
-                                        selectoRef.current?.setSelectedTargets(
-                                            [],
-                                        );
-                                        setLastSelectedFiles(selectedFiles);
-                                        setSelectedFiles([]);
-                                    }}
+                                    key={item.label}
+                                    onClick={item.onClick}
                                 >
-                                    <X />
+                                    <item.icon />
+                                    {item.label}
                                 </Button>
-                            </div>
-                        </>
-                    )}
-                </div>
+                            ))}
+
+                            <Button
+                                variant="ghost"
+                                size="icon"
+                                onClick={() => {
+                                    selectoRef.current?.setSelectedTargets([]);
+                                    setLastSelectedFiles(selectedFiles);
+                                    setSelectedFiles([]);
+                                }}
+                            >
+                                <X />
+                            </Button>
+                        </div>
+                    </>
+                )}
             </div>
-        </>
+        </div>
     );
 };
 

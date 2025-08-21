@@ -56,6 +56,10 @@ const EmptyTrashForm = ({
         }
     };
 
+    const renderBr = () => {
+        return <br />;
+    };
+
     return (
         <AlertDialog open={isOpen} onOpenChange={onClose}>
             <AlertDialogContent>
@@ -66,10 +70,10 @@ const EmptyTrashForm = ({
                     <AlertDialogDescription>
                         {deleteAll
                             ? t.rich('allTrash.description', {
-                                  br: () => <br />,
+                                  br: renderBr,
                               })
                             : t.rich('description', {
-                                  br: () => <br />,
+                                  br: renderBr,
                               })}
                     </AlertDialogDescription>
                 </AlertDialogHeader>

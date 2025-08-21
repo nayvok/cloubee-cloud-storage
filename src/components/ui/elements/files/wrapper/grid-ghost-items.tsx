@@ -7,22 +7,27 @@ interface GridGhostItemsProps {
 }
 
 const GridGhostItems = ({ viewMode, itemsCount = 15 }: GridGhostItemsProps) => {
+    const getViewModeWidth = () => {
+        if (viewMode === 'largeTile') {
+            return 'w-[144px]';
+        } else if (viewMode === 'tile') {
+            return 'w-[104px]';
+        } else {
+            return '';
+        }
+    };
+
     return (
         <>
             {viewMode !== 'list' &&
-                Array.from({ length: itemsCount }).map((_, index) => (
-                    <div
-                        key={index}
-                        className={cn(
-                            'h-0',
-                            viewMode === 'largeTile'
-                                ? 'w-[144px]'
-                                : viewMode === 'tile'
-                                  ? 'w-[104px]'
-                                  : '',
-                        )}
-                    ></div>
-                ))}
+                Array.from({ length: itemsCount }).map((_, index) => {
+                    return (
+                        <div
+                            key={index}
+                            className={cn('h-0', getViewModeWidth())}
+                        ></div>
+                    );
+                })}
         </>
     );
 };

@@ -15,15 +15,13 @@ const Header = () => {
     const isTrashPage = pathname.startsWith(APP_ROUTES.DASHBOARD.TRASH.path);
 
     return (
-        <>
-            <header className="relative flex h-16 shrink-0 items-center gap-2 transition-[width] ease-linear">
-                {isFilesPage && <FilesActionBar />}
-                {isTrashPage && <TrashActionBar />}
-                <HeaderBreadcrumbs pathname={pathname} />
-                {isFilesPage && <FilesHeaderPanel />}
-                {isTrashPage && <TrashHeaderPanel />}
-            </header>
-        </>
+        <header className="relative flex h-16 shrink-0 items-center gap-2 transition-[width] ease-linear">
+            {isFilesPage && <FilesActionBar />}
+            {isTrashPage && <TrashActionBar />}
+            <HeaderBreadcrumbs pathname={pathname} />
+            {isFilesPage && <FilesHeaderPanel />}
+            {isTrashPage && <TrashHeaderPanel />}
+        </header>
     );
 };
 

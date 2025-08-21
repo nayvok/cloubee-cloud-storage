@@ -95,17 +95,23 @@ const MoveToTrashForm = ({ isOpen, onClose }: MoveToTrashFormProps) => {
         });
     };
 
+    const getAlertDialogTitle = () => {
+        if (lastSelectedFiles.length > 1) {
+            return t('dialog.title_multiple');
+        }
+
+        if (lastSelectedFiles[0]?.isDirectory) {
+            return t('dialog.title_folder');
+        }
+
+        return t('dialog.title_file');
+    };
+
     return (
         <AlertDialog open={isOpen} onOpenChange={onClose}>
             <AlertDialogContent className="sm:max-w-[425px]">
                 <AlertDialogHeader>
-                    <AlertDialogTitle>
-                        {lastSelectedFiles.length > 1
-                            ? t('dialog.title_multiple')
-                            : lastSelectedFiles[0]?.isDirectory
-                              ? t('dialog.title_folder')
-                              : t('dialog.title_file')}
-                    </AlertDialogTitle>
+                    <AlertDialogTitle>{getAlertDialogTitle()}</AlertDialogTitle>
                     <AlertDialogDescription>
                         {t('dialog.description')}
                     </AlertDialogDescription>
