@@ -1,4 +1,5 @@
 import {
+    BadRequestException,
     ConflictException,
     Injectable,
     InternalServerErrorException,
@@ -53,32 +54,53 @@ export class UsersService {
     public async updateCurrentUser(
         id: string,
         name?: string,
-        password?: string,
+        currentPassword?: string,
+        newPassword?: string,
+        avatarPath?: string,
     ) {
-        if (!name && !password) {
-            throw new InternalServerErrorException('No changes provided');
+        if (currentPassword && !newPassword) {
+            throw new ConflictException('NEW_PASSWORD_REQUIRED');
         }
 
-        try {
-            const updateData: any = {};
+        const userData = await this.prisma.user.findUnique({
+            where: {
+                id: id,
+            },
+        });
 
-            if (password) {
-                updateData.password = await bcrypt.hash(password, 10);
+        const updateData: any = {};
+
+        if (newPassword) {
+            if (!currentPassword) {
+                throw new BadRequestException('INVALID_PASSWORD');
             }
 
-            if (name) {
-                updateData.name = name;
+            const isCurrentPasswordValid = await bcrypt.compare(
+                currentPassword,
+                userData.password,
+            );
+
+            if (!isCurrentPasswordValid) {
+                throw new BadRequestException('INVALID_PASSWORD');
             }
 
-            await this.prisma.user.update({
-                where: { id },
-                data: updateData,
-            });
-
-            return { message: 'User updated successfully.' };
-        } catch {
-            throw new InternalServerErrorException('Error during update');
+            updateData.password = await bcrypt.hash(newPassword, 10);
         }
+
+        if (name) {
+            updateData.name = name;
+        }
+
+        if (avatarPath !== undefined) {
+            updateData.avatarPath = avatarPath;
+        }
+
+        await this.prisma.user.update({
+            where: { id },
+            data: updateData,
+        });
+
+        return { message: 'USER_UPDATED' };
     }
 
     public async updateUserByAdmin(id: string, storageQuota?: number) {

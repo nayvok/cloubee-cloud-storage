@@ -41,7 +41,13 @@ export class UsersController {
 
     @Post('me')
     updateCurrentUser(@UserId() id: string, @Body() dto: UpdateCurrentUserDto) {
-        return this.usersService.updateCurrentUser(id, dto.name, dto.password);
+        return this.usersService.updateCurrentUser(
+            id,
+            dto.name,
+            dto.currentPassword,
+            dto.newPassword,
+            dto.avatarPath,
+        );
     }
 
     @Get(':id')
