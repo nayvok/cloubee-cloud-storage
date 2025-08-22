@@ -182,6 +182,25 @@
         "placeholder": "Trash is empty"
     },
     "settings": {
+        "user": {
+            "title": "Account",
+            "description": "Change your profile data",
+            "form": {
+                "name": "Name",
+                "current_password": "Current password",
+                "new_password": "New password",
+                "avatar": "Avatar",
+                "submit": "Save"
+            },
+            "errors": {
+                "invalid_password": "Current password is incorrect",
+                "new_password_required": "New password is required",
+                "unexpected_error": "An unexpected error occurred",
+                "name": "Name must be at least 2 characters long",
+                "password": "Password must be at least 8 characters long"
+            },
+            "success": "Data saved successfully"
+        },
         "users": {
             "title": "Users",
             "description": "Manage your users",

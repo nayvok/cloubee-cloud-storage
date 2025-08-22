@@ -43,6 +43,7 @@ import { Skeleton } from '@/components/ui/common/skeleton';
 import { logoutMutationFn } from '@/libs/api/auth/auth-api';
 import { APP_ROUTES } from '@/libs/constants/routes';
 import { setLanguage } from '@/libs/i18n/language';
+import { getFallbackAvatarInitials } from '@/libs/utils/getFallbackAvatarInitials';
 import {
     TypeChangeLanguageSchema,
     changeLanguageSchema,
@@ -110,10 +111,13 @@ export function NavUser({
                             size="lg"
                             className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
                         >
-                            <Avatar className="h-8 w-8 rounded-lg">
-                                <AvatarImage src={avatar} alt={name} />
+                            <Avatar className="bg-sidebar-accent h-8 w-8">
+                                <AvatarImage
+                                    src={avatar || '/'}
+                                    alt={name || '/'}
+                                />
                                 <AvatarFallback>
-                                    <Skeleton className="h-8 w-8 rounded-lg" />
+                                    {getFallbackAvatarInitials(name)}
                                 </AvatarFallback>
                             </Avatar>
 

@@ -36,7 +36,7 @@ export function AppSidebar({ ...props }: ComponentProps<typeof Sidebar>) {
                 <NavUser
                     name={data?.name ?? ''}
                     email={data?.email ?? ''}
-                    avatar={data?.avatarPath || '/avatar.png'}
+                    avatar={data?.avatarPath || ''}
                     isLoading={isPending}
                 />
             </SidebarFooter>

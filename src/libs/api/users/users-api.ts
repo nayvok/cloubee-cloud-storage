@@ -1,6 +1,7 @@
 import API from '@/libs/api/axios-client';
 import { IUserResponse } from '@/libs/api/users/users.types';
 import { API_ROUTES } from '@/libs/constants/api';
+import { TypeUpdateUserSchema } from '@/schemas/user/update-user.schema';
 import { TypeChangeUserByAdminSchema } from '@/schemas/users/change-user-by-admin.schema';
 
 export const getUserQueryFn = async (): Promise<IUserResponse> => {
@@ -24,5 +25,10 @@ export const changeUserByAdminMutationFn = async (
     const response = await API.post(`${API_ROUTES.USERS.BY_ID}/${data.id}`, {
         storageQuota: data.storageQuota,
     });
+    return response.data;
+};
+
+export const updateUserMutationFn = async (data: TypeUpdateUserSchema) => {
+    const response = await API.post(API_ROUTES.USERS.ME, data);
     return response.data;
 };
