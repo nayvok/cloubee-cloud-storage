@@ -37,7 +37,9 @@ const DeleteUserAlert = ({
         onError(error: Error) {
             onClose();
             if (error.message === 'NOT_FOUND') {
-                toast.error(t('not_found'));
+                toast.error(t('errors.not_found'));
+            } else {
+                toast.error(t('errors.delete_error'));
             }
         },
 
@@ -52,6 +54,7 @@ const DeleteUserAlert = ({
                 queryKey: [QUERY_KEYS.FREE_SPACE],
             });
             onClose();
+            toast.success(t('delete_success'));
         },
     });
 

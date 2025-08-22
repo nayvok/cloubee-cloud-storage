@@ -213,6 +213,7 @@
                         "quota_description": "Select a value between {minQuota} and {maxQuota} GB"
                     },
                     "submit": "Update",
+                    "edit_success": "User data updated",
                     "errors": {
                         "quota_conflict": "Quota conflict",
                         "unexpected_error": "An unexpected error occurred"
@@ -223,8 +224,10 @@
                     "description": "Are you sure you want to delete {email} and all their data?",
                     "cancel": "Cancel",
                     "action": "Delete",
+                    "delete_success": "User deleted",
                     "errors": {
-                        "not_found": "User not found"
+                        "not_found": "User not found",
+                        "delete_error": "Could not delete user"
                     }
                 }
             }
@@ -247,7 +250,9 @@
                 },
                 "toast": {
                     "copy_success": "Copied to clipboard",
-                    "copy_error": "Could not copy to clipboard"
+                    "copy_error": "Could not copy to clipboard",
+                    "delete_success": "Invitation deleted",
+                    "delete_error": "Failed to delete invitation"
                 }
             },
             "invite_btn": "Invite",

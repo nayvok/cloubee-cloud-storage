@@ -81,14 +81,9 @@ const ShowInvitations = () => {
                 [QUERY_KEYS.INVITATIONS],
                 context?.previousInvitations,
             );
-            toast.error('Произошла ошибка при удалении приглашения', {
-                duration: 2000,
-            });
-        },
 
-        async onSettled() {
-            queryClient.invalidateQueries({
-                predicate: query => query.queryKey[0] === QUERY_KEYS.FILES,
+            toast.error(toast.success(t('table.toast.delete_error')), {
+                duration: 2000,
             });
         },
 
@@ -99,6 +94,8 @@ const ShowInvitations = () => {
             await queryClient.invalidateQueries({
                 queryKey: [QUERY_KEYS.FREE_SPACE],
             });
+
+            toast.success(t('table.toast.delete_success'));
         },
     });
 

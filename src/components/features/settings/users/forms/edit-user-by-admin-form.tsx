@@ -93,6 +93,7 @@ const EditUserByAdminForm = ({
             });
             onClose();
             form.reset();
+            toast.success(t('edit_success'));
         },
     });
 
