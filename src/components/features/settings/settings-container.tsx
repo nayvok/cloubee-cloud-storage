@@ -1,4 +1,4 @@
-import ShowInvitations from '@/components/features/settings/users/show-invitations';
+import ShowInvitations from '@/components/features/settings/invitations/show-invitations';
 import ShowUsers from '@/components/features/settings/users/show-users';
 import { ROLE_TYPES, RoleType } from '@/libs/constants/roles';
 

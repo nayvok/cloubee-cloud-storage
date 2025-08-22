@@ -7,9 +7,9 @@ import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
+import AddInvitationForm from '@/components/features/settings/invitations/forms/add-invitation-form';
 import SettingsCard from '@/components/features/settings/settings-card';
 import SettingsLoader from '@/components/features/settings/settings-loader';
-import AddInvitationForm from '@/components/features/settings/users/forms/add-invitation-form';
 import { Badge } from '@/components/ui/common/badge';
 import { Button } from '@/components/ui/common/button';
 import {
