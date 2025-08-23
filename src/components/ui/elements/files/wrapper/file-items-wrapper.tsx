@@ -8,12 +8,12 @@ interface FilesWrapperProps extends PropsWithChildren {
     ref: Ref<HTMLDivElement | null>;
 }
 
-const FilesWrapper = ({ viewMode, ref, children }: FilesWrapperProps) => {
+const FileItemsWrapper = ({ viewMode, ref, children }: FilesWrapperProps) => {
     return (
         <div
             ref={ref}
             className={cn(
-                'flex h-0 w-full grow overflow-y-auto p-2 select-none',
+                'relative flex h-0 w-full grow overflow-y-auto p-2 select-none',
                 viewMode !== 'list'
                     ? 'flex-row flex-wrap content-start items-start justify-between gap-0'
                     : 'flex-col',
@@ -24,4 +24,4 @@ const FilesWrapper = ({ viewMode, ref, children }: FilesWrapperProps) => {
     );
 };
 
-export default FilesWrapper;
+export default FileItemsWrapper;

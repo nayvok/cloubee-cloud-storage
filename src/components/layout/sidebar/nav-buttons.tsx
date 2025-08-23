@@ -1,12 +1,9 @@
 'use client';
 
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
 import { FilePlus, FolderPlus, Plus, Upload } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { usePathname } from 'next/navigation';
 import { ChangeEvent, useState } from 'react';
-import { toast } from 'sonner';
 
 import MkdirForm from '@/components/features/files/forms/mkdir-form';
 import {
@@ -15,9 +12,7 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/common/sidebar';
-import { uploadMutationFn } from '@/libs/api/files/files-api';
-import { QUERY_KEYS } from '@/libs/api/query-keys';
-import { filesStore } from '@/libs/store/files/files.store';
+import { useFileUploader } from '@/libs/hooks/use-file-uploader';
 
 import {
     DropdownMenu,
@@ -29,122 +24,16 @@ import {
 
 export function NavButtons() {
     const t = useTranslations('layouts.sidebar.navButtons');
-    const tUploading = useTranslations('files.uploader');
     const [isMkdirFormOpen, setIsMkdirFormOpen] = useState(false);
+    const dir = usePathname().split('/').filter(Boolean).slice(2).join('/');
 
-    const setUploadedFile = filesStore(state => state.setUploadedFile);
-    const removeUploadedFile = filesStore(state => state.removeUploadedFile);
-
-    const queryClient = useQueryClient();
-    const pathname = usePathname()
-        .split('/')
-        .filter(Boolean)
-        .slice(2)
-        .join('/');
-
-    const uploadMutation = useMutation({
-        mutationFn: uploadMutationFn,
-
-        async onSettled() {
-            queryClient.invalidateQueries({
-                predicate: query => query.queryKey[0] === QUERY_KEYS.FILES,
-            });
-            queryClient.invalidateQueries({
-                queryKey: [QUERY_KEYS.USER],
-            });
-            queryClient.invalidateQueries({
-                queryKey: [QUERY_KEYS.FREE_SPACE],
-            });
-        },
-    });
+    const uploadFiles = useFileUploader();
 
     const onUpload = async (e: ChangeEvent<HTMLInputElement>) => {
+        e.preventDefault();
         if (e.target.files) {
-            for (const file of e.target.files) {
-                setUploadedFile({
-                    fileName: file.name,
-                    fileSize: file.size,
-                    fileLoaded: 0,
-                    fileTotal: file.size,
-                    isUploaded: false,
-                    isNameError: false,
-                    isSpaceError: false,
-                    fileOnCancel: () => {},
-                });
-            }
-
-            for (const file of e.target.files) {
-                const controller = new AbortController();
-
-                try {
-                    await uploadMutation.mutateAsync({
-                        file: file,
-                        idContext: pathname,
-                        onUploadProgress: progressEvent => {
-                            setUploadedFile({
-                                fileName: file.name,
-                                fileSize: file.size,
-                                fileLoaded: progressEvent.loaded,
-                                fileTotal: progressEvent.total || file.size,
-                                isUploaded: false,
-                                isNameError: false,
-                                isSpaceError: false,
-                                fileOnCancel: () => {
-                                    controller.abort();
-                                },
-                            });
-                        },
-                        abortController: controller,
-                    });
-
-                    setUploadedFile({
-                        fileName: file.name,
-                        fileSize: file.size,
-                        fileLoaded: 100,
-                        fileTotal: file.size,
-                        isUploaded: true,
-                        isNameError: false,
-                        isSpaceError: false,
-                        fileOnCancel: () => {},
-                    });
-                } catch (error: unknown) {
-                    if ((error as Error).message === 'NAME_ALREADY_TAKEN') {
-                        setUploadedFile({
-                            fileName: file.name,
-                            fileSize: file.size,
-                            fileLoaded: 100,
-                            fileTotal: file.size,
-                            isUploaded: true,
-                            isNameError: true,
-                            isSpaceError: false,
-                            fileOnCancel: () => {},
-                        });
-                    } else if (
-                        (error as Error).message === 'NOT_ENOUGH_DISK_SPACE'
-                    ) {
-                        setUploadedFile({
-                            fileName: file.name,
-                            fileSize: file.size,
-                            fileLoaded: 100,
-                            fileTotal: file.size,
-                            isUploaded: true,
-                            isNameError: false,
-                            isSpaceError: true,
-                            fileOnCancel: () => {},
-                        });
-                    } else {
-                        const response = (error as AxiosError).response;
-                        removeUploadedFile({
-                            fileName: file.name,
-                        });
-                        if (response?.data) {
-                            toast.error(
-                                `${tUploading('fileUploadingError')} ${file.name}`,
-                            );
-                        }
-                    }
-                }
-            }
+            const files = [...e.target.files];
+            await uploadFiles({ dir, files });
         }
     };
 

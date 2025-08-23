@@ -5,7 +5,7 @@ import { useState } from 'react';
 import Selection from '@/components/features/controls/selection';
 import TrashCard from '@/components/features/trash/trash-card';
 import TrashPlaceholder from '@/components/features/trash/trash-placeholder';
-import FilesWrapper from '@/components/ui/elements/files/wrapper/files-wrapper';
+import FileItemsWrapper from '@/components/ui/elements/files/wrapper/file-items-wrapper';
 import GridGhostItems from '@/components/ui/elements/files/wrapper/grid-ghost-items';
 import PageLoader from '@/components/ui/elements/page-loader';
 import { useTrashQuery } from '@/libs/api/files/hooks/use-trash-query';
@@ -23,7 +23,10 @@ const TrashContainer = () => {
                 <Selection files={data} containerElement={containerElement} />
             )}
 
-            <FilesWrapper ref={setContainerElement} viewMode={filesViewMode}>
+            <FileItemsWrapper
+                ref={setContainerElement}
+                viewMode={filesViewMode}
+            >
                 {isPending ? (
                     <PageLoader />
                 ) : (
@@ -45,7 +48,7 @@ const TrashContainer = () => {
                         )}
                     </>
                 )}
-            </FilesWrapper>
+            </FileItemsWrapper>
         </>
     );
 };

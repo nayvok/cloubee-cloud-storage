@@ -6,7 +6,8 @@ import { useState } from 'react';
 import Selection from '@/components/features/controls/selection';
 import FilesCard from '@/components/features/files/files-card';
 import FilesPlaceholder from '@/components/features/files/files-placeholder';
-import FilesWrapper from '@/components/ui/elements/files/wrapper/files-wrapper';
+import FilesUploaderDropzone from '@/components/features/files/files-uploader-dropzone';
+import FileItemsWrapper from '@/components/ui/elements/files/wrapper/file-items-wrapper';
 import GridGhostItems from '@/components/ui/elements/files/wrapper/grid-ghost-items';
 import PageLoader from '@/components/ui/elements/page-loader';
 import { useFilesQuery } from '@/libs/api/files/hooks/use-files-query';
@@ -24,12 +25,12 @@ const FilesContainer = () => {
         state => state.filesSortDirection,
     );
 
+    const dir = pathname.split('/').filter(Boolean).slice(2).join('/');
+
     const { data, isPending } = useFilesQuery({
         sortMode: filesSortMode,
         sortDirection: filesSortDirection,
-        idContext: decodeURIComponent(
-            pathname.split('/').filter(Boolean).slice(2).join('/'),
-        ),
+        idContext: decodeURIComponent(dir),
     });
 
     return (
@@ -41,8 +42,10 @@ const FilesContainer = () => {
                     containerElement={containerElement}
                 />
             )}
-
-            <FilesWrapper ref={setContainerElement} viewMode={filesViewMode}>
+            <FileItemsWrapper
+                ref={setContainerElement}
+                viewMode={filesViewMode}
+            >
                 {isPending ? (
                     <PageLoader />
                 ) : (
@@ -64,7 +67,8 @@ const FilesContainer = () => {
                         )}
                     </>
                 )}
-            </FilesWrapper>
+                <FilesUploaderDropzone dir={dir} />
+            </FileItemsWrapper>
         </>
     );
 };
