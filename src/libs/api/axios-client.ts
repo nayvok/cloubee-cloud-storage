@@ -19,7 +19,8 @@ API.interceptors.response.use(
         if (status === 401) {
             window.location.href = APP_ROUTES.LOGIN;
         }
-        return Promise.reject(new Error(...data));
+
+        return Promise.reject({ ...data } as Error);
     },
 );
 
