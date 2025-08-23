@@ -79,21 +79,23 @@ const ShowUser = () => {
                 queryKey: [QUERY_KEYS.USERS],
             });
 
+            toast.success(t('success'));
+        },
+
+        onSettled() {
             form.reset({
-                name: userData?.name,
+                name: userData?.name || '',
                 currentPassword: '',
                 newPassword: '',
                 avatarPath: userData?.avatarPath || '',
             });
-
-            toast.success(t('success'));
         },
     });
 
     useEffect(() => {
         if (userData) {
             form.reset({
-                name: userData?.name,
+                name: userData?.name || '',
                 currentPassword: '',
                 newPassword: '',
                 avatarPath: userData?.avatarPath || '',
