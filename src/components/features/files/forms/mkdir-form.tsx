@@ -1,7 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
-import { usePathname } from 'next/navigation';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
@@ -26,17 +25,13 @@ import { QUERY_KEYS } from '@/libs/api/query-keys';
 import { TypeMkdirSchema, useMkdirSchema } from '@/schemas/files/mkdir.schema';
 
 interface MkdirFormProps {
+    dir: string;
     isOpen: boolean;
     onClose: () => void;
 }
 
-const MkdirForm = ({ isOpen, onClose }: MkdirFormProps) => {
+const MkdirForm = ({ dir, isOpen, onClose }: MkdirFormProps) => {
     const t = useTranslations('files.mkdir');
-    const pathname = usePathname()
-        .split('/')
-        .filter(Boolean)
-        .slice(2)
-        .join('/');
 
     const mkdirSchema = useMkdirSchema();
     const queryClient = useQueryClient();
@@ -77,10 +72,10 @@ const MkdirForm = ({ isOpen, onClose }: MkdirFormProps) => {
 
     const onSubmit = ({ folderName }: TypeMkdirSchema) => {
         clearErrors('folderName');
-        if (pathname) {
+        if (dir) {
             mkdirMutation.mutate({
                 folderName,
-                idContext: decodeURIComponent(pathname),
+                idContext: decodeURIComponent(dir),
             });
         } else {
             mkdirMutation.mutate({

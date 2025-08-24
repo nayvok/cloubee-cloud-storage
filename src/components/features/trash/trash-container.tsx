@@ -5,9 +5,9 @@ import { useState } from 'react';
 import Selection from '@/components/features/controls/selection';
 import TrashCard from '@/components/features/trash/trash-card';
 import TrashPlaceholder from '@/components/features/trash/trash-placeholder';
+import CircleCenteredLoader from '@/components/ui/elements/circle-centered-loader';
 import FileItemsWrapper from '@/components/ui/elements/files/wrapper/file-items-wrapper';
 import GridGhostItems from '@/components/ui/elements/files/wrapper/grid-ghost-items';
-import PageLoader from '@/components/ui/elements/page-loader';
 import { useTrashQuery } from '@/libs/api/files/hooks/use-trash-query';
 import { filesPersistStore } from '@/libs/store/files/files.persist-store';
 
@@ -28,7 +28,7 @@ const TrashContainer = () => {
                 viewMode={filesViewMode}
             >
                 {isPending ? (
-                    <PageLoader />
+                    <CircleCenteredLoader />
                 ) : (
                     <>
                         {data && data.length > 0 ? (

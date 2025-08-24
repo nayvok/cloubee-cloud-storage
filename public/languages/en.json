@@ -116,6 +116,22 @@
         "placeholder": {
             "title": "No files yet",
             "description": "Everything will appear here once uploaded"
+        },
+        "explorer_dialog": {
+            "files": "Files",
+            "actions": {
+                "new_folder": "New Folder",
+                "upload": "Upload",
+                "create": "Create Here"
+            },
+            "title": {
+                "upload": "Where to upload?",
+                "mkdir": "Where to create a new folder?"
+            },
+            "description": {
+                "upload": "Choose a location to upload",
+                "mkdir": "Choose a location to create a folder"
+            }
         }
     },
     "trash": {

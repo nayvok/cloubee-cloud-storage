@@ -7,9 +7,9 @@ import Selection from '@/components/features/controls/selection';
 import FilesCard from '@/components/features/files/files-card';
 import FilesPlaceholder from '@/components/features/files/files-placeholder';
 import FilesUploaderDropzone from '@/components/features/files/files-uploader-dropzone';
+import CircleCenteredLoader from '@/components/ui/elements/circle-centered-loader';
 import FileItemsWrapper from '@/components/ui/elements/files/wrapper/file-items-wrapper';
 import GridGhostItems from '@/components/ui/elements/files/wrapper/grid-ghost-items';
-import PageLoader from '@/components/ui/elements/page-loader';
 import { useFilesQuery } from '@/libs/api/files/hooks/use-files-query';
 import { filesPersistStore } from '@/libs/store/files/files.persist-store';
 
@@ -47,7 +47,7 @@ const FilesContainer = () => {
                 viewMode={filesViewMode}
             >
                 {isPending ? (
-                    <PageLoader />
+                    <CircleCenteredLoader />
                 ) : (
                     <>
                         {data && data.length > 0 ? (

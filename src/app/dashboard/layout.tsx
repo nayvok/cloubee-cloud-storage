@@ -1,10 +1,10 @@
 import { cookies } from 'next/headers';
 import { ReactNode } from 'react';
 
+import FileUploaderList from '@/components/features/files/file-uploader-list';
 import Header from '@/components/layout/header/header';
 import SidebarLayout from '@/components/layout/sidebar/sidebar-layout';
 import { SidebarInset } from '@/components/ui/common/sidebar';
-import FileUploaderList from '@/components/ui/elements/file-uploader-list';
 
 export default async function DashboardLayout({
     children,

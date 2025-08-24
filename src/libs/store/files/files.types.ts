@@ -1,7 +1,7 @@
 import { RefObject } from 'react';
 import Selecto from 'react-selecto';
 
-import { IUploadedFile } from '@/components/ui/elements/file-uploader-list';
+import { IUploadedFile } from '@/components/features/files/file-uploader-list';
 import { IFileResponse } from '@/libs/api/files/files.types';
 import { TypeChangeFilesSortModeSchema } from '@/schemas/files/change-files-sort-mode.schema';
 import { TypeChangeFilesViewModeSchema } from '@/schemas/files/change-files-view-mode.schema';
