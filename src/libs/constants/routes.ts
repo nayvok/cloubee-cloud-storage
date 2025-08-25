@@ -2,6 +2,7 @@ export const APP_ROUTES = {
     LOGIN: '/',
     REGISTER: '/register',
     INVITATION: '/invitation',
+    SERVICE_UNAVAILABLE: '/service-unavailable',
     DASHBOARD: {
         FILES: {
             path: '/dashboard/files',

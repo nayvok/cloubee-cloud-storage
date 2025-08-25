@@ -1,35 +1,56 @@
+// middleware.ts
 import { NextRequest, NextResponse } from 'next/server';
 
+const TIMEOUT_MS = 3000;
+
 export async function middleware(request: NextRequest) {
-    const { url, cookies, nextUrl } = request;
+    const { url, nextUrl } = request;
+    const pathname = nextUrl.pathname;
 
-    const isSignInRoute = nextUrl.pathname === '/';
-    const isRegisterAdminRoute = nextUrl.pathname === '/register';
-    const isInvitationRoute = nextUrl.pathname === '/invitation';
-    const isDashboardRoute = nextUrl.pathname.startsWith('/dashboard');
+    const isSignInRoute = pathname === '/';
+    const isRegisterAdminRoute = pathname === '/register';
+    const isInvitationRoute = pathname === '/invitation';
+    const isDashboardRoute = pathname.startsWith('/dashboard');
 
-    const token = cookies.get('access_token')?.value;
+    const token = request.cookies.get('access_token')?.value;
 
-    const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/validate-request`,
-        {
-            cache: 'no-store',
-            headers: {
-                Cookie: `access_token=${token}`,
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), TIMEOUT_MS);
+
+    try {
+        const response = await fetch(
+            `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/validate-request`,
+            {
+                method: 'GET',
+                cache: 'no-store',
+                headers: {
+                    cookie: request.headers.get('cookie') ?? '',
+                },
+                signal: controller.signal,
             },
-        },
-    );
+        );
+        clearTimeout(timeout);
 
-    if (isSignInRoute || isRegisterAdminRoute || isInvitationRoute) {
-        if (response.ok) {
-            return NextResponse.redirect(new URL('/dashboard', url));
+        if (response.status >= 500) {
+            return NextResponse.rewrite(new URL('/service-unavailable', url));
         }
-    }
 
-    if (isDashboardRoute) {
-        if (!token || !response.ok) {
-            return NextResponse.redirect(new URL('/', url));
+        const isOk = response.ok;
+
+        if (isSignInRoute || isRegisterAdminRoute || isInvitationRoute) {
+            if (isOk) {
+                return NextResponse.redirect(new URL('/dashboard', url));
+            }
         }
+
+        if (isDashboardRoute) {
+            if (!token || !isOk) {
+                return NextResponse.redirect(new URL('/', url));
+            }
+        }
+    } catch {
+        clearTimeout(timeout);
+        return NextResponse.rewrite(new URL('/service-unavailable', url));
     }
 
     return NextResponse.next();

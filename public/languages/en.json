@@ -371,5 +371,9 @@
                 }
             }
         }
+    },
+    "errors": {
+        "description": "Oops, something went wrong.",
+        "go_to_home": "Go to homepage"
     }
 }
