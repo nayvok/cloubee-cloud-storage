@@ -12,7 +12,7 @@ interface ErrorPageProps {
 }
 
 const ErrorPage = ({ page }: ErrorPageProps) => {
-    const t = useTranslations('errors');
+    const t = useTranslations('errors_page');
     const router = useRouter();
 
     return (
