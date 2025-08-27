@@ -91,7 +91,7 @@ const ActionBar = ({ actionItems }: ActionBarProps) => {
             >
                 {selectedFiles && selectedFiles.length !== 0 && (
                     <>
-                        <div className="inline-flex items-center gap-2">
+                        <div className="inline-flex w-0 grow items-center gap-2">
                             {selectedFiles.length > 1 ? (
                                 <>
                                     <Button
@@ -130,7 +130,7 @@ const ActionBar = ({ actionItems }: ActionBarProps) => {
                                             className="flex max-w-[500px] flex-col p-2 text-sm"
                                         >
                                             <div>
-                                                <span>{t('info.name')}</span>{' '}
+                                                <span>{t('info.name')}</span>
                                                 <span className="font-medium">
                                                     {selectedFiles[0].name}
                                                 </span>
@@ -149,7 +149,7 @@ const ActionBar = ({ actionItems }: ActionBarProps) => {
                                             <span>
                                                 <span>
                                                     {t('info.modified')}
-                                                </span>{' '}
+                                                </span>
                                                 <span className="font-medium">
                                                     {format(
                                                         new Date(
@@ -168,7 +168,7 @@ const ActionBar = ({ actionItems }: ActionBarProps) => {
                                         </DropdownMenuContent>
                                     </DropdownMenu>
 
-                                    <span className="line-clamp-1">
+                                    <span className="line-clamp-1 overflow-ellipsis">
                                         {selectedFiles[0].name}
                                     </span>
                                 </>
@@ -182,7 +182,9 @@ const ActionBar = ({ actionItems }: ActionBarProps) => {
                                     onClick={item.onClick}
                                 >
                                     <item.icon />
-                                    {item.label}
+                                    <span className="max-[576px]:hidden">
+                                        {item.label}
+                                    </span>
                                 </Button>
                             ))}
 
