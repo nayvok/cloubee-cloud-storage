@@ -1,7 +1,14 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 
-import { Form, FormField } from '@/components/ui/common/form';
+import {
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+} from '@/components/ui/common/form';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/common/radio-group';
 import {
     Select,
     SelectContent,
@@ -16,22 +23,76 @@ import {
     useFilesViewModes,
 } from '@/schemas/files/change-files-view-mode.schema';
 
-const FilesViewModeToggle = () => {
+interface FilesViewModeToggleProps {
+    isMobile: boolean;
+}
+
+const FilesViewModeToggle = ({ isMobile }: FilesViewModeToggleProps) => {
     const { filesViewModes } = useFilesViewModes();
     const filesViewMode = filesPersistStore(state => state.filesViewMode);
     const setFilesViewMode = filesPersistStore(state => state.setFilesViewMode);
 
-    const formTrashViewMode = useForm<TypeChangeFilesViewModeSchema>({
+    const formFilesViewMode = useForm<TypeChangeFilesViewModeSchema>({
         resolver: zodResolver(changeFilesViewModeSchema),
         values: {
             mode: filesViewMode,
         },
     });
 
+    if (isMobile) {
+        return (
+            <Form {...formFilesViewMode}>
+                <FormField
+                    control={formFilesViewMode.control}
+                    name="mode"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormControl>
+                                <RadioGroup
+                                    onValueChange={value => {
+                                        field.onChange(value);
+                                        formFilesViewMode.handleSubmit(data => {
+                                            setFilesViewMode(data.mode);
+                                        })();
+                                    }}
+                                    defaultValue={field.value}
+                                    className="flex flex-col"
+                                >
+                                    {Object.entries(filesViewModes).map(
+                                        ([type, { icon: Icon, title }]) => (
+                                            <FormItem
+                                                key={type}
+                                                className="flex items-center gap-3"
+                                            >
+                                                <FormLabel className="[&:has([data-state=unchecked])]:text-muted-foreground flex cursor-pointer items-center gap-2 font-normal">
+                                                    <FormControl className="sr-only">
+                                                        <RadioGroupItem
+                                                            value={type}
+                                                        />
+                                                    </FormControl>
+
+                                                    <Icon
+                                                        strokeWidth={2}
+                                                        className="size-[20px]"
+                                                    />
+                                                    {title}
+                                                </FormLabel>
+                                            </FormItem>
+                                        ),
+                                    )}
+                                </RadioGroup>
+                            </FormControl>
+                        </FormItem>
+                    )}
+                />
+            </Form>
+        );
+    }
+
     return (
-        <Form {...formTrashViewMode}>
+        <Form {...formFilesViewMode}>
             <FormField
-                control={formTrashViewMode.control}
+                control={formFilesViewMode.control}
                 name="mode"
                 render={({ field }) => {
                     const selectedMode = filesViewModes[field.value];
@@ -40,7 +101,7 @@ const FilesViewModeToggle = () => {
                         <Select
                             onValueChange={value => {
                                 field.onChange(value);
-                                formTrashViewMode.handleSubmit(data => {
+                                formFilesViewMode.handleSubmit(data => {
                                     setFilesViewMode(data.mode);
                                 })();
                             }}

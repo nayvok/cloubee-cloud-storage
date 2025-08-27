@@ -54,6 +54,14 @@
         }
     },
     "files": {
+        "filesSortDirectionToggle": {
+            "asc": "По возрастанию",
+            "desc": "По убыванию"
+        },
+        "headerPanel": {
+            "view": "Вид",
+            "sort": "Сортировать"
+        },
         "actions": {
             "download": "Скачать",
             "rename": "Переименовать",
@@ -140,7 +148,8 @@
             "permanentDelete": "Удалить навсегда"
         },
         "headerPanel": {
-            "clear": "Очистить корзину"
+            "clear": "Очистить корзину",
+            "view": "Вид"
         },
         "emptyTrash": {
             "allTrash": {

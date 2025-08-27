@@ -1,101 +1,71 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import { ListFilter } from 'lucide-react';
-import { useForm } from 'react-hook-form';
+import { EllipsisVertical } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
+import FilesSortDirectionToggle from '@/components/features/controls/files-sort-direction-toggle';
+import FilesSortModeToggle from '@/components/features/controls/files-sort-mode-toggle';
 import FilesViewModeToggle from '@/components/features/controls/files-view-mode-toggle';
 import { Button } from '@/components/ui/common/button';
-import { Form, FormField } from '@/components/ui/common/form';
 import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/common/select';
-import { filesPersistStore } from '@/libs/store/files/files.persist-store';
-import { cn } from '@/libs/utils/tw-merge';
-import {
-    TypeChangeFilesSortModeSchema,
-    changeFilesSortModeSchema,
-    useFilesSortModes,
-} from '@/schemas/files/change-files-sort-mode.schema';
+    Drawer,
+    DrawerContent,
+    DrawerDescription,
+    DrawerHeader,
+    DrawerTitle,
+    DrawerTrigger,
+} from '@/components/ui/common/drawer';
+import { Separator } from '@/components/ui/common/separator';
 
 const FilesHeaderPanel = () => {
-    const { filesSortModes } = useFilesSortModes();
-    const filesSortMode = filesPersistStore(state => state.filesSortMode);
-    const setFilesSortMode = filesPersistStore(state => state.setFilesSortMode);
-
-    const filesSortDirection = filesPersistStore(
-        state => state.filesSortDirection,
-    );
-
-    const setFilesSortDirection = filesPersistStore(
-        state => state.setFilesSortDirection,
-    );
-
-    const formFilesSortMode = useForm<TypeChangeFilesSortModeSchema>({
-        resolver: zodResolver(changeFilesSortModeSchema),
-        values: {
-            mode: filesSortMode,
-        },
-    });
+    const t = useTranslations('files.headerPanel');
 
     return (
-        <div className="mx-4 flex gap-2">
-            <Button
-                variant="outline"
-                size="icon"
-                onClick={setFilesSortDirection}
-            >
-                <ListFilter
-                    strokeWidth={3}
-                    className={cn(
-                        'text-foreground h-[1.2rem] w-[1.2rem] scale-100 rotate-180 transition-all',
-                        filesSortDirection === 'desc' && 'scale-0',
-                    )}
-                />
-                <ListFilter
-                    strokeWidth={3}
-                    className={cn(
-                        'absolute h-[1.2rem] w-[1.2rem] scale-100 transition-all',
-                        filesSortDirection === 'asc' && 'scale-0',
-                    )}
-                />
-            </Button>
+        <>
+            <div className="mx-4 flex gap-2 max-[576px]:hidden">
+                <FilesSortDirectionToggle isMobile={false} />
 
-            <Form {...formFilesSortMode}>
-                <FormField
-                    control={formFilesSortMode.control}
-                    name="mode"
-                    render={({ field }) => (
-                        <Select
-                            onValueChange={value => {
-                                field.onChange(value);
-                                formFilesSortMode.handleSubmit(data => {
-                                    setFilesSortMode(data.mode);
-                                })();
-                            }}
-                            value={field.value}
-                        >
-                            <SelectTrigger className="w-[180px]">
-                                <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                                {Object.entries(filesSortModes).map(
-                                    ([type, { title }]) => (
-                                        <SelectItem key={type} value={type}>
-                                            {title}
-                                        </SelectItem>
-                                    ),
-                                )}
-                            </SelectContent>
-                        </Select>
-                    )}
-                />
-            </Form>
+                <FilesSortModeToggle isMobile={false} />
 
-            <FilesViewModeToggle />
-        </div>
+                <FilesViewModeToggle isMobile={false} />
+            </div>
+
+            <div className="mx-4 hidden gap-2 max-[576px]:flex">
+                <Drawer>
+                    <DrawerTrigger asChild>
+                        <Button variant="ghost">
+                            <EllipsisVertical />
+                        </Button>
+                    </DrawerTrigger>
+                    <DrawerContent>
+                        <DrawerHeader className="sr-only">
+                            <DrawerTitle />
+                            <DrawerDescription />
+                        </DrawerHeader>
+
+                        <div className="flex flex-col gap-4 p-4">
+                            <div className="text-muted-foreground uppercase">
+                                {t('view')}
+                            </div>
+                            <FilesViewModeToggle isMobile={true} />
+                        </div>
+
+                        <Separator />
+
+                        <div className="flex flex-col gap-4 p-4">
+                            <div className="text-muted-foreground uppercase">
+                                {t('sort')}
+                            </div>
+                            <FilesSortModeToggle isMobile={true} />
+                        </div>
+
+                        <Separator />
+
+                        <div className="flex flex-col gap-4 p-4">
+                            <FilesSortDirectionToggle isMobile={true} />
+                        </div>
+                    </DrawerContent>
+                </Drawer>
+            </div>
+        </>
     );
 };
 

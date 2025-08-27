@@ -54,6 +54,14 @@
         }
     },
     "files": {
+        "filesSortDirectionToggle": {
+            "asc": "Ascending",
+            "desc": "Descending"
+        },
+        "headerPanel": {
+            "view": "View",
+            "sort": "Sort"
+        },
         "actions": {
             "download": "Download",
             "rename": "Rename",
@@ -140,7 +148,8 @@
             "permanentDelete": "Delete permanently"
         },
         "headerPanel": {
-            "clear": "Empty trash"
+            "clear": "Empty trash",
+            "view": "View"
         },
         "emptyTrash": {
             "allTrash": {
