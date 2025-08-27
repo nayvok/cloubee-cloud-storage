@@ -13,8 +13,12 @@ async function bootstrap() {
 
     const config = app.get(ConfigService);
 
+    const allowedOrigin = config
+        .getOrThrow<string>('ALLOWED_ORIGIN')
+        .split(',');
+
     app.enableCors({
-        origin: config.getOrThrow<string>('ALLOWED_ORIGIN'),
+        origin: allowedOrigin,
         credentials: true,
         exposedHeaders: ['set-cookie'],
     });
