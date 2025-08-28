@@ -18,6 +18,7 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from '@/components/ui/common/dropdown-menu';
+import { ScrollArea, ScrollBar } from '@/components/ui/common/scroll-area';
 import {
     Table,
     TableBody,
@@ -114,7 +115,7 @@ const ShowInvitations = () => {
             ) : (
                 <>
                     {data && data.length === 0 ? (
-                        <div className="flex flex-col items-center justify-center gap-3">
+                        <div className="flex grow flex-col items-center justify-center gap-3">
                             <Users className="size-8" />
                             <p>{t('placeholder')}</p>
                             <Button
@@ -125,112 +126,117 @@ const ShowInvitations = () => {
                             </Button>
                         </div>
                     ) : (
-                        <>
-                            <div>
-                                <Table>
-                                    <TableCaption>
-                                        {t('table.caption')}
-                                    </TableCaption>
-                                    <TableHeader>
-                                        <TableRow>
-                                            <TableHead className="w-[100px]">
-                                                {t('table.head.email')}
-                                            </TableHead>
-                                            <TableHead className="text-center">
-                                                {t('table.head.role')}
-                                            </TableHead>
-                                            <TableHead className="text-center">
-                                                {t('table.head.quota')}
-                                            </TableHead>
-                                            <TableHead className="text-center">
-                                                {t('table.head.created_at')}
-                                            </TableHead>
-                                            <TableHead className="text-right">
-                                                {t('table.head.actions')}
-                                            </TableHead>
-                                        </TableRow>
-                                    </TableHeader>
-                                    <TableBody>
-                                        {data?.map(invitation => {
-                                            return (
-                                                <TableRow key={invitation.id}>
-                                                    <TableCell className="w-[100px]">
-                                                        {invitation.email}
-                                                    </TableCell>
-                                                    <TableCell className="text-center">
-                                                        <Badge
-                                                            variant={
-                                                                invitation.role ===
-                                                                'ADMIN'
-                                                                    ? 'default'
-                                                                    : 'secondary'
-                                                            }
-                                                        >
-                                                            {invitation.role.toLowerCase()}
-                                                        </Badge>
-                                                    </TableCell>
-                                                    <TableCell className="text-center">
-                                                        <Badge variant="secondary">
-                                                            {convertBytes(
-                                                                Number(
-                                                                    invitation.storageQuota,
-                                                                ),
-                                                            )}
-                                                        </Badge>
-                                                    </TableCell>
-                                                    <TableCell className="text-center">
-                                                        {format(
-                                                            new Date(
-                                                                invitation.createdAt,
-                                                            ),
-                                                            'dd.MM.yyyy, HH:mm',
-                                                        )}
-                                                    </TableCell>
-
-                                                    <TableCell className="flex justify-end text-right">
-                                                        <DropdownMenu>
-                                                            <DropdownMenuTrigger
-                                                                asChild
+                        <div className="flex w-0 grow flex-col gap-6">
+                            <ScrollArea>
+                                <div>
+                                    <Table>
+                                        <TableCaption>
+                                            {t('table.caption')}
+                                        </TableCaption>
+                                        <TableHeader>
+                                            <TableRow>
+                                                <TableHead className="w-[100px]">
+                                                    {t('table.head.email')}
+                                                </TableHead>
+                                                <TableHead className="text-center">
+                                                    {t('table.head.role')}
+                                                </TableHead>
+                                                <TableHead className="text-center">
+                                                    {t('table.head.quota')}
+                                                </TableHead>
+                                                <TableHead className="text-center">
+                                                    {t('table.head.created_at')}
+                                                </TableHead>
+                                                <TableHead className="text-right">
+                                                    {t('table.head.actions')}
+                                                </TableHead>
+                                            </TableRow>
+                                        </TableHeader>
+                                        <TableBody>
+                                            {data?.map(invitation => {
+                                                return (
+                                                    <TableRow
+                                                        key={invitation.id}
+                                                    >
+                                                        <TableCell className="w-[100px]">
+                                                            {invitation.email}
+                                                        </TableCell>
+                                                        <TableCell className="text-center">
+                                                            <Badge
+                                                                variant={
+                                                                    invitation.role ===
+                                                                    'ADMIN'
+                                                                        ? 'default'
+                                                                        : 'secondary'
+                                                                }
                                                             >
-                                                                <Button
-                                                                    variant="ghost"
-                                                                    className="h-8 w-8 p-0"
+                                                                {invitation.role.toLowerCase()}
+                                                            </Badge>
+                                                        </TableCell>
+                                                        <TableCell className="text-center">
+                                                            <Badge variant="secondary">
+                                                                {convertBytes(
+                                                                    Number(
+                                                                        invitation.storageQuota,
+                                                                    ),
+                                                                )}
+                                                            </Badge>
+                                                        </TableCell>
+                                                        <TableCell className="text-center">
+                                                            {format(
+                                                                new Date(
+                                                                    invitation.createdAt,
+                                                                ),
+                                                                'dd.MM.yyyy, HH:mm',
+                                                            )}
+                                                        </TableCell>
+
+                                                        <TableCell className="flex justify-end text-right">
+                                                            <DropdownMenu>
+                                                                <DropdownMenuTrigger
+                                                                    asChild
                                                                 >
-                                                                    <MoreHorizontal className="h-4 w-4" />
-                                                                </Button>
-                                                            </DropdownMenuTrigger>
-                                                            <DropdownMenuContent align="end">
-                                                                <DropdownMenuItem
-                                                                    onClick={() =>
-                                                                        onCopyInvitation(
-                                                                            invitation.token,
-                                                                        )
-                                                                    }
-                                                                >
-                                                                    {t(
-                                                                        'table.dropdown.copy',
-                                                                    )}
-                                                                </DropdownMenuItem>
-                                                                <DropdownMenuItem
-                                                                    onClick={() =>
-                                                                        onDeleteInvitation(
-                                                                            invitation.id,
-                                                                        )
-                                                                    }
-                                                                >
-                                                                    {t(
-                                                                        'table.dropdown.delete',
-                                                                    )}
-                                                                </DropdownMenuItem>
-                                                            </DropdownMenuContent>
-                                                        </DropdownMenu>
-                                                    </TableCell>
-                                                </TableRow>
-                                            );
-                                        })}
-                                    </TableBody>
-                                </Table>
-                            </div>
+                                                                    <Button
+                                                                        variant="ghost"
+                                                                        className="h-8 w-8 p-0"
+                                                                    >
+                                                                        <MoreHorizontal className="h-4 w-4" />
+                                                                    </Button>
+                                                                </DropdownMenuTrigger>
+                                                                <DropdownMenuContent align="end">
+                                                                    <DropdownMenuItem
+                                                                        onClick={() =>
+                                                                            onCopyInvitation(
+                                                                                invitation.token,
+                                                                            )
+                                                                        }
+                                                                    >
+                                                                        {t(
+                                                                            'table.dropdown.copy',
+                                                                        )}
+                                                                    </DropdownMenuItem>
+                                                                    <DropdownMenuItem
+                                                                        onClick={() =>
+                                                                            onDeleteInvitation(
+                                                                                invitation.id,
+                                                                            )
+                                                                        }
+                                                                    >
+                                                                        {t(
+                                                                            'table.dropdown.delete',
+                                                                        )}
+                                                                    </DropdownMenuItem>
+                                                                </DropdownMenuContent>
+                                                            </DropdownMenu>
+                                                        </TableCell>
+                                                    </TableRow>
+                                                );
+                                            })}
+                                        </TableBody>
+                                    </Table>
+                                </div>
+                                <ScrollBar orientation="horizontal" />
+                            </ScrollArea>
                             <div className="mr-4 flex w-full flex-row flex-wrap justify-end gap-2">
                                 <Button
                                     onClick={() =>
@@ -241,7 +247,7 @@ const ShowInvitations = () => {
                                     {t('invite_btn')}
                                 </Button>
                             </div>
-                        </>
+                        </div>
                     )}
 
                     <AddInvitationForm

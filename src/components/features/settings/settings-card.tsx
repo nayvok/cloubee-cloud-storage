@@ -33,7 +33,7 @@ const SettingsCard = ({
                 <CardDescription>{description}</CardDescription>
             </CardHeader>
             <CardContent className="border-t py-6">
-                <div className="min-h-[25vh]">{children}</div>
+                <div className="flex min-h-[25vh] w-full">{children}</div>
             </CardContent>
         </Card>
     );

@@ -119,7 +119,7 @@ const ShowUser = () => {
                         onSubmit={form.handleSubmit(data =>
                             updateUserMutation.mutate(data),
                         )}
-                        className="flex flex-col gap-6"
+                        className="flex grow flex-col gap-6"
                     >
                         <FormField
                             control={form.control}
