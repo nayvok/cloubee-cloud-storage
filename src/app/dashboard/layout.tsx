@@ -5,6 +5,7 @@ import FileUploaderList from '@/components/features/files/file-uploader-list';
 import Header from '@/components/layout/header/header';
 import SidebarLayout from '@/components/layout/sidebar/sidebar-layout';
 import { SidebarInset } from '@/components/ui/common/sidebar';
+import { cn } from '@/libs/utils/tw-merge';
 
 export default async function DashboardLayout({
     children,
@@ -21,7 +22,12 @@ export default async function DashboardLayout({
             <SidebarInset>
                 <Header />
                 <div className="flex flex-1 flex-col gap-4 p-2 pt-0">
-                    <div className="bg-sidebar border-sidebar-border flex min-h-[100vh] flex-1 flex-col overflow-hidden rounded-lg border shadow-sm md:min-h-min">
+                    <div
+                        className={cn(
+                            'bg-sidebar border-sidebar-border flex flex-col overflow-hidden rounded-lg border shadow-sm',
+                            'h-0 flex-1 md:min-h-min',
+                        )}
+                    >
                         {children}
                     </div>
                 </div>
