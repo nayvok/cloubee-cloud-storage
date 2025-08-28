@@ -3,6 +3,7 @@ import { useState } from 'react';
 import MoveToTrashForm from '@/components/features/files/forms/move-to-trash-form';
 import RenameForm from '@/components/features/files/forms/rename-form';
 import useFilesActionItems from '@/components/features/files/hooks/use-files-action-items';
+import useMobileSelection from '@/components/features/trash/hooks/use-mobile-selection';
 import FileCard from '@/components/ui/elements/files/file-card';
 import { IFileResponse } from '@/libs/api/files/files.types';
 import { useFileDownloader } from '@/libs/hooks/use-file-downloader';
@@ -11,10 +12,12 @@ import { type TypeChangeFilesViewModeSchema } from '@/schemas/files/change-files
 
 interface FileCardProps {
     file: IFileResponse;
+    files: IFileResponse[];
+    pathname: string;
     viewMode: TypeChangeFilesViewModeSchema['mode'];
 }
 
-const FilesCard = ({ file, viewMode }: FileCardProps) => {
+const FilesCard = ({ file, files, pathname, viewMode }: FileCardProps) => {
     const downloadFile = useFileDownloader();
 
     const [isRenameFormOpen, setIsRenameFormOpen] = useState(false);
@@ -25,6 +28,7 @@ const FilesCard = ({ file, viewMode }: FileCardProps) => {
     const setLastSelectedFiles = filesStore(
         state => state.setLastSelectedFiles,
     );
+
     const selectoRef = filesStore(state => state.selectoRef);
 
     const contextMenuItems = useFilesActionItems({
@@ -35,6 +39,13 @@ const FilesCard = ({ file, viewMode }: FileCardProps) => {
         isHaveDir:
             !selectedFiles.every(file => !file.isDirectory) || file.isDirectory,
     });
+
+    const { handleClick, handleTouchStart, handleTouchEnd } =
+        useMobileSelection({
+            file: file,
+            files: files,
+            pathname: pathname,
+        });
 
     return (
         <>
@@ -52,6 +63,9 @@ const FilesCard = ({ file, viewMode }: FileCardProps) => {
                         setLastSelectedFiles([file]);
                     }
                 }}
+                onTouchStart={handleTouchStart}
+                onTouchEnd={handleTouchEnd}
+                onClick={handleClick}
             />
 
             {isMoveToTrashFormOpen && (

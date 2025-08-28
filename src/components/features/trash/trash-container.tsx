@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { isMobile } from 'react-device-detect';
 
 import Selection from '@/components/features/controls/selection';
 import TrashCard from '@/components/features/trash/trash-card';
@@ -19,7 +20,7 @@ const TrashContainer = () => {
 
     return (
         <>
-            {data && data.length > 0 && containerElement && (
+            {data && data.length > 0 && containerElement && !isMobile && (
                 <Selection files={data} containerElement={containerElement} />
             )}
 
@@ -37,6 +38,7 @@ const TrashContainer = () => {
                                     <TrashCard
                                         key={file.id}
                                         file={file}
+                                        files={data}
                                         viewMode={filesViewMode}
                                     />
                                 ))}

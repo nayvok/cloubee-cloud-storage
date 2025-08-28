@@ -2,6 +2,7 @@ import { useState } from 'react';
 
 import EmptyTrashForm from '@/components/features/trash/forms/empty-trash-form';
 import RestoreForm from '@/components/features/trash/forms/restore-form';
+import useMobileSelection from '@/components/features/trash/hooks/use-mobile-selection';
 import useTrashActionItems from '@/components/features/trash/hooks/use-trash-action-items';
 import FileCard from '@/components/ui/elements/files/file-card';
 import { IFileResponse } from '@/libs/api/files/files.types';
@@ -10,10 +11,11 @@ import { type TypeChangeFilesViewModeSchema } from '@/schemas/files/change-files
 
 interface TrashCardProps {
     file: IFileResponse;
+    files: IFileResponse[];
     viewMode: TypeChangeFilesViewModeSchema['mode'];
 }
 
-const TrashCard = ({ file, viewMode }: TrashCardProps) => {
+const TrashCard = ({ file, files, viewMode }: TrashCardProps) => {
     const [isEmptyTrashFormOpen, setIsEmptyTrashFormOpen] = useState(false);
     const [isRestoreFormOpen, setIsRestoreFormOpen] = useState(false);
 
@@ -28,6 +30,12 @@ const TrashCard = ({ file, viewMode }: TrashCardProps) => {
         restoreAction: () => setIsRestoreFormOpen(true),
         permanentDeleteAction: () => setIsEmptyTrashFormOpen(true),
     });
+
+    const { handleClick, handleTouchStart, handleTouchEnd } =
+        useMobileSelection({
+            file: file,
+            files: files,
+        });
 
     return (
         <>
@@ -45,6 +53,9 @@ const TrashCard = ({ file, viewMode }: TrashCardProps) => {
                         setLastSelectedFiles([file]);
                     }
                 }}
+                onTouchStart={handleTouchStart}
+                onTouchEnd={handleTouchEnd}
+                onClick={handleClick}
             />
 
             {isEmptyTrashFormOpen && (

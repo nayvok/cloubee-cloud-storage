@@ -1,4 +1,4 @@
-import { Flame, RotateCcw } from 'lucide-react';
+import { RotateCcw, Trash2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 import { ActionItem } from '@/libs/types/action-item.types';
@@ -22,7 +22,7 @@ const useTrashActionItems = ({
             show: true,
         },
         {
-            icon: Flame,
+            icon: Trash2,
             label: t('permanentDelete'),
             onClick: permanentDeleteAction,
             show: true,

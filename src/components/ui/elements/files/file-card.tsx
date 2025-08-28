@@ -1,4 +1,6 @@
 import { format } from 'date-fns';
+import { ComponentProps } from 'react';
+import { isMobile } from 'react-device-detect';
 
 import { Card, CardContent } from '@/components/ui/common/card';
 import {
@@ -16,7 +18,7 @@ import { getFileIcon } from '@/libs/utils/get-file-icon';
 import { cn } from '@/libs/utils/tw-merge';
 import { type TypeChangeFilesViewModeSchema } from '@/schemas/files/change-files-view-mode.schema';
 
-interface FileCardProps {
+interface FileCardProps extends ComponentProps<'div'> {
     file: IFileResponse;
     viewMode: TypeChangeFilesViewModeSchema['mode'];
     isFileSelected: boolean;
@@ -24,16 +26,155 @@ interface FileCardProps {
     onOpenChangeContextMenu: () => void;
 }
 
+const FileCardUi = ({
+    file,
+    viewMode,
+    isFileSelected,
+}: Pick<FileCardProps, 'file' | 'viewMode' | 'isFileSelected'>) => {
+    const isSmallWindow = useIsMobile();
+
+    const FileIcon = getFileIcon(file.mimeType, file.name, file.isDirectory);
+
+    return (
+        <Card
+            className={cn(
+                'hover:bg-sidebar-accent cursor-pointer border-0 bg-transparent shadow-none select-none',
+                isFileSelected && 'bg-sidebar-accent',
+                viewMode === 'largeTile'
+                    ? 'h-[180px] w-[144px]'
+                    : viewMode === 'tile'
+                      ? 'h-[144px] w-[104px]'
+                      : 'h-[64px]',
+            )}
+        >
+            <CardContent
+                className={cn(
+                    'flex p-[12px]',
+                    viewMode === 'largeTile'
+                        ? 'h-[180px] w-[144px] flex-col justify-between'
+                        : viewMode === 'tile'
+                          ? 'h-[144px] w-[104px] flex-col justify-between'
+                          : 'flex-row items-center justify-start max-[425px]:px-[6px]',
+                )}
+            >
+                <div
+                    className={cn(
+                        'relative flex shrink-0 justify-center overflow-hidden',
+                        viewMode === 'largeTile'
+                            ? 'h-[115px] w-full items-end'
+                            : viewMode === 'tile'
+                              ? 'h-[80px] w-full items-end'
+                              : 'h-[40px] w-[40px] items-center',
+                    )}
+                >
+                    {file.thumbnailLarge ? (
+                        <>
+                            <div className="absolute top-0 left-0 size-full"></div>
+                            <ThumbnailImage
+                                fileId={file.id}
+                                viewMode={viewMode}
+                            />
+                        </>
+                    ) : (
+                        <div
+                            className={cn(
+                                viewMode === 'largeTile'
+                                    ? 'size-[100px]'
+                                    : viewMode === 'tile'
+                                      ? 'size-[64px]'
+                                      : 'size-full',
+                            )}
+                        >
+                            <FileIcon strokeWidth={0.5} className="size-full" />
+                        </div>
+                    )}
+                </div>
+                {viewMode === 'list' ? (
+                    isSmallWindow ? (
+                        <div className="flex w-0 grow flex-col justify-between gap-0.5 pl-5 text-xs max-[425px]:pl-3">
+                            <span
+                                title={file.name}
+                                className="w-full overflow-hidden text-left text-sm overflow-ellipsis whitespace-nowrap"
+                            >
+                                {file.name}
+                            </span>
+                            <div className="text-muted-foreground inline-flex gap-1.5">
+                                <span>
+                                    {format(
+                                        new Date(file.updatedAt),
+                                        'dd.MM.yyyy',
+                                    )}
+                                </span>
+                                <span>
+                                    {format(new Date(file.updatedAt), 'HH:mm')}
+                                </span>
+                                <span>
+                                    {Number(file.size) !== 0 &&
+                                        convertBytes(Number(file.size))}
+                                </span>
+                            </div>
+                        </div>
+                    ) : (
+                        <div className="inline-flex shrink-0 grow overflow-hidden pl-5 text-xs">
+                            <span className="w-0 grow basis-0 overflow-hidden text-left overflow-ellipsis whitespace-nowrap">
+                                {file.name}
+                            </span>
+                            <span className="text-muted-foreground ml-5 basis-[75px] text-right lg:basis-[100px]">
+                                {format(new Date(file.updatedAt), 'dd.MM.yyyy')}
+                            </span>
+                            <span className="text-muted-foreground basis-[75px] text-right lg:basis-[100px]">
+                                {format(new Date(file.updatedAt), 'HH:mm')}
+                            </span>
+                            <span className="text-muted-foreground basis-[75px] text-right lg:basis-[100px]">
+                                {Number(file.size) !== 0 &&
+                                    convertBytes(Number(file.size))}
+                            </span>
+                        </div>
+                    )
+                ) : (
+                    <div className="flex h-[31px] w-full items-start justify-center overflow-hidden">
+                        <span
+                            title={file.name}
+                            className="line-clamp-2 text-center text-xs break-words"
+                        >
+                            {file.name}
+                        </span>
+                    </div>
+                )}
+            </CardContent>
+        </Card>
+    );
+};
+
 const FileCard = ({
     file,
     viewMode,
     isFileSelected,
     contextMenuItems,
     onOpenChangeContextMenu,
+    ...props
 }: FileCardProps) => {
-    const isMobile = useIsMobile();
-
-    const FileIcon = getFileIcon(file.mimeType, file.name, file.isDirectory);
+    if (isMobile) {
+        return (
+            <div
+                {...props}
+                className={cn(
+                    'mb-1',
+                    viewMode === 'largeTile'
+                        ? 'h-[180px] w-[144px]'
+                        : viewMode === 'tile'
+                          ? 'h-[144px] w-[104px]'
+                          : 'h-[64px]',
+                )}
+            >
+                <FileCardUi
+                    file={file}
+                    viewMode={viewMode}
+                    isFileSelected={isFileSelected}
+                />
+            </div>
+        );
+    }
 
     return (
         <>
@@ -49,124 +190,11 @@ const FileCard = ({
                               : 'h-[64px]',
                     )}
                 >
-                    <Card
-                        className={cn(
-                            'hover:bg-sidebar-accent cursor-pointer border-0 bg-transparent shadow-none select-none',
-                            isFileSelected && 'bg-sidebar-accent',
-                            viewMode === 'largeTile'
-                                ? 'h-[180px] w-[144px]'
-                                : viewMode === 'tile'
-                                  ? 'h-[144px] w-[104px]'
-                                  : 'h-[64px]',
-                        )}
-                    >
-                        <CardContent
-                            className={cn(
-                                'flex p-[12px]',
-                                viewMode === 'largeTile'
-                                    ? 'h-[180px] w-[144px] flex-col justify-between'
-                                    : viewMode === 'tile'
-                                      ? 'h-[144px] w-[104px] flex-col justify-between'
-                                      : 'flex-row items-center justify-start max-[425px]:px-[6px]',
-                            )}
-                        >
-                            <div
-                                className={cn(
-                                    'flex shrink-0 justify-center overflow-hidden',
-                                    viewMode === 'largeTile'
-                                        ? 'h-[115px] w-full items-end'
-                                        : viewMode === 'tile'
-                                          ? 'h-[80px] w-full items-end'
-                                          : 'h-[40px] w-[40px] items-center',
-                                )}
-                            >
-                                {file.thumbnailLarge ? (
-                                    <ThumbnailImage
-                                        fileId={file.id}
-                                        viewMode={viewMode}
-                                    />
-                                ) : (
-                                    <div
-                                        className={cn(
-                                            viewMode === 'largeTile'
-                                                ? 'size-[100px]'
-                                                : viewMode === 'tile'
-                                                  ? 'size-[64px]'
-                                                  : 'size-full',
-                                        )}
-                                    >
-                                        <FileIcon
-                                            strokeWidth={0.5}
-                                            className="size-full"
-                                        />
-                                    </div>
-                                )}
-                            </div>
-                            {viewMode === 'list' ? (
-                                isMobile ? (
-                                    <div className="flex w-0 grow flex-col justify-between gap-0.5 pl-5 text-xs max-[425px]:pl-3">
-                                        <span
-                                            title={file.name}
-                                            className="w-full overflow-hidden text-left text-sm overflow-ellipsis whitespace-nowrap"
-                                        >
-                                            {file.name}
-                                        </span>
-                                        <div className="text-muted-foreground inline-flex gap-1.5">
-                                            <span>
-                                                {format(
-                                                    new Date(file.updatedAt),
-                                                    'dd.MM.yyyy',
-                                                )}
-                                            </span>
-                                            <span>
-                                                {format(
-                                                    new Date(file.updatedAt),
-                                                    'HH:mm',
-                                                )}
-                                            </span>
-                                            <span>
-                                                {Number(file.size) !== 0 &&
-                                                    convertBytes(
-                                                        Number(file.size),
-                                                    )}
-                                            </span>
-                                        </div>
-                                    </div>
-                                ) : (
-                                    <div className="inline-flex shrink-0 grow overflow-hidden pl-5 text-xs">
-                                        <span className="w-0 grow basis-0 overflow-hidden text-left overflow-ellipsis whitespace-nowrap">
-                                            {file.name}
-                                        </span>
-                                        <span className="text-muted-foreground ml-5 basis-[75px] text-right lg:basis-[100px]">
-                                            {format(
-                                                new Date(file.updatedAt),
-                                                'dd.MM.yyyy',
-                                            )}
-                                        </span>
-                                        <span className="text-muted-foreground basis-[75px] text-right lg:basis-[100px]">
-                                            {format(
-                                                new Date(file.updatedAt),
-                                                'HH:mm',
-                                            )}
-                                        </span>
-                                        <span className="text-muted-foreground basis-[75px] text-right lg:basis-[100px]">
-                                            {Number(file.size) !== 0 &&
-                                                convertBytes(Number(file.size))}
-                                        </span>
-                                    </div>
-                                )
-                            ) : (
-                                <div className="flex h-[31px] w-full items-start justify-center overflow-hidden">
-                                    <span
-                                        title={file.name}
-                                        className="line-clamp-2 text-center text-xs break-words"
-                                    >
-                                        {file.name}
-                                    </span>
-                                </div>
-                            )}
-                        </CardContent>
-                    </Card>
+                    <FileCardUi
+                        file={file}
+                        viewMode={viewMode}
+                        isFileSelected={isFileSelected}
+                    />
                 </ContextMenuTrigger>
                 <ContextMenuContent>
                     {contextMenuItems.map(item => (

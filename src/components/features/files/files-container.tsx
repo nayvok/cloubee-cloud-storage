@@ -2,6 +2,7 @@
 
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
+import { isMobile } from 'react-device-detect';
 
 import Selection from '@/components/features/controls/selection';
 import FilesCard from '@/components/features/files/files-card';
@@ -35,7 +36,7 @@ const FilesContainer = () => {
 
     return (
         <>
-            {data && data.length > 0 && containerElement && (
+            {data && data.length > 0 && containerElement && !isMobile && (
                 <Selection
                     files={data}
                     pathname={pathname}
@@ -57,6 +58,8 @@ const FilesContainer = () => {
                                         key={file.id}
                                         file={file}
                                         viewMode={filesViewMode}
+                                        files={data}
+                                        pathname={pathname}
                                     />
                                 ))}
 
