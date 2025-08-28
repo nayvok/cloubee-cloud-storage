@@ -33,8 +33,8 @@ const FilesCard = ({ file, files, pathname, viewMode }: FileCardProps) => {
 
     const contextMenuItems = useFilesActionItems({
         downloadAction: () => downloadFile(),
-        renameAction: () => setIsRenameFormOpen(true),
-        deleteAction: () => setIsMoveToTrashFormOpen(true),
+        renameAction: () => setTimeout(() => setIsRenameFormOpen(true), 0),
+        deleteAction: () => setTimeout(() => setIsMoveToTrashFormOpen(true), 0),
         isMultiple: selectedFiles.length > 1,
         isHaveDir:
             !selectedFiles.every(file => !file.isDirectory) || file.isDirectory,

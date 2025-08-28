@@ -27,8 +27,9 @@ const TrashCard = ({ file, files, viewMode }: TrashCardProps) => {
     const selectoRef = filesStore(state => state.selectoRef);
 
     const contextMenuItems = useTrashActionItems({
-        restoreAction: () => setIsRestoreFormOpen(true),
-        permanentDeleteAction: () => setIsEmptyTrashFormOpen(true),
+        restoreAction: () => setTimeout(() => setIsRestoreFormOpen(true), 0),
+        permanentDeleteAction: () =>
+            setTimeout(() => setIsEmptyTrashFormOpen(true), 0),
     });
 
     const { handleClick, handleTouchStart, handleTouchEnd } =
