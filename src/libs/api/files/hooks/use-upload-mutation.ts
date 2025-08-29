@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { uploadMutationFn } from '@/libs/api/files/files-api';
-import { QUERY_KEYS } from '@/libs/api/query-keys';
+import { QUERY_KEYS } from '@/libs/constants/query-keys';
 
 export const useUploadMutation = () => {
     const queryClient = useQueryClient();

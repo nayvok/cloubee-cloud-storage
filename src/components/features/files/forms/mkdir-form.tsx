@@ -21,7 +21,7 @@ import {
 } from '@/components/ui/common/form';
 import { Input } from '@/components/ui/common/input';
 import { mkdirMutationFn } from '@/libs/api/files/files-api';
-import { QUERY_KEYS } from '@/libs/api/query-keys';
+import { QUERY_KEYS } from '@/libs/constants/query-keys';
 import { TypeMkdirSchema, useMkdirSchema } from '@/schemas/files/mkdir.schema';
 
 interface MkdirFormProps {

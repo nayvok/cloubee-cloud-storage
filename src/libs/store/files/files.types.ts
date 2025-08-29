@@ -38,4 +38,10 @@ export interface IFilesStore {
 
     isFileUploaderListCollapsed: boolean;
     setIsFileUploaderListCollapsed: () => void;
+
+    isOpenBigPicture: boolean;
+    setIsOpenBigPicture: () => void;
+
+    openedFile: IFileResponse | null;
+    setOpenedFile: (openedFile: IFileResponse) => void;
 }

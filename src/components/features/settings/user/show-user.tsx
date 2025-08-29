@@ -22,10 +22,10 @@ import {
 } from '@/components/ui/common/form';
 import { Input } from '@/components/ui/common/input';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/common/radio-group';
-import { QUERY_KEYS } from '@/libs/api/query-keys';
 import { useUserQuery } from '@/libs/api/users/hooks/use-user-query';
 import { updateUserMutationFn } from '@/libs/api/users/users-api';
 import { LOCAL_AVATARS } from '@/libs/constants/local-avatars';
+import { QUERY_KEYS } from '@/libs/constants/query-keys';
 import { getFallbackAvatarInitials } from '@/libs/utils/getFallbackAvatarInitials';
 import { getGravatarHash } from '@/libs/utils/getGravatarHash';
 import {

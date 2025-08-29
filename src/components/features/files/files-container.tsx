@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { isMobile } from 'react-device-detect';
 
 import Selection from '@/components/features/controls/selection';
+import FilesBigPicture from '@/components/features/files/files-big-picture';
 import FilesCard from '@/components/features/files/files-card';
 import FilesPlaceholder from '@/components/features/files/files-placeholder';
 import FilesUploaderDropzone from '@/components/features/files/files-uploader-dropzone';
@@ -13,6 +14,7 @@ import FileItemsWrapper from '@/components/ui/elements/files/wrapper/file-items-
 import GridGhostItems from '@/components/ui/elements/files/wrapper/grid-ghost-items';
 import { useFilesQuery } from '@/libs/api/files/hooks/use-files-query';
 import { filesPersistStore } from '@/libs/store/files/files.persist-store';
+import { filesStore } from '@/libs/store/files/files.store';
 
 const FilesContainer = () => {
     const pathname = usePathname();
@@ -25,6 +27,8 @@ const FilesContainer = () => {
     const filesSortDirection = filesPersistStore(
         state => state.filesSortDirection,
     );
+
+    const isOpenBigPicture = filesStore(state => state.isOpenBigPicture);
 
     const dir = pathname.split('/').filter(Boolean).slice(2).join('/');
 
@@ -72,6 +76,7 @@ const FilesContainer = () => {
                 )}
                 <FilesUploaderDropzone dir={dir} />
             </FileItemsWrapper>
+            {isOpenBigPicture && <FilesBigPicture files={data} />}
         </>
     );
 };

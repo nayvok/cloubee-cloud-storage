@@ -25,7 +25,7 @@ import {
 import { Input } from '@/components/ui/common/input';
 import { useFreeSpaceQuery } from '@/libs/api/files/hooks/use-free-space-query';
 import { addInvitationMutationFn } from '@/libs/api/invitations/invitations-api';
-import { QUERY_KEYS } from '@/libs/api/query-keys';
+import { QUERY_KEYS } from '@/libs/constants/query-keys';
 import { convertGbToBytes } from '@/libs/utils/convert-gb-to-bytes';
 import {
     TypeAddInvitationSchema,

@@ -20,6 +20,8 @@ const useMobileSelection = ({
     const selectedFiles = filesStore(state => state.selectedFiles);
     const addSelectedFile = filesStore(state => state.addSelectedFile);
     const removeSelectedFile = filesStore(state => state.removeSelectedFile);
+    const setIsOpenBigPicture = filesStore(state => state.setIsOpenBigPicture);
+    const setOpenedFile = filesStore(state => state.setOpenedFile);
 
     const holdTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -55,7 +57,8 @@ const useMobileSelection = ({
                         scroll: false,
                     });
                 } else {
-                    alert(`Открываем файл: ${file?.name}`);
+                    setOpenedFile(file);
+                    setIsOpenBigPicture();
                 }
             }
         }

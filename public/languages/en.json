@@ -54,6 +54,13 @@
         }
     },
     "files": {
+        "big_picture": {
+            "info": {
+                "name": "Name:",
+                "size": "Size:",
+                "modified": "Modified:"
+            }
+        },
         "filesSortDirectionToggle": {
             "asc": "Ascending",
             "desc": "Descending"

@@ -23,6 +23,8 @@ const Selection = ({ files, pathname, containerElement }: BaseSelectoProps) => {
     const removeSelectedFile = filesStore(state => state.removeSelectedFile);
     const headerActionBarRef = filesStore(state => state.headerActionBarRef);
     const setSelectoRef = filesStore(state => state.setSelectoRef);
+    const setIsOpenBigPicture = filesStore(state => state.setIsOpenBigPicture);
+    const setOpenedFile = filesStore(state => state.setOpenedFile);
 
     const selectoRef = useRef<Selecto>(null);
     const [selectStart, setSelectStart] = useState(false);
@@ -117,7 +119,11 @@ const Selection = ({ files, pathname, containerElement }: BaseSelectoProps) => {
                             scroll: false,
                         });
                     } else {
-                        alert(`Открываем файл: ${file?.name}`);
+                        setLastSelectedFiles(selectedFiles);
+                        setSelectedFiles([]);
+                        selectoRef.current?.setSelectedTargets([]);
+                        setOpenedFile(file!);
+                        setIsOpenBigPicture();
                     }
                 }
             }}

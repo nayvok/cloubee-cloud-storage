@@ -2,6 +2,7 @@ import { RefObject, createRef } from 'react';
 import Selecto from 'react-selecto';
 import { create } from 'zustand/react';
 
+import { IFileResponse } from '@/libs/api/files/files.types';
 import { IFilesStore } from '@/libs/store/files/files.types';
 
 export const filesStore = create<
@@ -78,4 +79,15 @@ export const filesStore = create<
                 isFileUploaderListCollapsed: !state.isFileUploaderListCollapsed,
             };
         }),
+
+    isOpenBigPicture: false,
+    setIsOpenBigPicture: () =>
+        set(state => {
+            return {
+                isOpenBigPicture: !state.isOpenBigPicture,
+            };
+        }),
+
+    openedFile: null,
+    setOpenedFile: (openedFile: IFileResponse) => set({ openedFile }),
 }));

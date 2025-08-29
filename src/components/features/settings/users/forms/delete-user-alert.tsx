@@ -13,9 +13,9 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
 } from '@/components/ui/common/alert-dialog';
-import { QUERY_KEYS } from '@/libs/api/query-keys';
 import { deleteUserMutationFn } from '@/libs/api/users/users-api';
 import { IUserResponse } from '@/libs/api/users/users.types';
+import { QUERY_KEYS } from '@/libs/constants/query-keys';
 
 interface DeleteUserAlertProps {
     isOpen: boolean;

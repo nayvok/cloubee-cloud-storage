@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 
-import { QUERY_KEYS } from '@/libs/api/query-keys';
 import { getUsersQueryFn } from '@/libs/api/users/users-api';
+import { QUERY_KEYS } from '@/libs/constants/query-keys';
 
 export const useUsersQuery = () => {
     return useQuery({

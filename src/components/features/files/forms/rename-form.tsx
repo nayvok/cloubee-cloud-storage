@@ -32,7 +32,7 @@ import {
 } from '@/components/ui/common/form';
 import { Input } from '@/components/ui/common/input';
 import { renameMutationFn } from '@/libs/api/files/files-api';
-import { QUERY_KEYS } from '@/libs/api/query-keys';
+import { QUERY_KEYS } from '@/libs/constants/query-keys';
 import { filesPersistStore } from '@/libs/store/files/files.persist-store';
 import { filesStore } from '@/libs/store/files/files.store';
 import {

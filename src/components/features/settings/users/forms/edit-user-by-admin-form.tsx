@@ -24,9 +24,9 @@ import {
 } from '@/components/ui/common/form';
 import { Input } from '@/components/ui/common/input';
 import { useFreeSpaceQuery } from '@/libs/api/files/hooks/use-free-space-query';
-import { QUERY_KEYS } from '@/libs/api/query-keys';
 import { changeUserByAdminMutationFn } from '@/libs/api/users/users-api';
 import { IUserResponse } from '@/libs/api/users/users.types';
+import { QUERY_KEYS } from '@/libs/constants/query-keys';
 import { convertBytes } from '@/libs/utils/convert-bytes';
 import { convertGbToBytes } from '@/libs/utils/convert-gb-to-bytes';
 import {

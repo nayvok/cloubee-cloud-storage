@@ -54,6 +54,13 @@
         }
     },
     "files": {
+        "big_picture": {
+            "info": {
+                "name": "Имя:",
+                "size": "Размер:",
+                "modified": "Изменён:"
+            }
+        },
         "filesSortDirectionToggle": {
             "asc": "По возрастанию",
             "desc": "По убыванию"

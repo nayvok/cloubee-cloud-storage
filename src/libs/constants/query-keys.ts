@@ -3,6 +3,7 @@ export const QUERY_KEYS = {
     USERS: 'users',
     FILES: 'files',
     THUMBNAIL: 'thumbnail',
+    FULL_IMAGE: 'full-image',
     TRASH: 'trash',
     INVITATIONS: 'invitations',
     FREE_SPACE: 'free-space',

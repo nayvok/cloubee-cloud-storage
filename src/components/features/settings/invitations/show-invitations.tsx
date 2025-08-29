@@ -31,7 +31,7 @@ import {
 import { useInvitationsQuery } from '@/libs/api/invitations/hooks/use-invitations-query';
 import { deleteInvitationMutationFn } from '@/libs/api/invitations/invitations-api';
 import { IInvitation } from '@/libs/api/invitations/invitations.types';
-import { QUERY_KEYS } from '@/libs/api/query-keys';
+import { QUERY_KEYS } from '@/libs/constants/query-keys';
 import { convertBytes } from '@/libs/utils/convert-bytes';
 
 const ShowInvitations = () => {
