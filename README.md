@@ -6,7 +6,6 @@
 
 Is a simple, open-source cloud storage solution that you can host on your own server. It provides full control over your data without relying on third-party cloud services.
 
-
 ## Description
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
@@ -39,3 +38,4 @@ If you are looking for a cloud-based platform to deploy your NestJS application,
 ```bash
 $ npm install -g mau
 $ mau deploy
+```
