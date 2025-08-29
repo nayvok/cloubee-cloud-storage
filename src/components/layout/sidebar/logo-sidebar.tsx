@@ -6,6 +6,7 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/common/sidebar';
+import { FRONTEND_VERSION } from '@/libs/constants/constants';
 
 export function LogoSidebar() {
     return (
@@ -27,7 +28,7 @@ export function LogoSidebar() {
                                 Cloubee
                             </span>
                             <span className="text-muted-foreground truncate text-xs">
-                                v0.0.1
+                                v{FRONTEND_VERSION}
                             </span>
                         </div>
                     </SidebarMenuButton>
