@@ -346,8 +346,7 @@
                 "upload": "Upload",
                 "create": {
                     "title": "Create",
-                    "folder": "Folder",
-                    "text": "Text File"
+                    "folder": "Folder"
                 }
             },
             "navLinks": {

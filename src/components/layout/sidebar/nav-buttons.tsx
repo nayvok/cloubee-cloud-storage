@@ -1,6 +1,6 @@
 'use client';
 
-import { FilePlus, FolderPlus, Plus, Upload } from 'lucide-react';
+import { FolderPlus, Plus, Upload } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { usePathname } from 'next/navigation';
 import { ChangeEvent, useRef, useState } from 'react';
@@ -68,9 +68,9 @@ export function NavButtons() {
 
     const onClickMkdir = () => {
         if (!pathname.startsWith(APP_ROUTES.DASHBOARD.FILES.path)) {
-            setIsMkdirExplorerOpen(true);
+            setTimeout(() => setIsMkdirExplorerOpen(true), 0);
         } else {
-            setIsMkdirFormOpen(!isMkdirFormOpen);
+            setTimeout(() => setIsMkdirFormOpen(!isMkdirFormOpen), 0);
         }
     };
 
@@ -118,10 +118,6 @@ export function NavButtons() {
                                 <DropdownMenuItem onClick={onClickMkdir}>
                                     <FolderPlus />
                                     {t('create.folder')}
-                                </DropdownMenuItem>
-                                <DropdownMenuItem>
-                                    <FilePlus />
-                                    {t('create.text')}
                                 </DropdownMenuItem>
                             </DropdownMenuGroup>
                         </DropdownMenuContent>
