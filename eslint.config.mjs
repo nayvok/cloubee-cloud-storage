@@ -1,4 +1,6 @@
 import { FlatCompat } from '@eslint/eslintrc';
+import eslintPluginPrettier from 'eslint-plugin-prettier';
+import eslintPluginReact from 'eslint-plugin-react';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -13,6 +15,25 @@ const eslintConfig = [
     ...compat.extends('next/core-web-vitals', 'next/typescript'),
     {
         ignores: ['node_modules/', 'dist/', '/.next/', '/.idea/'],
+    },
+    {
+        files: ['**/*.jsx', '**/*.tsx'],
+        rules: {
+            'react/jsx-curly-brace-presence': [
+                'error',
+                { props: 'never', children: 'never' },
+            ],
+            'prettier/prettier': 'error',
+        },
+        plugins: {
+            react: eslintPluginReact,
+            prettier: eslintPluginPrettier,
+        },
+        settings: {
+            react: {
+                version: 'detect',
+            },
+        },
     },
 ];
 
