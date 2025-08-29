@@ -5,10 +5,10 @@ import { useEffect, useRef, useState } from 'react';
 
 import { Button } from '@/components/ui/common/button';
 import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuTrigger,
-} from '@/components/ui/common/dropdown-menu';
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from '@/components/ui/common/popover';
 import { useIsMobile } from '@/libs/hooks/use-mobile';
 import { filesStore } from '@/libs/store/files/files.store';
 import { ActionItem } from '@/libs/types/action-item.types';
@@ -113,8 +113,8 @@ const ActionBar = ({ actionItems }: ActionBarProps) => {
                                 </>
                             ) : (
                                 <>
-                                    <DropdownMenu modal={false}>
-                                        <DropdownMenuTrigger asChild>
+                                    <Popover>
+                                        <PopoverTrigger asChild>
                                             <Button
                                                 variant="ghost"
                                                 size="icon"
@@ -122,20 +122,19 @@ const ActionBar = ({ actionItems }: ActionBarProps) => {
                                             >
                                                 <Info />
                                             </Button>
-                                        </DropdownMenuTrigger>
-                                        <DropdownMenuContent
+                                        </PopoverTrigger>
+                                        <PopoverContent
                                             side="bottom"
                                             align="start"
-                                            sideOffset={4}
-                                            className="flex max-w-[500px] flex-col p-2 text-sm"
+                                            className="z-[300] flex w-[320px] flex-col p-2 text-sm"
                                         >
-                                            <div>
-                                                <span>{t('info.name')}</span>
+                                            <div className="max-w-full overflow-hidden break-words">
+                                                <span>{t('info.name')}</span>{' '}
                                                 <span className="font-medium">
                                                     {selectedFiles[0].name}
                                                 </span>
                                             </div>
-                                            <span>
+                                            <div>
                                                 <span>{t('info.size')}</span>{' '}
                                                 <span className="font-medium">
                                                     {convertBytes(
@@ -145,11 +144,11 @@ const ActionBar = ({ actionItems }: ActionBarProps) => {
                                                         ),
                                                     )}
                                                 </span>
-                                            </span>
-                                            <span>
+                                            </div>
+                                            <div>
                                                 <span>
                                                     {t('info.modified')}
-                                                </span>
+                                                </span>{' '}
                                                 <span className="font-medium">
                                                     {format(
                                                         new Date(
@@ -164,9 +163,9 @@ const ActionBar = ({ actionItems }: ActionBarProps) => {
                                                         'HH:mm',
                                                     )}
                                                 </span>
-                                            </span>
-                                        </DropdownMenuContent>
-                                    </DropdownMenu>
+                                            </div>
+                                        </PopoverContent>
+                                    </Popover>
 
                                     <span className="line-clamp-1 overflow-ellipsis">
                                         {selectedFiles[0].name}
