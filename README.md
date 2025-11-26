@@ -1,5 +1,5 @@
 <p align="center">
-  ![preview](https://github.com/user-attachments/assets/911feef5-7c97-4a24-a4fe-5374e3639688)
+  <img src="https://github.com/user-attachments/assets/52509dbf-2fcb-4d43-a046-499aba188553" alt="Cloubee" />
 </p>
 
 # ☁️ Cloubee
