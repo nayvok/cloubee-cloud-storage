@@ -1,0 +1,395 @@
+{
+    "auth": {
+        "login": {
+            "title": "Войти",
+            "description": "Введите вашу почту и пароль, чтобы войти",
+            "emailLabel": "Почта",
+            "passwordLabel": "Пароль",
+            "submitButton": "Войти",
+            "forgotPassword": "Забыли пароль?",
+            "error": {
+                "email": "Неверный адрес электронной почты",
+                "emailRequired": "Почта обязательна",
+                "password": "Пароль должен содержать не менее 8 символов",
+                "passwordRequired": "Пароль обязателен",
+                "invalidCredentials": "Неверная почта или пароль",
+                "authError": "Ошибка авторизации"
+            }
+        },
+        "register": {
+            "title": "Настройка сервера",
+            "description": "Введите ваш email и пароль для настройки сервера",
+            "nameLabel": "Имя",
+            "emailLabel": "Почта",
+            "passwordLabel": "Пароль",
+            "confirmPasswordLabel": "Подтвердить пароль",
+            "submitButton": "Зарегистрироваться",
+            "error": {
+                "name": "Имя должно содержать не менее 2 символов",
+                "nameRequired": "Имя обязательно",
+                "email": "Неверный адрес электронной почты",
+                "emailRequired": "Почта обязательна",
+                "password": "Пароль должен содержать не менее 8 символов",
+                "passwordRequired": "Пароль обязателен",
+                "confirmPassword": "Пароли не совпадают",
+                "registerError": "Ошибка регистрации"
+            }
+        },
+        "invitation": {
+            "title": "Приглашение",
+            "description": "Заполните форму ниже, чтобы создать аккаунт",
+            "emailLabel": "Почта",
+            "nameLabel": "Имя",
+            "passwordLabel": "Пароль",
+            "confirmPasswordLabel": "Подтвердить пароль",
+            "submitButton": "Зарегистрироваться",
+            "error": {
+                "name": "Имя должно содержать не менее 2 символов",
+                "nameRequired": "Имя обязательно",
+                "password": "Пароль должен содержать не менее 8 символов",
+                "passwordRequired": "Пароль обязателен",
+                "confirmPassword": "Пароли не совпадают",
+                "invitationError": "Ошибка регистрации"
+            }
+        }
+    },
+    "files": {
+        "big_picture": {
+            "info": {
+                "name": "Имя:",
+                "size": "Размер:",
+                "modified": "Изменён:"
+            }
+        },
+        "filesSortDirectionToggle": {
+            "asc": "По возрастанию",
+            "desc": "По убыванию"
+        },
+        "headerPanel": {
+            "view": "Вид",
+            "sort": "Сортировать"
+        },
+        "actions": {
+            "download": "Скачать",
+            "rename": "Переименовать",
+            "delete": "Удалить"
+        },
+        "mkdir": {
+            "title": "Укажите название папки",
+            "create": "Создать",
+            "defaultName": "Новая папка",
+            "error": {
+                "nameAlreadyTaken": "Такое название уже есть — придумайте другое",
+                "mkdirError": "Произошла ошибка при создании папки",
+                "nameRequired": "Название обязательно"
+            }
+        },
+        "rename": {
+            "title": "Переименовать",
+            "save": "Сохранить",
+            "confirmChangeExtension": {
+                "title": "Расширение будет изменено!",
+                "description": "После изменения расширения этот файл может перестать открываться в программах",
+                "cancel": "Оставить",
+                "confirm": "Использовать",
+                "confirmRemoveExtension": "Убрать расширение"
+            },
+            "error": {
+                "nameAlreadyTaken": "Такое название уже есть — придумайте другое",
+                "renameError": "Не удалось переименовать файл",
+                "nameRequired": "Название обязательно"
+            }
+        },
+        "moveToTrash": {
+            "dialog": {
+                "title_multiple": "Удалить выбранные объекты?",
+                "title_folder": "Удалить папку?",
+                "title_file": "Удалить файл?",
+                "description": "В корзине файлы и папки будут храниться 30 дней, потом удалятся навсегда",
+                "cancel": "Отменить",
+                "confirm": "Удалить"
+            },
+            "toast": {
+                "loading": "Перемещение в корзину",
+                "success": "Успешно перемещено в корзину",
+                "error": "Ошибка перемещения в корзину"
+            }
+        },
+        "uploader": {
+            "isNameError": "Уже есть в папке",
+            "isSpaceError": "Не хватает места на диске",
+            "listTitle": "Загрузки",
+            "listCollapsedTrue": "Развернуть",
+            "listCollapsedFalse": "Свернуть",
+            "fileUploadingError": "Произошла ошибка при загрузке файла:"
+        },
+        "download": {
+            "inProgress": "Идёт скачивание, пожалуйста, подождите",
+            "success": "Скачивание завершено",
+            "error": "Произошла ошибка при скачивании"
+        },
+        "placeholder": {
+            "title": "Пока нет файлов",
+            "description": "Когда загрузите, всё будет здесь"
+        },
+        "explorer_dialog": {
+            "files": "Файлы",
+            "actions": {
+                "new_folder": "Новая папка",
+                "upload": "Загрузить",
+                "create": "Создать здесь"
+            },
+            "title": {
+                "upload": "Куда загрузить?",
+                "mkdir": "Где создать новую папку?"
+            },
+            "description": {
+                "upload": "Выберете место для загрузки",
+                "mkdir": "Выберете место для создания папки"
+            }
+        }
+    },
+    "trash": {
+        "actions": {
+            "restore": "Восстановить",
+            "permanentDelete": "Удалить навсегда"
+        },
+        "headerPanel": {
+            "clear": "Очистить корзину",
+            "view": "Вид"
+        },
+        "emptyTrash": {
+            "allTrash": {
+                "title": "Очистка корзины",
+                "description": "Содержимое корзины будет удалено без возможности восстановления.<br></br>Вы уверены?",
+                "cancel": "Отмена",
+                "confirm": "Очистить",
+                "toast": {
+                    "loading": "Очистка корзины",
+                    "success": "Корзина очищена",
+                    "error": "Произошла ошибка при очистке корзины"
+                }
+            },
+            "title": "Удалить навсегда",
+            "description": "Содержимое будет удалено без возможности восстановления.<br></br>Вы уверены?",
+            "cancel": "Отмена",
+            "confirm": "Удалить",
+            "toast": {
+                "loading": "Удаляется",
+                "success": "Успешно удалено",
+                "error": "Произошла ошибка при удалении"
+            }
+        },
+        "restore": {
+            "single": {
+                "title": "Восстановить файл?"
+            },
+            "many": {
+                "title": "Восстановить файлы?"
+            },
+            "toast": {
+                "loading": {
+                    "single": "Восстановление файла",
+                    "many": "Восстановление файлов"
+                },
+                "success": {
+                    "single": "{fileName} восстановлен",
+                    "many": "Восстановлено файлов: {count}"
+                },
+                "errors": {
+                    "default": "Ошибка при восстановлении",
+                    "single": {
+                        "text": "Не удалось восстановить файл",
+                        "type": "Ошибка: имя файла занято или файл не найден"
+                    },
+                    "many": {
+                        "text": "Не удалось восстановить файлов: {count}",
+                        "type": "Ошибка: имена файлов заняты или файлы не найдены"
+                    }
+                }
+            },
+
+            "cancel": "Отмена",
+            "confirm": "Восстановить"
+        },
+        "placeholder": "Корзина пуста"
+    },
+    "settings": {
+        "user": {
+            "title": "Аккаунт",
+            "description": "Измените данные вашего профиля",
+            "form": {
+                "name": "Имя",
+                "current_password": "Текущий пароль",
+                "new_password": "Новый пароль",
+                "avatar": "Аватар",
+                "submit": "Сохранить"
+            },
+            "errors": {
+                "invalid_password": "Текущий пароль не верный",
+                "new_password_required": "Необходимо указать новый пароль",
+                "unexpected_error": "Произошла непредвиденная ошибка",
+                "name": "Имя должно содержать не менее 2 символов",
+                "password": "Пароль должен содержать не менее 8 символов"
+            },
+            "success": "Данные сохранены"
+        },
+        "users": {
+            "title": "Пользователи",
+            "description": "Управляйте вашими пользователями",
+            "table": {
+                "caption": "Список пользователей",
+                "head": {
+                    "email": "Почта",
+                    "name": "Имя",
+                    "role": "Роль",
+                    "used_quota": "Использовано",
+                    "quota": "Квота",
+                    "created_at": "Обновлен",
+                    "actions": "Действия"
+                },
+                "dropdown": {
+                    "edit": "Изменить",
+                    "delete": "Удалить"
+                }
+            },
+            "dialogs": {
+                "edit": {
+                    "title": "Изменить квоту",
+                    "description": {
+                        "quota_info": "У пользователя {email} сейчас занято {used} из {quota}.",
+                        "quota_action": "Вы можете увеличить или уменьшить квоту пользователя."
+                    },
+                    "form": {
+                        "quota_label": "Квота",
+                        "quota_description": "Выберете значение от {minQuota} до {maxQuota} GB"
+                    },
+                    "submit": "Изменить",
+                    "edit_success": "Данные пользователя обновлены",
+                    "errors": {
+                        "quota_conflict": "Конфликт при изменении квоты",
+                        "unexpected_error": "Произошла непредвиденная ошибка"
+                    }
+                },
+                "delete": {
+                    "title": "Удаление пользователя",
+                    "description": "Вы уверены, что хотите удалить {email} и все его данные?",
+                    "cancel": "Отмена",
+                    "action": "Удалить",
+                    "delete_success": "Пользователь удален",
+                    "errors": {
+                        "not_found": "Пользователь не найден",
+                        "delete_error": "Не удалось удалить пользователя"
+                    }
+                }
+            }
+        },
+        "invitations": {
+            "title": "Приглашения",
+            "description": "Предоставьте другим доступ к хранилищу",
+            "table": {
+                "caption": "Список приглашений",
+                "head": {
+                    "email": "Почта",
+                    "role": "Роль",
+                    "quota": "Квота",
+                    "created_at": "Приглашен",
+                    "actions": "Действия"
+                },
+                "dropdown": {
+                    "copy": "Скопировать",
+                    "delete": "Удалить"
+                },
+                "toast": {
+                    "copy_success": "Скопировано в буфер обмена",
+                    "copy_error": "Не удалось скопировать в буфер обмена",
+                    "delete_success": "Приглашение удалено",
+                    "delete_error": "Не удалось удалить приглашение"
+                }
+            },
+            "invite_btn": "Пригласить",
+            "placeholder": "Приглашений пока нет",
+            "dialogs": {
+                "add": {
+                    "title": "Создать приглашение",
+                    "description": {
+                        "invite": "Пригласить нового пользователя",
+                        "storage_warning": "Недостаточно места. Освободите минимум 1 ГБ для продолжения."
+                    },
+                    "form": {
+                        "email_label": "Почта",
+                        "email_description": "Это будет почта нового пользователя",
+                        "quota_label": "Квота",
+                        "quota_description": "Выберете значение до {maxQuota} GB"
+                    },
+                    "submit": "Пригласить",
+                    "errors": {
+                        "email_already_exist": "Пользователь с такой почтой уже приглашён или зарегистрирован",
+                        "unexpected_error": "Произошла непредвиденная ошибка"
+                    }
+                }
+            }
+        }
+    },
+    "layouts": {
+        "sidebar": {
+            "navUser": {
+                "logout": "Выход",
+                "logoutError": "Произошла ошибка при выходе из системы",
+                "settings": "Настройки",
+                "themeSwitcher": {
+                    "light": "Светлая",
+                    "dark": "Тёмная",
+                    "system": "Системная"
+                }
+            },
+            "navButtons": {
+                "upload": "Загрузить",
+                "create": {
+                    "title": "Создать",
+                    "folder": "Папку"
+                }
+            },
+            "navLinks": {
+                "files": "Файлы",
+                "trash": "Корзина"
+            }
+        },
+        "header": {
+            "files": "Файлы",
+            "gallery": "Галерея",
+            "trash": "Корзина",
+            "settings": "Настройки",
+            "filesSortingForm": {
+                "sortMode": {
+                    "byName": "По названию",
+                    "bySize": "По размеру",
+                    "byLastChange": "По изменению"
+                },
+                "viewMode": {
+                    "largeTile": "Крупная плитка",
+                    "tile": "Плитка",
+                    "list": "Список"
+                }
+            },
+            "actionBar": {
+                "actions": {
+                    "download": "Скачать",
+                    "rename": "Переименовать",
+                    "delete": "Удалить",
+                    "close": "Закрыть"
+                },
+                "info": {
+                    "selectedCount": "Выбрано:",
+                    "name": "Имя:",
+                    "size": "Размер:",
+                    "modified": "Изменён:"
+                }
+            }
+        }
+    },
+    "errors_page": {
+        "description": "Упс, что-то пошло не так.",
+        "go_to_home": "На главную"
+    }
+}

@@ -1,0 +1,394 @@
+{
+    "auth": {
+        "login": {
+            "title": "Sign in",
+            "description": "Enter your email and password to sign in",
+            "emailLabel": "Email",
+            "passwordLabel": "Password",
+            "submitButton": "Login",
+            "forgotPassword": "Forgot password?",
+            "error": {
+                "email": "Invalid email address",
+                "emailRequired": "Email is required",
+                "password": "Password must be at least 8 characters long",
+                "passwordRequired": "Password is required",
+                "invalidCredentials": "Invalid email or password",
+                "authError": "Authorization failed"
+            }
+        },
+        "register": {
+            "title": "Setup the server",
+            "description": "Enter your email and password to setup the server",
+            "nameLabel": "Name",
+            "emailLabel": "Email",
+            "passwordLabel": "Password",
+            "confirmPasswordLabel": "Confirm password",
+            "submitButton": "Register",
+            "error": {
+                "name": "Name must be at least 2 characters long",
+                "nameRequired": "Name is required",
+                "email": "Invalid email address",
+                "emailRequired": "Email is required",
+                "password": "Password must be at least 8 characters long",
+                "passwordRequired": "Password is required",
+                "confirmPassword": "Passwords do not match",
+                "registerError": "Registration failed"
+            }
+        },
+        "invitation": {
+            "title": "Invitation",
+            "description": "Fill the form below to create your account",
+            "emailLabel": "Email",
+            "nameLabel": "Name",
+            "passwordLabel": "Password",
+            "confirmPasswordLabel": "Confirm password",
+            "submitButton": "Register",
+            "error": {
+                "name": "Name must be at least 2 characters long",
+                "nameRequired": "Name is required",
+                "password": "Password must be at least 8 characters long",
+                "passwordRequired": "Password is required",
+                "confirmPassword": "Passwords do not match",
+                "invitationError": "Registration failed"
+            }
+        }
+    },
+    "files": {
+        "big_picture": {
+            "info": {
+                "name": "Name:",
+                "size": "Size:",
+                "modified": "Modified:"
+            }
+        },
+        "filesSortDirectionToggle": {
+            "asc": "Ascending",
+            "desc": "Descending"
+        },
+        "headerPanel": {
+            "view": "View",
+            "sort": "Sort"
+        },
+        "actions": {
+            "download": "Download",
+            "rename": "Rename",
+            "delete": "Delete"
+        },
+        "mkdir": {
+            "title": "Enter folder name",
+            "create": "Create",
+            "defaultName": "New folder",
+            "error": {
+                "nameAlreadyTaken": "This name is already taken — choose another one",
+                "mkdirError": "An error occurred while creating the folder",
+                "nameRequired": "Name is required"
+            }
+        },
+        "rename": {
+            "title": "Rename",
+            "save": "Save",
+            "confirmChangeExtension": {
+                "title": "Extension will be changed!",
+                "description": "After changing the extension, this file may no longer open in programs",
+                "cancel": "Keep",
+                "confirm": "Use",
+                "confirmRemoveExtension": "Remove extension"
+            },
+            "error": {
+                "nameAlreadyTaken": "This name is already taken — choose another one",
+                "renameError": "Failed to rename file",
+                "nameRequired": "Name is required"
+            }
+        },
+        "moveToTrash": {
+            "dialog": {
+                "title_multiple": "Delete selected items?",
+                "title_folder": "Delete folder?",
+                "title_file": "Delete file?",
+                "description": "Files and folders will be stored in trash for 30 days before permanent deletion",
+                "cancel": "Cancel",
+                "confirm": "Delete"
+            },
+            "toast": {
+                "loading": "Moving to trash",
+                "success": "Moved to trash successfully",
+                "error": "Error moving to trash"
+            }
+        },
+        "uploader": {
+            "isNameError": "Already exists in the folder",
+            "isSpaceError": "Not enough disk space",
+            "listTitle": "Uploads",
+            "listCollapsedTrue": "Expand",
+            "listCollapsedFalse": "Collapse",
+            "fileUploadingError": "An error occurred while uploading the file:"
+        },
+        "download": {
+            "inProgress": "Downloading, please wait",
+            "success": "Download completed",
+            "error": "An error occurred during download"
+        },
+        "placeholder": {
+            "title": "No files yet",
+            "description": "Everything will appear here once uploaded"
+        },
+        "explorer_dialog": {
+            "files": "Files",
+            "actions": {
+                "new_folder": "New Folder",
+                "upload": "Upload",
+                "create": "Create Here"
+            },
+            "title": {
+                "upload": "Where to upload?",
+                "mkdir": "Where to create a new folder?"
+            },
+            "description": {
+                "upload": "Choose a location to upload",
+                "mkdir": "Choose a location to create a folder"
+            }
+        }
+    },
+    "trash": {
+        "actions": {
+            "restore": "Restore",
+            "permanentDelete": "Delete permanently"
+        },
+        "headerPanel": {
+            "clear": "Empty trash",
+            "view": "View"
+        },
+        "emptyTrash": {
+            "allTrash": {
+                "title": "Empty trash",
+                "description": "All items in the trash will be permanently deleted.<br></br>Are you sure?",
+                "cancel": "Cancel",
+                "confirm": "Empty",
+                "toast": {
+                    "loading": "Emptying trash",
+                    "success": "Trash emptied",
+                    "error": "Failed to empty trash"
+                }
+            },
+            "title": "Delete permanently",
+            "description": "The content will be permanently deleted.<br></br>Are you sure?",
+            "cancel": "Cancel",
+            "confirm": "Delete",
+            "toast": {
+                "loading": "Deleting",
+                "success": "Successfully deleted",
+                "error": "Deletion error occurred"
+            }
+        },
+        "restore": {
+            "single": {
+                "title": "Restore file?"
+            },
+            "many": {
+                "title": "Restore files?"
+            },
+            "toast": {
+                "loading": {
+                    "single": "Restoring file",
+                    "many": "Restoring files"
+                },
+                "success": {
+                    "single": "{fileName} restored",
+                    "many": "Files restored: {count}"
+                },
+                "errors": {
+                    "default": "Restoration error",
+                    "single": {
+                        "text": "Failed to restore file",
+                        "type": "Error: file name already exists or file not found"
+                    },
+                    "many": {
+                        "text": "Failed to restore files: {count}",
+                        "type": "Error: file names already exist or files not found"
+                    }
+                }
+            },
+            "cancel": "Cancel",
+            "confirm": "Restore"
+        },
+        "placeholder": "Trash is empty"
+    },
+    "settings": {
+        "user": {
+            "title": "Account",
+            "description": "Change your profile data",
+            "form": {
+                "name": "Name",
+                "current_password": "Current password",
+                "new_password": "New password",
+                "avatar": "Avatar",
+                "submit": "Save"
+            },
+            "errors": {
+                "invalid_password": "Current password is incorrect",
+                "new_password_required": "New password is required",
+                "unexpected_error": "An unexpected error occurred",
+                "name": "Name must be at least 2 characters long",
+                "password": "Password must be at least 8 characters long"
+            },
+            "success": "Data saved successfully"
+        },
+        "users": {
+            "title": "Users",
+            "description": "Manage your users",
+            "table": {
+                "caption": "User list",
+                "head": {
+                    "email": "Email",
+                    "name": "Name",
+                    "role": "Role",
+                    "used_quota": "Used",
+                    "quota": "Quota",
+                    "created_at": "Updated",
+                    "actions": "Actions"
+                },
+                "dropdown": {
+                    "edit": "Edit",
+                    "delete": "Delete"
+                }
+            },
+            "dialogs": {
+                "edit": {
+                    "title": "Edit quota",
+                    "description": {
+                        "quota_info": "User {email} is currently using {used} of {quota}.",
+                        "quota_action": "You can increase or decrease the user's quota."
+                    },
+                    "form": {
+                        "quota_label": "Quota",
+                        "quota_description": "Select a value between {minQuota} and {maxQuota} GB"
+                    },
+                    "submit": "Update",
+                    "edit_success": "User data updated",
+                    "errors": {
+                        "quota_conflict": "Quota conflict",
+                        "unexpected_error": "An unexpected error occurred"
+                    }
+                },
+                "delete": {
+                    "title": "Delete User",
+                    "description": "Are you sure you want to delete {email} and all their data?",
+                    "cancel": "Cancel",
+                    "action": "Delete",
+                    "delete_success": "User deleted",
+                    "errors": {
+                        "not_found": "User not found",
+                        "delete_error": "Could not delete user"
+                    }
+                }
+            }
+        },
+        "invitations": {
+            "title": "Invitations",
+            "description": "Grant others access to the storage",
+            "table": {
+                "caption": "Invitation List",
+                "head": {
+                    "email": "Email",
+                    "role": "Role",
+                    "quota": "Quota",
+                    "created_at": "Invited At",
+                    "actions": "Actions"
+                },
+                "dropdown": {
+                    "copy": "Copy",
+                    "delete": "Delete"
+                },
+                "toast": {
+                    "copy_success": "Copied to clipboard",
+                    "copy_error": "Could not copy to clipboard",
+                    "delete_success": "Invitation deleted",
+                    "delete_error": "Failed to delete invitation"
+                }
+            },
+            "invite_btn": "Invite",
+            "placeholder": "No invitations yet",
+            "dialogs": {
+                "add": {
+                    "title": "Create Invitation",
+                    "description": {
+                        "invite": "Invite a new user",
+                        "storage_warning": "Not enough space. Free up at least 1 GB to continue."
+                    },
+                    "form": {
+                        "email_label": "Email",
+                        "email_description": "This will be the email of the new user",
+                        "quota_label": "Quota",
+                        "quota_description": "Choose a value up to {maxQuota} GB"
+                    },
+                    "submit": "Invite",
+                    "errors": {
+                        "email_already_exist": "A user with this email has already been invited or registered",
+                        "unexpected_error": "An unexpected error occurred"
+                    }
+                }
+            }
+        }
+    },
+    "layouts": {
+        "sidebar": {
+            "navUser": {
+                "logout": "Logout",
+                "logoutError": "An error occurred while logging out",
+                "settings": "Settings",
+                "themeSwitcher": {
+                    "light": "Light",
+                    "dark": "Dark",
+                    "system": "System"
+                }
+            },
+            "navButtons": {
+                "upload": "Upload",
+                "create": {
+                    "title": "Create",
+                    "folder": "Folder"
+                }
+            },
+            "navLinks": {
+                "files": "Files",
+                "trash": "Trash"
+            }
+        },
+        "header": {
+            "files": "Files",
+            "gallery": "Gallery",
+            "trash": "Trash",
+            "settings": "Settings",
+            "filesSortingForm": {
+                "sortMode": {
+                    "byName": "By name",
+                    "bySize": "By size",
+                    "byLastChange": "By modified"
+                },
+                "viewMode": {
+                    "largeTile": "Large tiles",
+                    "tile": "Tiles",
+                    "list": "List"
+                }
+            },
+            "actionBar": {
+                "actions": {
+                    "download": "Download",
+                    "rename": "Rename",
+                    "delete": "Delete",
+                    "close": "Close"
+                },
+                "info": {
+                    "selectedCount": "Selected:",
+                    "name": "Name:",
+                    "size": "Size:",
+                    "modified": "Modified:"
+                }
+            }
+        }
+    },
+    "errors_page": {
+        "description": "Oops, something went wrong.",
+        "go_to_home": "Go to homepage"
+    }
+}
