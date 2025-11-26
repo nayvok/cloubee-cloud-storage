@@ -1,0 +1,46 @@
+import { Logger, ValidationPipe } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { NestFactory } from '@nestjs/core';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import * as cookieParser from 'cookie-parser';
+
+import { BigIntSerializerInterceptor } from '@/shared/interceptors/big-int-serialize.interceptor';
+
+import { CoreModule } from './core/core.module';
+
+async function bootstrap() {
+    const app = await NestFactory.create(CoreModule);
+
+    const config = app.get(ConfigService);
+
+    const allowedOrigin = config
+        .getOrThrow<string>('ALLOWED_ORIGIN')
+        .split(',');
+
+    app.enableCors({
+        origin: allowedOrigin,
+        credentials: true,
+        exposedHeaders: ['set-cookie'],
+    });
+
+    app.use(cookieParser());
+    app.useGlobalPipes(new ValidationPipe());
+    app.useGlobalInterceptors(new BigIntSerializerInterceptor());
+    app.useLogger(new Logger());
+
+    const swagger = new DocumentBuilder()
+        .setTitle('Cloubee')
+        .setVersion('1.0')
+        .addBearerAuth()
+        .build();
+
+    const documentFactory = SwaggerModule.createDocument(app, swagger);
+
+    SwaggerModule.setup('swagger', app, documentFactory, {
+        jsonDocumentUrl: 'swagger/yaml',
+    });
+
+    await app.listen(config.getOrThrow<number>('APPLICATION_PORT'));
+}
+
+bootstrap();
