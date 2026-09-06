@@ -2,6 +2,14 @@
 
 Self-hosted cloud storage with file management, user accounts, storage quotas, and an admin interface.
 
+
+## Preview
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/52509dbf-2fcb-4d43-a046-499aba188553" alt="Cloubee" />
+</p>
+
+
 ## At a glance
 
 - **What it is:** A web application for managing files and folders on infrastructure you operate.
@@ -81,12 +89,6 @@ bun run dev
 Open [`http://localhost:3000`](http://localhost:3000) in a browser.
 
 `prisma db push` is used for the current local setup. This project does not currently provide migration history, so review schema changes before applying them to any persistent database.
-
-## Preview
-
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/52509dbf-2fcb-4d43-a046-499aba188553" alt="Cloubee" />
-</p>
 
 ## Implemented scope
 
